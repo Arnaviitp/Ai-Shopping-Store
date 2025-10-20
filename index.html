@@ -1,292 +1,525 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lumosis × Aivora — Mood-Aware AI Shopping</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap');
-
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: 'Poppins', sans-serif;
-      background: radial-gradient(circle at top left, #0f0c29, #302b63, #24243e);
-      color: #fff;
-      overflow-x: hidden;
-    }
-
-    header {
-      text-align: center;
-      padding: 40px 20px;
-      font-size: 2.3rem;
-      font-weight: 700;
-      text-shadow: 0 0 20px cyan;
-      letter-spacing: 1px;
-    }
-
-    section {
-      max-width: 1100px;
-      margin: auto;
-      padding: 30px;
-      background: rgba(255,255,255,0.05);
-      border-radius: 20px;
-      box-shadow: 0 0 20px rgba(0,255,255,0.2);
-      backdrop-filter: blur(8px);
-      transition: 0.3s;
-    }
-
-    select, button {
-      padding: 12px 18px;
-      border-radius: 10px;
-      border: none;
-      font-size: 1rem;
-      cursor: pointer;
-      margin-top: 15px;
-      outline: none;
-    }
-
-    select {
-      background: rgba(255,255,255,0.1);
-      color: #fff;
-      border: 1px solid cyan;
-      width: 100%;
-      max-width: 300px;
-    }
-
-    button {
-      background: linear-gradient(90deg, #00b4db, #0083b0);
-      color: #fff;
-      font-weight: 600;
-      transition: all 0.3s ease;
-    }
-
-    button:hover {
-      box-shadow: 0 0 15px cyan;
-      transform: scale(1.05);
-    }
-
-    .suggestions {
-      margin-top: 25px;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-      gap: 20px;
-    }
-
-    .card {
-      background: rgba(255,255,255,0.1);
-      border: 1px solid rgba(0,255,255,0.3);
-      border-radius: 15px;
-      padding: 15px;
-      text-align: center;
-      transition: all 0.3s ease;
-    }
-
-    .card:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 20px cyan;
-    }
-
-    .card h4 { color: #00eaff; }
-    .card p { font-size: 0.9rem; color: #ccc; }
-    .card button {
-      margin-top: 8px;
-      width: 100%;
-    }
-
-    .chatbot {
-      margin-top: 40px;
-      padding: 20px;
-      background: rgba(0,0,0,0.4);
-      border-radius: 15px;
-      border: 1px solid cyan;
-    }
-
-    .chat-display {
-      height: 200px;
-      overflow-y: auto;
-      border-radius: 10px;
-      padding: 10px;
-      background: rgba(255,255,255,0.05);
-      margin-bottom: 10px;
-    }
-
-    .chat-msg { margin: 8px 0; }
-    .chat-msg.user { text-align: right; color: #00e0ff; }
-    .chat-msg.bot { text-align: left; color: #fff; }
-
-    .input-area {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .input-area input {
-      flex: 1;
-      padding: 10px;
-      border-radius: 8px;
-      border: none;
-      background: rgba(255,255,255,0.1);
-      color: #fff;
-      min-width: 200px;
-    }
-
-    footer {
-      margin-top: 40px;
-      text-align: center;
-      font-size: 0.9rem;
-      opacity: 0.7;
-    }
-
-    @media (max-width: 600px) {
-      header { font-size: 1.8rem; }
-      section { padding: 20px; }
-      .chat-display { height: 180px; }
-    }
-  </style>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Lumosis × Aivora — Mood AI Shop (Single File)</title>
+<meta name="color-scheme" content="dark">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#071026; --panel:#0b1220; --card:rgba(255,255,255,0.03);
+    --accent1:#6ef0d3; --accent2:#7aa8ff; --muted:#9fb3c8;
+    --glass: rgba(255,255,255,0.02);
+    --radius:14px;
+  }
+  *{box-sizing:border-box;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto;}
+  html,body{height:100%;margin:0;background:linear-gradient(180deg,var(--bg),#08122a);color:#e6f6ff}
+  .wrap{max-width:1180px;margin:20px auto;padding:18px;border-radius:16px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));box-shadow:0 12px 40px rgba(2,6,23,0.6)}
+  header{display:flex;justify-content:space-between;align-items:center;gap:12px}
+  .brand{display:flex;gap:12px;align-items:center}
+  .logo{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--accent1),var(--accent2));display:flex;align-items:center;justify-content:center;color:#021018;font-weight:700}
+  h1{margin:0;font-size:1.2rem}
+  .lead{color:var(--muted);margin:0;font-size:0.9rem}
+  .layout{display:grid;grid-template-columns:320px 1fr 320px;gap:16px;margin-top:16px}
+  @media(max-width:1040px){.layout{grid-template-columns:1fr;}}
+  .panel{background:var(--panel);padding:14px;border-radius:12px}
+  label.small{display:block;font-size:0.85rem;color:var(--muted);margin-bottom:6px}
+  input.apiKey{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
+  button.btn{padding:10px 12px;border-radius:10px;border:0;font-weight:600;cursor:pointer;background:linear-gradient(90deg,var(--accent1),var(--accent2));color:#021018}
+  .moodGrid{display:grid;grid-template-columns:1fr;gap:10px}
+  .moodBtn{display:flex;gap:12px;align-items:center;padding:10px;border-radius:10px;background:var(--glass);cursor:pointer;border:1px solid rgba(255,255,255,0.02)}
+  .moodBtn:hover{transform:translateY(-4px)}
+  .moodEmoji{width:44px;height:44;border-radius:10px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.03);font-size:20px}
+  .moodLabel{font-weight:700}
+  .moodDesc{font-size:0.9rem;color:var(--muted)}
+  .selectedTag{margin-top:10px;color:var(--accent1);font-weight:600}
+  .controls{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+  .search{flex:1;padding:10px;border-radius:10px;border:0;background:rgba(255,255,255,0.02);color:inherit}
+  .gridProducts{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+  .product{background:var(--card);padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,0.02);display:flex;flex-direction:column;gap:8px;min-height:150px}
+  .title{font-weight:700}
+  .meta{font-size:0.85rem;color:var(--muted)}
+  .actions{margin-top:auto;display:flex;gap:8px}
+  .btnGhost{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted);padding:8px;border-radius:10px}
+  .chat{display:flex;flex-direction:column;height:460px}
+  .messages{flex:1;overflow:auto;padding:10px;display:flex;flex-direction:column;gap:10px;border-radius:10px;background:linear-gradient(180deg, rgba(0,0,0,0.2), rgba(255,255,255,0.01))}
+  .msg.user{align-self:flex-end;background:linear-gradient(90deg,var(--accent1),var(--accent2));padding:10px;border-radius:10px;color:#021018;max-width:76%}
+  .msg.aiva{align-self:flex-start;background:rgba(255,255,255,0.03);padding:10px;border-radius:10px;color:var(--muted);max-width:76%}
+  .chatInput{display:flex;gap:8px;margin-top:10px}
+  .chatInput input{flex:1;padding:10px;border-radius:10px;border:0;background:rgba(255,255,255,0.02);color:inherit}
+  .cartItem{display:flex;justify-content:space-between;align-items:center;padding:8px;border-radius:10px;background:rgba(255,255,255,0.02);margin-bottom:8px}
+  .small{font-size:0.85rem;color:var(--muted)}
+  .spinner{display:inline-block;border:3px solid rgba(255,255,255,0.06);border-top-color:var(--accent1);border-radius:50%;width:18px;height:18px;animation:spin 1s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .notice{font-size:0.9rem;color:var(--muted);margin-top:8px}
+  footer{margin-top:12px;color:var(--muted);text-align:center;font-size:0.85rem}
+</style>
 </head>
 <body>
-  <header>🌌 Lumosis × Aivora</header>
+  <div class="wrap" role="application" aria-label="Lumosis mood shop">
+    <header>
+      <div class="brand"><div class="logo">L</div><div><h1>Lumosis × Aivora</h1><p class="lead">Mood-aware AI shopping — products & chat powered by Groq</p></div></div>
+      <div class="small">Local demo — keep your key private</div>
+    </header>
 
-  <section>
-    <h2>✨ How are you feeling today?</h2>
-    <select id="mood">
-      <option value="">Select your mood</option>
-      <option value="tired">😴 Tired</option>
-      <option value="stressed">😖 Stressed</option>
-      <option value="happy">😊 Happy</option>
-      <option value="sad">😔 Sad</option>
-      <option value="energetic">⚡ Energetic</option>
-    </select>
-    <button onclick="fetchAIProducts()">Get AI Suggestions</button>
-    <p id="moodInfo" style="margin-top:10px; color:#00eaff; display:none;"></p>
+    <div class="layout" id="layoutRoot">
+      <!-- LEFT: API key, moods -->
+      <aside class="panel" aria-label="Controls">
+        <label class="small">1) Paste Groq API key (session only)</label>
+        <input id="apiKey" type="password" class="apiKey" placeholder="Paste Groq API key here (will be stored in session only)"/>
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button class="btn" id="saveKey">Save Key</button>
+          <button class="btnGhost" id="clearKey">Clear</button>
+        </div>
+        <div id="keyNotice" class="notice"></div>
 
-    <div class="suggestions" id="suggestions"></div>
+        <hr style="margin:12px 0;border:none;border-top:1px solid rgba(255,255,255,0.03)">
 
-    <div class="chatbot">
-      <h3>💬 Aivora — Your Smart Shopping Assistant</h3>
-      <div class="chat-display" id="chatDisplay"></div>
-      <div class="input-area">
-        <input type="text" id="chatInput" placeholder="Ask Aivora for comparisons..." />
-        <button onclick="sendMessage()">Send</button>
-      </div>
+        <label class="small">2) Pick your mood</label>
+        <div class="moodGrid" id="moodGrid">
+          <div class="moodBtn" data-mood="tired"><div class="moodEmoji">😴</div><div><div class="moodLabel">Tired</div><div class="moodDesc">Need rest & calm</div></div></div>
+          <div class="moodBtn" data-mood="stressed"><div class="moodEmoji">😣</div><div><div class="moodLabel">Stressed</div><div class="moodDesc">Need soothing</div></div></div>
+          <div class="moodBtn" data-mood="happy"><div class="moodEmoji">😊</div><div><div class="moodLabel">Happy</div><div class="moodDesc">Treat yourself</div></div></div>
+          <div class="moodBtn" data-mood="cold"><div class="moodEmoji">🥶</div><div><div class="moodLabel">Cold</div><div class="moodDesc">Warm & cozy</div></div></div>
+          <div class="moodBtn" data-mood="relaxed"><div class="moodEmoji">😌</div><div><div class="moodLabel">Relaxed</div><div class="moodDesc">Gentle care</div></div></div>
+          <div class="moodBtn" data-mood="energetic"><div class="moodEmoji">⚡</div><div><div class="moodLabel">Energetic</div><div class="moodDesc">Boost mode</div></div></div>
+        </div>
+
+        <div class="selectedTag" id="selectedTag" style="display:none">Selected mood: <span id="pickedMood"></span></div>
+        <div class="notice" id="fetchNotice" style="display:none;margin-top:10px"></div>
+      </aside>
+
+      <!-- CENTER: Products -->
+      <main class="panel" aria-label="Products area">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <h3 style="margin:0">Products</h3>
+            <div class="small" id="prodCount">No products yet</div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <input id="search" class="search" placeholder="Search products / ingredients" />
+            <select id="categoryFilter" class="btnGhost" style="padding:8px;border-radius:8px">
+              <option value="">All</option><option>Tea</option><option>Skincare</option><option>Outfit</option>
+            </select>
+            <select id="sortBy" class="btnGhost" style="padding:8px;border-radius:8px">
+              <option value="relevance">Relevance</option><option value="price_asc">Price ↑</option><option value="price_desc">Price ↓</option><option value="rating_desc">Rating</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="productsArea" style="margin-top:12px">
+          <div class="gridProducts" id="productsGrid"></div>
+        </div>
+
+        <div id="pager" style="margin-top:12px;display:flex;justify-content:center;gap:8px"></div>
+      </main>
+
+      <!-- RIGHT: Chat + Cart -->
+      <aside class="panel" aria-label="Assistant & Cart">
+        <h3 style="margin:0">Aivora — Assistant</h3>
+        <div class="small" style="margin-top:6px">Ask Aivora to compare items, summarize reviews, or suggest best value.</div>
+
+        <div class="chat" style="margin-top:8px">
+          <div class="messages" id="messages">
+            <div class="msg aiva"><strong>Aivora:</strong> Hi — pick a mood and I will generate personalized products. Ask me to compare any of them.</div>
+          </div>
+
+          <div class="chatInput">
+            <input id="chatInput" placeholder="Compare 'Chamomile vs Lavender' or 'best value for cozy hoodie'" />
+            <button class="btn" id="sendChat">Ask</button>
+          </div>
+        </div>
+
+        <hr style="margin:12px 0;border:none;border-top:1px solid rgba(255,255,255,0.03)">
+
+        <h4 style="margin:0">Cart</h4>
+        <div id="cartList" style="max-height:220px;overflow:auto;margin-top:8px"></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
+          <div><strong>Total:</strong> <span id="cartTotal">₹0</span></div>
+          <button class="btn" id="checkoutBtn">Checkout</button>
+        </div>
+
+        <div id="emiBox" style="margin-top:10px;display:none">
+          <h4 style="margin:0">Smart EMI</h4>
+          <div id="emiPlan" class="small"></div>
+        </div>
+      </aside>
     </div>
 
-    <div id="emiSection" style="display:none; margin-top:25px;">
-      <h3>💳 Smart EMI Plan</h3>
-      <p id="emiResult">Calculating best payment options...</p>
-    </div>
-  </section>
+    <footer style="margin-top:12px">Tip: If your browser shows a CORS error, run the small local proxy provided in the instructions below.</footer>
 
-  <footer>© 2025 Lumosis × Aivora — AI Mood Experience</footer>
+    <!-- Hidden: CORS/server instructions -->
+    <details style="margin-top:12px;color:var(--muted)">
+      <summary style="cursor:pointer;color:var(--muted)">If you get CORS or network errors — quick local proxy (optional)</summary>
+      <pre style="background:#071022;padding:12px;border-radius:8px;color:#cde;">
+# Quick Node proxy (run locally, then keep this file and open in browser at http://localhost:3000/index.html)
+npm init -y
+npm i express node-fetch
+// save as server.js:
+const express = require('express'); const fetch = (...a)=>import('node-fetch').then(m=>m.default(...a));
+const app = express(); app.use(express.json()); app.use(express.static('.'));
+const GROQ_KEY = process.env.GROQ_KEY || '';
+app.post('/proxy', async (req,res)=>{ try{
+  const r = await fetch('https://api.groq.ai/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+GROQ_KEY},body:JSON.stringify(req.body)});
+  const j = await r.text(); res.status(r.status).send(j);
+}catch(e){res.status(500).send(e.message);} });
+app.listen(3000,()=>console.log('Proxy http://localhost:3000')); 
+// Run: GROQ_KEY="gsk_..." node server.js
+      </pre>
+    </details>
+  </div>
 
-  <script>
-    async function fetchAIProducts() {
-      const mood = document.getElementById('mood').value;
-      const info = document.getElementById('moodInfo');
-      const suggestions = document.getElementById('suggestions');
-      if (!mood) return alert("Please select your mood first!");
+<script>
+/* ---------------------------
+  Single-file client logic:
+  - store API key in sessionStorage (user pastes it)
+  - generate 50+ products via Groq chat completion (model: llama-3.1-8b-instant)
+  - chat uses Groq as well
+  - fallback to local generator if Groq fails
+----------------------------*/
+const state = { apiKey: sessionStorage.getItem('GROQ_KEY') || '', mood: null, products: [], page:1, perPage:12, cart: [] };
 
-      info.style.display = "block";
-      info.textContent = `Aivora is curating products for your ${mood} mood...`;
-      suggestions.innerHTML = "";
+/* ---------- UI elements ---------- */
+const apiKeyInput = document.getElementById('apiKey');
+const saveKeyBtn = document.getElementById('saveKey');
+const clearKeyBtn = document.getElementById('clearKey');
+const keyNotice = document.getElementById('keyNotice');
+const moodBtns = document.querySelectorAll('.moodBtn');
+const pickedMood = document.getElementById('pickedMood');
+const selectedTag = document.getElementById('selectedTag');
+const fetchNotice = document.getElementById('fetchNotice');
+const productsGrid = document.getElementById('productsGrid');
+const prodCount = document.getElementById('prodCount');
+const pager = document.getElementById('pager');
+const searchInput = document.getElementById('search');
+const categoryFilter = document.getElementById('categoryFilter');
+const sortBy = document.getElementById('sortBy');
+const messagesEl = document.getElementById('messages');
+const chatInput = document.getElementById('chatInput');
+const sendChatBtn = document.getElementById('sendChat');
+const cartList = document.getElementById('cartList');
+const cartTotalEl = document.getElementById('cartTotal');
+const checkoutBtn = document.getElementById('checkoutBtn');
+const emiBox = document.getElementById('emiBox');
+const emiPlan = document.getElementById('emiPlan');
 
-      try {
-        const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-          method: "POST",
-          headers: {
-            "Authorization": "Bearer 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",
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            model: "llama-3.1-8b-instant",
-            messages: [
-              { role: "system", content: "You are Lumosis, an AI mood stylist that generates curated calming teas, gentle skincare, and comfy outfits based on mood. Return JSON with name, type, and price in rupees for 50+ unique products." },
-              { role: "user", content: `Generate 50+ futuristic product recommendations for someone who feels ${mood}.` }
-            ],
-            max_tokens: 1000
-          })
-        });
+/* ---------- API key handling ---------- */
+apiKeyInput.value = state.apiKey || '';
+saveKeyBtn.addEventListener('click', ()=> {
+  const v = apiKeyInput.value.trim();
+  if(!v) return alert('Paste your Groq API key (keeps in session only).');
+  sessionStorage.setItem('GROQ_KEY', v);
+  state.apiKey = v;
+  keyNotice.textContent = 'API key saved for this session. (Will be cleared when tab closes.)';
+  keyNotice.style.color = 'var(--accent1)';
+});
+clearKeyBtn.addEventListener('click', ()=> {
+  sessionStorage.removeItem('GROQ_KEY');
+  state.apiKey = '';
+  apiKeyInput.value = '';
+  keyNotice.textContent = 'API key cleared.';
+});
 
-        const data = await res.json();
-        let text = data.choices?.[0]?.message?.content;
-        let jsonStart = text.indexOf('[');
-        let jsonEnd = text.lastIndexOf(']');
-        let jsonStr = text.slice(jsonStart, jsonEnd + 1);
-
-        const products = JSON.parse(jsonStr);
-        info.textContent = `Showing AI-suggested picks for your ${mood} mood:`;
-
-        products.forEach(item => {
-          const card = document.createElement('div');
-          card.className = 'card';
-          card.innerHTML = `
-            <h4>${item.name}</h4>
-            <p>${item.type}</p>
-            <p>${item.price}</p>
-            <button onclick="buyProduct('${item.name}', '${item.price}')">Buy Instantly</button>
-          `;
-          suggestions.appendChild(card);
-        });
-
-      } catch (err) {
-        info.textContent = "⚠️ Failed to fetch AI products. Check connection or API key.";
-        console.error(err);
-      }
+/* ---------- Mood selection ---------- */
+moodBtns.forEach(btn=>{
+  btn.addEventListener('click', async ()=>{
+    const mood = btn.dataset.mood;
+    // highlight selection
+    document.querySelectorAll('.moodBtn').forEach(b=>b.style.outline='none');
+    btn.style.outline='2px solid rgba(110,168,255,0.12)';
+    state.mood = mood;
+    pickedMood.textContent = mood;
+    selectedTag.style.display='block';
+    // clear previous and show spinner
+    state.products = []; state.page = 1; renderProducts();
+    fetchNotice.style.display='block'; fetchNotice.innerHTML = '<span class="spinner"></span> Generating 60+ products with AI...';
+    // call AI
+    try {
+      const products = await generateProductsViaGroq(mood, 60);
+      state.products = products;
+      fetchNotice.textContent = `AI returned ${products.length} products for "${mood}".`;
+    } catch(err){
+      console.warn('Groq generation failed:', err);
+      state.products = fallbackProducts(mood, 60);
+      fetchNotice.textContent = `Using fallback products (${state.products.length}) — AI call failed or CORS blocked.`;
     }
+    state.page = 1;
+    renderProducts();
+  });
+});
 
-    function buyProduct(name, price) {
-      const emi = document.getElementById('emiSection');
-      const emiRes = document.getElementById('emiResult');
-      emi.style.display = 'block';
-      emiRes.textContent = `Checking EMI options for ${name} (${price})...`;
-      setTimeout(() => {
-        const val = parseInt(price.replace('₹','')) || 1200;
-        emiRes.innerHTML = `
-          ✅ EMI Plan: 3 months × ₹${(val/3).toFixed(0)}  
-          <br>💡 Tip: Use Lumosis SmartPay for 10% cashback!
-        `;
-      }, 1500);
-    }
+/* ---------- Generate products via Groq ---------- */
+async function generateProductsViaGroq(mood, count=60){
+  if(!state.apiKey) throw new Error('API key missing');
 
-    async function sendMessage() {
-      const input = document.getElementById('chatInput');
-      const display = document.getElementById('chatDisplay');
-      const msg = input.value.trim();
-      if (!msg) return;
+  // structured prompt: ask for JSON only
+  const userPrompt = `Produce ${count} distinct product objects in JSON array tailored to mood: "${mood}". Each item must be:
+  { "id": "unique-id", "name":"product name", "category":"Tea|Skincare|Outfit", "short_description":"one-line", "price": integer (rupees), "rating": float 0-5 (one decimal), "sentiment": float 0.0-1.0 }
+Return exactly a top-level JSON object: { "products": [ ... ] } and nothing else.`;
 
-      display.innerHTML += `<div class='chat-msg user'>${msg}</div>`;
-      input.value = "";
-      const botDiv = document.createElement('div');
-      botDiv.className = 'chat-msg bot';
-      botDiv.textContent = "Aivora is thinking...";
-      display.appendChild(botDiv);
-      display.scrollTop = display.scrollHeight;
+  const body = {
+    model: "llama-3.1-8b-instant",
+    messages: [
+      { role: "system", content: "You are an assistant that outputs precise JSON only. Do not add extra commentary." },
+      { role: "user", content: userPrompt }
+    ],
+    temperature: 0.9,
+    max_completion_tokens: 1500
+  };
 
-      try {
-        const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-          method: "POST",
-          headers: {
-            "Authorization": "Bearer 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",
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            model: "llama-3.1-8b-instant",
-            messages: [
-              { role: "system", content: "You are Aivora, an AI shopping assistant that compares and ranks products based on customer sentiment, value, and popularity." },
-              { role: "user", content: msg }
-            ],
-            max_tokens: 200
-          })
-        });
+  // Try direct Groq call (may hit CORS)
+  const endpoint = 'https://api.groq.ai/v1/chat/completions';
+  const headers = { "Content-Type":"application/json", "Authorization":"Bearer " + state.apiKey };
 
-        const data = await res.json();
-        botDiv.textContent = data.choices?.[0]?.message?.content || "Sorry, I couldn’t process that.";
-      } catch (err) {
-        botDiv.textContent = "⚠️ Network error or invalid API key.";
-      }
-    }
-  </script>
+  const resp = await fetch(endpoint, { method:'POST', headers, body: JSON.stringify(body) });
+  if(!resp.ok){
+    // provide helpful message when blocked
+    const text = await resp.text();
+    throw new Error('Groq API error: ' + resp.status + ' — ' + text.slice(0,200));
+  }
+  const json = await resp.json();
+  const content = json.choices?.[0]?.message?.content || json.choices?.[0]?.delta?.content || '';
+  if(!content) throw new Error('No content from Groq');
+
+  // extract JSON object safely
+  const firstBrace = content.indexOf('{');
+  const lastBrace = content.lastIndexOf('}');
+  if(firstBrace === -1 || lastBrace === -1) throw new Error('No JSON in model response');
+  const jsonText = content.slice(firstBrace, lastBrace+1);
+  let parsed;
+  try { parsed = JSON.parse(jsonText); }
+  catch(e){
+    // try to be permissive: find array
+    const arrStart = content.indexOf('[');
+    const arrEnd = content.lastIndexOf(']');
+    if(arrStart === -1 || arrEnd === -1) throw e;
+    const arrText = content.slice(arrStart, arrEnd+1);
+    parsed = { products: JSON.parse(arrText) };
+  }
+  if(!Array.isArray(parsed.products)) throw new Error('Parsed JSON has no products array');
+  // sanitize & normalize
+  const products = parsed.products.map((p,i)=>({
+    id: String(p.id || `g_${Date.now()}_${i}`),
+    name: String(p.name || p.title || 'Product '+(i+1)),
+    category: String(p.category || (i%3===0?'Tea':(i%3===1?'Skincare':'Outfit'))),
+    short_description: String(p.short_description || p.description || ''),
+    price: Number(p.price) || Math.round(Math.random()*1500+199),
+    rating: Number(p.rating) || Number((Math.random()*1.2+3.6).toFixed(1)),
+    sentiment: Number(p.sentiment) || Number((Math.random()*0.4+0.6).toFixed(2))
+  }));
+  return products;
+}
+
+/* ---------- Fallback generator ---------- */
+function fallbackProducts(mood, count=60){
+  const seeds = {
+    tired:['Chamomile','Night','Calm','Soothing','Cloud'],
+    stressed:['Lavender','Zen','Detox','Quiet','Balance'],
+    happy:['Citrus','Sunshine','Glow','Fresh','Spark'],
+    cold:['Ginger','Warm','Cozy','Fleece','Therm'],
+    relaxed:['Jasmine','Serene','Hydrate','Breezy','Soft'],
+    energetic:['Green','Power','Zest','Boost','Active']
+  };
+  const cats = ['Tea','Skincare','Outfit'];
+  const s = seeds[mood] || seeds['relaxed'];
+  const arr = [];
+  for(let i=0;i<count;i++){
+    arr.push({
+      id: `fb_${mood}_${i}`,
+      name: `${s[i % s.length]} ${cats[i%3]} ${100+i}`,
+      category: cats[i%3],
+      short_description: `${s[i % s.length]} inspired ${cats[i%3]}`,
+      price: Math.round(Math.random()*1500+199),
+      rating: Number((Math.random()*1.2+3.6).toFixed(1)),
+      sentiment: Number((Math.random()*0.4+0.6).toFixed(2))
+    });
+  }
+  return arr;
+}
+
+/* ---------- Render products (with filters/paging) ---------- */
+function renderProducts(){
+  productsGrid.innerHTML = '';
+  const filtered = applyFilters(state.products);
+  prodCount.textContent = `${filtered.length} products`;
+  // paging
+  const start = (state.page-1)*state.perPage;
+  const pageItems = filtered.slice(start, start + state.perPage);
+  pageItems.forEach(p=>{
+    const d = document.createElement('div'); d.className='product';
+    d.innerHTML = `<div style="display:flex;justify-content:space-between"><div class="title">${escapeHtml(p.name)}</div><div class="meta">₹${Number(p.price).toFixed(0)}</div></div>
+      <div class="small">${escapeHtml(p.category)} • Rating: ${p.rating} • Sent: ${Number(p.sentiment).toFixed(2)}</div>
+      <div style="margin-top:6px">${escapeHtml(p.short_description || '')}</div>
+      <div class="actions">
+        <button class="btn" data-buy="${p.id}">Buy Now</button>
+        <button class="btnGhost" data-cart="${p.id}">Add to Cart</button>
+        <button class="btnGhost" data-info="${p.id}">Info</button>
+      </div>`;
+    productsGrid.appendChild(d);
+  });
+  renderPager(filtered.length);
+  attachProductHandlers();
+}
+
+/* filters */
+function applyFilters(list){
+  const q = (searchInput.value||'').trim().toLowerCase();
+  const cat = (categoryFilter.value||'').trim();
+  const sBy = sortBy.value;
+  let out = list.slice();
+  if(q) out = out.filter(p => p.name.toLowerCase().includes(q) || p.short_description.toLowerCase().includes(q));
+  if(cat) out = out.filter(p => p.category === cat);
+  if(sBy === 'price_asc') out.sort((a,b)=>a.price-b.price);
+  else if(sBy==='price_desc') out.sort((a,b)=>b.price-a.price);
+  else if(sBy==='rating_desc') out.sort((a,b)=>b.rating-b.rating?b.rating-a.rating:0);
+  return out;
+}
+searchInput.addEventListener('input', ()=>{ state.page=1; renderProducts(); });
+categoryFilter.addEventListener('change', ()=>{ state.page=1; renderProducts(); });
+sortBy.addEventListener('change', ()=>{ state.page=1; renderProducts(); });
+
+/* pager */
+function renderPager(total){
+  pager.innerHTML = '';
+  const totalPages = Math.max(1, Math.ceil(total / state.perPage));
+  const prev = document.createElement('button'); prev.className='btnGhost'; prev.textContent='Prev'; prev.disabled = state.page===1; prev.onclick=()=>{ state.page=Math.max(1,state.page-1); renderProducts(); };
+  const next = document.createElement('button'); next.className='btnGhost'; next.textContent='Next'; next.disabled = state.page>=totalPages; next.onclick=()=>{ state.page=Math.min(totalPages,state.page+1); renderProducts(); };
+  const pageLabel = document.createElement('div'); pageLabel.className='small'; pageLabel.style.alignSelf='center'; pageLabel.textContent = `Page ${state.page}/${totalPages}`;
+  pager.appendChild(prev); pager.appendChild(pageLabel); pager.appendChild(next);
+}
+
+/* product handlers */
+function attachProductHandlers(){
+  document.querySelectorAll('[data-cart]').forEach(b=>b.onclick = (e)=>{ const id = e.currentTarget.dataset.cart; const p = findProductById(id); if(p) addToCart(p); });
+  document.querySelectorAll('[data-buy]').forEach(b=>b.onclick = (e)=>{ const id = e.currentTarget.dataset.buy; const p = findProductById(id); if(p) buyNow(p); });
+  document.querySelectorAll('[data-info]').forEach(b=>b.onclick = (e)=>{ const id = e.currentTarget.dataset.info; const p = findProductById(id); if(p) showInfo(p); });
+}
+function findProductById(id){ return state.products.find(x=>x.id===id) || null; }
+
+function addToCart(p){
+  const copy = {...p, qty:1};
+  state.cart.push(copy);
+  renderCart();
+  showToast('Added to cart');
+}
+function renderCart(){
+  cartList.innerHTML = '';
+  let total=0;
+  state.cart.forEach((c, idx)=>{
+    total += c.price * c.qty;
+    const el = document.createElement('div'); el.className='cartItem';
+    el.innerHTML = `<div style="flex:1"><strong>${escapeHtml(c.name)}</strong><div class="small">${escapeHtml(c.category)} • ₹${c.price}</div></div>
+      <div style="display:flex;gap:6px;align-items:center">
+        <input type="number" min="1" value="${c.qty}" style="width:56px;padding:6px;border-radius:8px;border:0;background:rgba(255,255,255,0.02)}" data-idx="${idx}" class="cartQty"/>
+        <button class="btnGhost" data-rem="${idx}">Remove</button>
+      </div>`;
+    cartList.appendChild(el);
+  });
+  cartTotalEl.textContent = '₹' + total.toFixed(2);
+  // handlers
+  document.querySelectorAll('[data-rem]').forEach(b=>b.onclick=(e)=>{ const i=Number(e.currentTarget.dataset.rem); state.cart.splice(i,1); renderCart(); });
+  document.querySelectorAll('.cartQty').forEach(inp=>inp.onchange=(e)=>{ const i=Number(e.target.dataset.idx); const v=Math.max(1,Number(e.target.value)||1); state.cart[i].qty=v; renderCart(); });
+}
+
+/* buy flow & EMI */
+function buyNow(p){
+  if(!confirm(`Buy "${p.name}" for ₹${p.price}?`)) return;
+  const plan = computeSmartEmi(p.price, p.sentiment || 0.75);
+  emiBox.style.display='block';
+  emiPlan.innerHTML = `<strong>Plan for ${escapeHtml(p.name)}</strong><div class="small">${plan.summary}</div><div class="small">EMI: ₹${plan.emi.toFixed(2)} / month for ${plan.tenure} months @ ${(plan.rate*100).toFixed(2)}% p.a.</div><div style="margin-top:8px"><button class="btn" onclick="confirmPurchase('${p.id}')">Confirm</button></div>`;
+}
+checkoutBtn.addEventListener('click', ()=> {
+  if(state.cart.length===0) return alert('Cart empty');
+  const total = state.cart.reduce((s,c)=>s + c.price*c.qty, 0);
+  if(!confirm(`Checkout cart for ₹${total.toFixed(2)}?`)) return;
+  const plan = computeSmartEmi(total, averageSentiment(state.cart));
+  emiBox.style.display='block';
+  emiPlan.innerHTML = `<strong>Cart plan</strong><div class="small">${plan.summary}</div><div class="small">EMI: ₹${plan.emi.toFixed(2)} / month for ${plan.tenure} months @ ${(plan.rate*100).toFixed(2)}% p.a.</div><div style="margin-top:8px"><button class="btn" onclick="confirmPurchase('cart')">Confirm</button></div>`;
+});
+function confirmPurchase(id){
+  if(id==='cart'){ alert('Demo purchase complete — thank you!'); state.cart=[]; renderCart(); emiBox.style.display='none'; }
+  else { alert('Demo purchase complete — thank you!'); emiBox.style.display='none'; }
+}
+function computeSmartEmi(amount, sentiment){
+  const base=0.14; const rate = Math.max(0.06, base - (sentiment-0.6)*0.08);
+  let tenure = amount < 500 ? 3 : amount < 1500 ? 6 : 12;
+  const rM = rate/12;
+  const emi = (amount * rM * Math.pow(1+rM,tenure)) / (Math.pow(1+rM,tenure) - 1);
+  const summary = amount < 1000 ? 'Low-cost quick plan' : amount < 3000 ? 'Balanced plan' : 'Split downpayment + longer tenure recommended';
+  return {rate,tenure,emi,summary};
+}
+function averageSentiment(items){ if(!items||items.length===0) return 0.75; return items.reduce((a,b)=>a+(b.sentiment||0.75),0)/items.length; }
+
+/* chat: both user + Aivora via Groq */
+sendChatBtn.addEventListener('click', sendChat);
+chatInput.addEventListener('keydown', (e)=>{ if(e.key==='Enter') sendChat(); });
+
+async function sendChat(){
+  const txt = (chatInput.value||'').trim(); if(!txt) return;
+  addMsg('user', txt); chatInput.value='';
+  addMsg('aiva', 'Thinking & analyzing products...');
+  try {
+    const reply = await askGroqChat(txt);
+    addMsg('aiva', reply);
+    // try to parse ranking if reply is JSON with "ranking"
+    try{
+      const parsed = JSON.parse(reply);
+      if(parsed && parsed.ranking && Array.isArray(parsed.ranking)) highlightRanking(parsed.ranking);
+    }catch(e){}
+  } catch(err){
+    addMsg('aiva', 'Error: ' + err.message);
+  }
+}
+
+function addMsg(role, text){
+  const d = document.createElement('div'); d.className = 'msg ' + (role==='user' ? 'user' : 'aiva');
+  d.innerHTML = `<strong>${role==='user' ? 'You' : 'Aivora'}:</strong> ${escapeHtml(text)}`;
+  messagesEl.appendChild(d); messagesEl.scrollTop = messagesEl.scrollHeight;
+}
+
+function highlightRanking(ids){
+  if(!ids || ids.length===0) return;
+  const first = ids[0];
+  const el = document.querySelector(`[data-buy="${first}"]`);
+  if(el) el.scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+/* call Groq for chat; include context of some products */
+async function askGroqChat(prompt){
+  if(!state.apiKey) throw new Error('API key missing. Paste and Save the key in the left panel.');
+  const contextProducts = state.products.slice(0,20).map(p=>({id:p.id,name:p.name,category:p.category,price:p.price,rating:p.rating,sentiment:p.sentiment}));
+  const userContent = `User: ${prompt}\n\nContext products: ${JSON.stringify(contextProducts)}\n\nReturn either plain helpful text or JSON like { "reply":"...", "ranking": ["id1","id2",...] } .`;
+  const body = {
+    model: "llama-3.1-8b-instant",
+    messages: [
+      { role: "system", content: "You are Aivora, a concise, helpful shopping assistant. If asked to compare, produce a JSON with 'ranking' array (product ids) and a 'reply' text. Otherwise respond conversationally." },
+      { role: "user", content: userContent }
+    ],
+    temperature: 0.9,
+    max_completion_tokens: 600
+  };
+  const endpoint = 'https://api.groq.ai/v1/chat/completions';
+  const resp = await fetch(endpoint, { method:'POST', headers:{ 'Content-Type':'application/json', 'Authorization':'Bearer ' + state.apiKey }, body: JSON.stringify(body) });
+  if(!resp.ok){
+    const txt = await resp.text();
+    throw new Error('Groq API error: ' + resp.status + ' — ' + txt.slice(0,300));
+  }
+  const json = await resp.json();
+  const content = json.choices?.[0]?.message?.content || '';
+  return content;
+}
+
+/* ---------- helpers ---------- */
+function showInfo(p){
+  alert(`${p.name}\n\n${p.short_description}\n\nCategory: ${p.category}\nPrice: ₹${p.price}\nRating: ${p.rating}\nSentiment: ${p.sentiment}`);
+}
+function showToast(txt){ const t=document.createElement('div'); t.textContent=txt; t.style.position='fixed'; t.style.bottom='18px'; t.style.left='50%'; t.style.transform='translateX(-50%)'; t.style.background='rgba(0,0,0,0.7)'; t.style.padding='8px 14px'; t.style.borderRadius='8px'; document.body.appendChild(t); setTimeout(()=>t.remove(),1800); }
+function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+/* If Groq fails with CORS, the user can use a local proxy — already shown in details */
+</script>
 </body>
 </html>
+
 
