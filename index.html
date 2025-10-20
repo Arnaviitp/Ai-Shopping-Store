@@ -1,0 +1,431 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Aivora — Smart Shopping Store</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #0d0f14; --card: #141924; --accent: #8fe3cf; --text: #e8f1f2;
+      --muted: #a7b3b8; --good: #53d769; --warn: #f5c451; --bad: #ff6b6b;
+    }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family: Inter, system-ui, Segoe UI, Roboto, Arial, sans-serif;
+      background: linear-gradient(180deg, #0d0f14, #0b1320); color: var(--text); }
+    .topbar { position: sticky; top:0; z-index:10; display:flex; align-items:baseline; gap:1rem;
+      padding:1rem 2rem; background: rgba(10,12,18,0.8); backdrop-filter: blur(8px); border-bottom:1px solid #1f2533; }
+    .topbar h1 { margin:0; font-size:1.5rem; color: var(--accent); }
+    .subtitle { color: var(--muted); font-size:0.95rem; }
+    .container { display:grid; grid-template-columns:1fr; gap:1rem; padding:1rem; max-width:1100px; margin:0 auto; }
+    .panel { background: var(--card); border:1px solid #1f2533; border-radius:12px; padding:1rem; }
+    .grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap:0.75rem; margin-top:0.5rem; }
+    .card { background:#101626; border:1px solid #212a3b; border-radius:10px; padding:0.75rem; display:flex; flex-direction:column; gap:0.5rem; }
+    .card img { width:100%; height:140px; object-fit:cover; border-radius:8px; background:#0e1422; }
+    .card .name { font-weight:600; }
+    .card .meta { font-size:0.9rem; color: var(--muted); }
+    .card .price { font-weight:600; color: var(--accent); }
+    .card .actions { display:flex; gap:0.5rem; }
+    .card .actions button { flex:1; padding:0.5rem; border-radius:8px; border:1px solid #2a3246; background:#161c2b; color:var(--text); cursor:pointer; }
+    .card .actions button:hover { border-color: var(--accent); color: var(--accent); }
+    .tray { display:flex; gap:0.5rem; flex-wrap: wrap; }
+    .tag { background:#162032; padding:0.4rem 0.6rem; border-radius:999px; border:1px solid #2a3246; font-size:0.9rem; }
+    .results { margin-top:0.75rem; }
+    .result-block { background:#0f1524; border:1px solid #202a40; border-radius:10px; padding:0.75rem; margin:0.5rem 0; }
+    .checkout label { display:inline-flex; flex-direction:column; margin-right:0.75rem; margin-bottom:0.5rem; }
+    .checkout input { margin-top:0.25rem; padding:0.4rem 0.5rem; background:#0e1422; color:var(--text); border:1px solid #2a3246; border-radius:6px; width:160px; }
+    .checkout button { padding:0.5rem 0.9rem; border-radius:8px; border:1px solid #2a3246; background:#161c2b; color:var(--text); cursor:pointer; }
+    .chatbot { position: fixed; right: 16px; bottom: 16px; width: 340px; max-height: 72vh; display:flex; flex-direction:column;
+      background:#0f1524; border:1px solid #202a40; border-radius:12px; overflow:hidden; box-shadow:0 10px 30px rgba(0,0,0,0.4); }
+    .chat-header { padding:0.6rem 0.8rem; background:#11182a; border-bottom:1px solid #202a40; color: var(--accent); }
+    .chat-log { padding:0.6rem; overflow:auto; flex:1; font-size:0.95rem; }
+    .chat-msg { margin:0.35rem 0; }
+    .chat-msg.user { text-align:right; color: var(--accent); }
+    .chat-input { display:flex; gap:0.4rem; padding:0.6rem; border-top:1px solid #202a40; }
+    .chat-input input { flex:1; padding:0.45rem; background:#0e1422; color:var(--text); border:1px solid #2a3246; border-radius:6px; }
+    .chat-input button { padding:0.45rem 0.7rem; border-radius:6px; border:1px solid #2a3246; background:#161c2b; color:var(--text); cursor:pointer; }
+    .row { display:flex; gap:0.5rem; flex-wrap:wrap; align-items:center; }
+    .hint { color: var(--muted); font-size:0.9rem; }
+    .pill { background:#162032; border:1px solid #2a3246; border-radius:999px; padding:0.3rem 0.6rem; }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <h1>Aivora</h1>
+    <div class="subtitle">Mood → Care → Compare → Smart Pay</div>
+  </header>
+
+  <main class="container">
+    <section class="panel">
+      <h2>Your mood</h2>
+      <div class="row">
+        <input id="mood-text" placeholder="How are you feeling?" style="flex:1; padding:0.5rem; background:#0e1422; color:#e8f1f2; border:1px solid #2a3246; border-radius:6px;">
+        <button id="mood-detect">Detect Mood</button>
+        <span id="mood-output" class="pill">mood: —</span>
+      </div>
+      <div class="hint">Type a short note like “feeling a bit stressed and tired” then Detect Mood.</div>
+    </section>
+
+    <section class="panel">
+      <h2>Suggestions</h2>
+      <div id="suggestions" class="grid"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Compare tray</h2>
+      <div id="compare-tray" class="tray"></div>
+      <div class="row">
+        <button id="compare-btn" disabled>Compare & Rank (HF)</button>
+      </div>
+      <div id="compare-results" class="results"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Checkout</h2>
+      <div class="checkout">
+        <label>Total amount (₹)
+          <input id="amount" type="number" value="1999" min="0" />
+        </label>
+        <label>Monthly income (₹)
+          <input id="income" type="number" value="50000" min="0" />
+        </label>
+        <label>Existing EMIs (₹)
+          <input id="existing" type="number" value="0" min="0" />
+        </label>
+        <label>Annual interest (%)
+          <input id="rate" type="number" value="12" min="0" step="0.1" />
+        </label>
+        <button id="emi-btn">Run EMI Check</button>
+      </div>
+      <div id="emi-results" class="results"></div>
+    </section>
+  </main>
+
+  <aside class="chatbot">
+    <div class="chat-header">Aivora</div>
+    <div id="chat-log" class="chat-log"></div>
+    <div class="chat-input">
+      <input id="chat-text" type="text" placeholder="Ask: rank calming teas vs skincare" />
+      <button id="chat-send">Send</button>
+    </div>
+  </aside>
+
+  <script>
+    // =========== CONFIG (direct API usage) ===========
+    const HF_TOKEN = "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"; // WARNING: visible client-side
+    const HF_CHAT_BASE = "https://router.huggingface.co/v1"; // OpenAI-compatible
+    const HF_CHAT_MODEL = "meta-llama/Llama-3.1-8B-Instruct:openrouter"; // pick any available provider/model [example]
+    const HF_SENTIMENT_MODEL = "distilbert-base-uncased-finetuned-sst-2-english";
+
+    // =========== MOCK CATALOG + REVIEWS ===========
+    const CATALOG = [
+      { id:"tea-chamomile-serene", name:"Chamomile Serene Tea", category:"teas", price:299, rating:4.5, moods:["calm","stressed","tired"], tags:["herbal","caffeine-free","soothing"], img:"" },
+      { id:"tea-lavender-lull", name:"Lavender Lull Blend", category:"teas", price:349, rating:4.4, moods:["calm","stressed"], tags:["aromatic","floral","evening"], img:"" },
+      { id:"skin-centella-gel", name:"Centella Calm Gel", category:"skincare", price:799, rating:4.6, moods:["stressed","tired"], tags:["gentle","fragrance-free","sensitive-skin"], img:"" },
+      { id:"skin-ceramide-milk", name:"Ceramide Barrier Milk", category:"skincare", price:899, rating:4.3, moods:["stressed","calm"], tags:["barrier-repair","hydrating","lightweight"], img:"" },
+      { id:"outfit-cotton-lounge", name:"Ultra-Soft Cotton Lounge Set", category:"outfits", price:1499, rating:4.7, moods:["calm","tired"], tags:["breathable","comfy","relaxed-fit"], img:"" },
+      { id:"outfit-bamboo-pjs", name:"Bamboo Cloud PJs", category:"outfits", price:1799, rating:4.5, moods:["calm","stressed"], tags:["cooling","buttery-soft","sleep"], img:"" }
+    ];
+    const REVIEWS = {
+      "tea-chamomile-serene": [
+        { text: "Soothing cup before bed, calms me instantly and tastes gentle." },
+        { text: "Helped my sleep routine, very relaxing aroma!" },
+        { text: "Nice flavor, not bitter, eases anxiety a bit." }
+      ],
+      "tea-lavender-lull": [
+        { text: "Floral and calming, perfect for winding down after work." },
+        { text: "Smells great but slightly strong, still very relaxing." },
+        { text: "Love it for evening meditation sessions." }
+      ],
+      "skin-centella-gel": [
+        { text: "Reduced redness quickly, super gentle and non-sticky." },
+        { text: "Great for sensitive skin, calming with daily use." },
+        { text: "Hydrates without irritation; barrier feels better." }
+      ],
+      "skin-ceramide-milk": [
+        { text: "Barrier repair game-changer, soothed flaky patches." },
+        { text: "Hydrating but light; fragrance-free is a win." },
+        { text: "Calming but a bit pricey; still worth it." }
+      ],
+      "outfit-cotton-lounge": [
+        { text: "So soft and breathable, all-day comfort!" },
+        { text: "Relaxed fit is perfect; fabric feels premium." },
+        { text: "Super comfy and great for lounging." }
+      ],
+      "outfit-bamboo-pjs": [
+        { text: "Cooling and buttery-soft; best sleep ever." },
+        { text: "Very comfortable; runs slightly large but amazing feel." },
+        { text: "Comfy and calming; perfect for hot nights." }
+      ]
+    };
+
+    // =========== DOM ===========
+    const moodText = document.getElementById('mood-text');
+    const moodDetectBtn = document.getElementById('mood-detect');
+    const moodOutput = document.getElementById('mood-output');
+    const suggestionsEl = document.getElementById('suggestions');
+    const trayEl = document.getElementById('compare-tray');
+    const compareBtn = document.getElementById('compare-btn');
+    const compareResults = document.getElementById('compare-results');
+    const emiBtn = document.getElementById('emi-btn');
+    const emiResults = document.getElementById('emi-results');
+    const chatLog = document.getElementById('chat-log');
+    const chatText = document.getElementById('chat-text');
+    const chatSend = document.getElementById('chat-send');
+
+    // =========== STATE ===========
+    let compareTray = [];
+    let currentMood = null;
+
+    // =========== HELPERS ===========
+    function logUser(msg) {
+      const el = document.createElement('div'); el.className = 'chat-msg user'; el.textContent = msg; chatLog.appendChild(el); chatLog.scrollTop = chatLog.scrollHeight;
+    }
+    function logBot(msg) {
+      const el = document.createElement('div'); el.className = 'chat-msg'; el.textContent = msg; chatLog.appendChild(el); chatLog.scrollTop = chatLog.scrollHeight;
+    }
+
+    function productCard(p) {
+      const el = document.createElement('div');
+      el.className = 'card';
+      el.innerHTML = `
+        <img alt="${p.name}"/>
+        <div class="name">${p.name}</div>
+        <div class="meta">₹${p.price} • ★ ${p.rating}</div>
+        <div class="meta">${p.tags.join(' • ')}</div>
+        <div class="actions">
+          <button class="add">Add to Compare</button>
+          <button class="buy">Buy</button>
+        </div>
+      `;
+      el.querySelector('.add').onclick = () => addToTray(p);
+      el.querySelector('.buy').onclick = () => {
+        document.getElementById('amount').value = p.price;
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+      };
+      return el;
+    }
+
+    function renderSuggestions(mood) {
+      suggestionsEl.innerHTML = '';
+      const filtered = mood ? CATALOG.filter(p => p.moods.includes(mood)) : CATALOG;
+      const byCat = filtered.reduce((a, p) => { (a[p.category] = a[p.category] || []).push(p); return a; }, {});
+      ["teas","skincare","outfits"].forEach(cat => {
+        const list = byCat[cat] || [];
+        if (!list.length) return;
+        const head = document.createElement('div');
+        head.className = 'result-block';
+        head.innerHTML = `<strong>${cat.toUpperCase()}</strong>`;
+        suggestionsEl.appendChild(head);
+        const row = document.createElement('div'); row.className = 'grid';
+        list.forEach(p => row.appendChild(productCard(p)));
+        suggestionsEl.appendChild(row);
+      });
+    }
+
+    function addToTray(product) {
+      if (compareTray.find(p => p.id === product.id)) return;
+      compareTray.push(product);
+      renderTray();
+    }
+    function removeFromTray(id) {
+      compareTray = compareTray.filter(p => p.id !== id);
+      renderTray();
+    }
+    function renderTray() {
+      trayEl.innerHTML = '';
+      compareTray.forEach(p => {
+        const span = document.createElement('span');
+        span.className = 'tag'; span.textContent = p.name; span.title = 'Click to remove'; span.onclick = () => removeFromTray(p.id);
+        trayEl.appendChild(span);
+      });
+      compareBtn.disabled = compareTray.length < 2;
+    }
+
+    // =========== HF API CALLS ===========
+    async function hfChat(prompt) {
+      // OpenAI-compatible Chat Completions via HF router
+      const body = {
+        model: HF_CHAT_MODEL,
+        messages: [
+          { role: "system", content: "You are Aivora, a concise shopping assistant that compares options and ranks them clearly." },
+          { role: "user", content: prompt }
+        ],
+        temperature: 0.4,
+        max_tokens: 512,
+        stream: false
+      };
+      const res = await fetch(`${HF_CHAT_BASE}/chat/completions`, {
+        method: "POST",
+        headers: { "Authorization": `Bearer ${HF_TOKEN}`, "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+      if (!res.ok) throw new Error(`HF chat ${res.status}`);
+      const json = await res.json();
+      return json?.choices?.[0]?.message?.content || "";
+    } // [web:146]
+
+    async function hfClassifySentimentBatch(texts) {
+      const endpoint = `https://api-inference.huggingface.co/models/${encodeURIComponent(HF_SENTIMENT_MODEL)}`;
+      const res = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Authorization": `Bearer ${HF_TOKEN}`, "Content-Type": "application/json" },
+        body: JSON.stringify({ inputs: texts, options: { wait_for_model: true } })
+      });
+      if (!res.ok) throw new Error(`HF classify ${res.status}`);
+      return res.json();
+    } // [web:171][web:156]
+
+    // Map sentiment to mood
+    function moodFromSentiment(out) {
+      // For SST-2, arr like [{label:"POSITIVE", score:0.98}, {label:"NEGATIVE", score:0.02}]
+      const pos = out.find(x => x.label.toUpperCase().includes('POSITIVE'))?.score || 0;
+      const neg = out.find(x => x.label.toUpperCase().includes('NEGATIVE'))?.score || 0;
+      if (pos - neg >= 0.25) return "calm";
+      if (neg - pos >= 0.25) return "stressed";
+      return "tired";
+    } // [web:171]
+
+    async function detectMoodFromText(text) {
+      const out = await hfClassifySentimentBatch([text]);
+      return moodFromSentiment(out?.[0] || []);
+    } // [web:171]
+
+    async function productSentimentCompound(productId) {
+      const list = (REVIEWS[productId] || []).map(r => r.text);
+      if (!list.length) return { compoundAvg: 0, n: 0 };
+      const out = await hfClassifySentimentBatch(list);
+      // convert to compound-like: pos - neg
+      const compounds = out.map(arr => {
+        const pos = arr.find(x => x.label.toUpperCase().includes('POSITIVE'))?.score || 0;
+        const neg = arr.find(x => x.label.toUpperCase().includes('NEGATIVE'))?.score || 0;
+        return pos - neg;
+      });
+      const sum = compounds.reduce((a,b)=>a+b,0);
+      return { compoundAvg: sum/compounds.length, n: compounds.length };
+    } // [web:171][web:156]
+
+    async function rankByCategoryHF(category) {
+      const items = CATALOG.filter(p => p.category === category);
+      if (!items.length) return [];
+      const maxRating = Math.max(...items.map(p => p.rating || 0), 1);
+      const results = [];
+      for (const p of items) {
+        const s = await productSentimentCompound(p.id);
+        const normalizedRating = (p.rating || 0) / maxRating;
+        const score = 0.6 * s.compoundAvg + 0.4 * normalizedRating;
+        results.push({ ...p, sentiment: { compound: Number(s.compoundAvg.toFixed(4)), count: s.n }, rankScore: Number(score.toFixed(4)) });
+      }
+      results.sort((a,b)=> b.rankScore - a.rankScore);
+      return results;
+    } // [web:171]
+
+    // =========== EMI ===========
+    function calcEmi({ principal, annualRatePct, months }) {
+      const r = (annualRatePct / 100) / 12;
+      if (r === 0) return principal / months;
+      const num = principal * r * Math.pow(1 + r, months);
+      const den = Math.pow(1 + r, months) - 1;
+      return num / den;
+    } // standard amortization [web:140]
+
+    function evaluatePlans({ amount, monthlyIncome, existingEmi=0, annualRatePct=12 }) {
+      const tenures = [3,6,9,12];
+      const plans = tenures.map(m => {
+        const monthlyEmi = calcEmi({ principal: amount, annualRatePct, months: m });
+        const foir = ((existingEmi + monthlyEmi) / monthlyIncome) * 100;
+        return { months:m, annualRatePct, monthlyEmi: Number(monthlyEmi.toFixed(2)), foir: Number(foir.toFixed(2)), affordable: foir <= 55 };
+      });
+      const affordable = plans.filter(p=>p.affordable).sort((a,b)=>a.months-b.months);
+      const recommended = affordable[0] || plans[plans.length-1];
+      return { plans, recommended };
+    } // FOIR guidance banding common usage [web:140]
+
+    // =========== UI HANDLERS ===========
+    moodDetectBtn.onclick = async () => {
+      const text = moodText.value.trim();
+      if (!text) { moodOutput.textContent = "mood: —"; currentMood = null; renderSuggestions(null); return; }
+      try {
+        moodOutput.textContent = "mood: …";
+        const mood = await detectMoodFromText(text);
+        currentMood = mood;
+        moodOutput.textContent = "mood: " + mood;
+        renderSuggestions(mood);
+        logBot(`Personalized picks for "${mood}" are ready.`);
+      } catch (e) {
+        moodOutput.textContent = "mood: error";
+        logBot("Mood service unavailable.");
+      }
+    };
+
+    compareBtn.onclick = async () => {
+      try {
+        const ids = compareTray.map(p=>p.id);
+        const byCat = {};
+        ids.forEach(id => {
+          const p = CATALOG.find(x=>x.id===id);
+          if (!p) return;
+          byCat[p.category] = byCat[p.category] || [];
+          byCat[p.category].push(p);
+        });
+
+        compareResults.innerHTML = '';
+        for (const cat of Object.keys(byCat)) {
+          const ranked = await rankByCategoryHF(cat);
+          const rankedSelected = ranked.filter(r => ids.includes(r.id));
+          const block = document.createElement('div'); block.className='result-block';
+          block.innerHTML = `<div><strong>${cat.toUpperCase()} — Ranked (sentiment → rating)</strong></div>`;
+          rankedSelected.forEach((p, idx) => {
+            const line = document.createElement('div');
+            line.textContent = `${idx+1}. ${p.name} — ₹${p.price} • ★ ${p.rating} • sentiment ${p.sentiment.compound} (${p.sentiment.count} reviews)`;
+            block.appendChild(line);
+          });
+          compareResults.appendChild(block);
+        }
+        logBot("Shared a ranked list based on real sentiments and ratings.");
+      } catch (e) {
+        logBot("Comparison service unavailable.");
+      }
+    };
+
+    function renderEmi({ plans, recommended }) {
+      emiResults.innerHTML = '';
+      plans.forEach(p => {
+        const row = document.createElement('div'); row.className='result-block';
+        const color = p.affordable ? 'var(--good)' : 'var(--bad)';
+        row.innerHTML = `<div><strong>${p.months} months</strong> • EMI ₹${p.monthlyEmi} • FOIR ${p.foir}%</div>
+                         <div class="meta" style="color:${color}">${p.affordable ? 'Affordable' : 'High obligation'}</div>`;
+        emiResults.appendChild(row);
+      });
+      const rec = document.createElement('div'); rec.className='result-block';
+      rec.innerHTML = `<div><strong>Recommended:</strong> ${recommended.months} months @ EMI ₹${recommended.monthlyEmi} (FOIR ${recommended.foir}%)</div>`;
+      emiResults.appendChild(rec);
+    }
+
+    emiBtn.onclick = () => {
+      const amount = Number(document.getElementById('amount').value || 0);
+      const monthlyIncome = Number(document.getElementById('income').value || 0);
+      const existingEmi = Number(document.getElementById('existing').value || 0);
+      const annualRatePct = Number(document.getElementById('rate').value || 0);
+      const result = evaluatePlans({ amount, monthlyIncome, existingEmi, annualRatePct });
+      renderEmi(result);
+      logBot("Calculated EMI options and highlighted an affordable plan.");
+    };
+
+    chatSend.onclick = async () => {
+      const q = chatText.value.trim(); if (!q) return;
+      chatText.value=''; logUser(q);
+      try {
+        const reply = await hfChat(q);
+        logBot(reply);
+      } catch (e) {
+        logBot("Chat service unavailable.");
+      }
+    };
+    chatText.addEventListener('keydown', e => { if (e.key === 'Enter') chatSend.click(); });
+
+    // Init
+    renderSuggestions(null);
+    logBot("Hi! Detect your mood, add items to compare, ask Aivora to rank, and plan your EMI.");
+  </script>
+</body>
+</html>
