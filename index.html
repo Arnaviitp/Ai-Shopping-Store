@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <meta name="description" content="AI-powered wellness shopping with personalized recommendations">
     <meta name="theme-color" content="#667eea">
-    <title>Advanced Wellness Shopping - Powered by Aivora AI</title>
+    <title>Smart Wellness Shopping - Powered by Trenz AI</title>
     <style>
         * {
             margin: 0;
@@ -1353,13 +1353,13 @@
         <div id="chatbotSection" class="section hidden">
             <div class="section-title">
                 <span>🤖</span>
-                <span>Chat with Aivora</span>
+                <span>Chat with Trenz</span>
             </div>
             <div class="chatbot-container">
                 <div class="chat-header">
                     <div class="chat-status">
                         <div class="status-indicator"></div>
-                        <span>Aivora Online</span>
+                        <span>Trenz Online</span>
                     </div>
                     <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                         <button class="btn btn-secondary" onclick="clearChat()">Clear</button>
@@ -1368,7 +1368,7 @@
                 </div>
                 <div id="chatMessages" class="chat-messages">
                     <div class="message bot-message">
-                        Hi! I'm Aivora, your AI wellness assistant. I can help you compare products, analyze reviews, and find the perfect items for your needs. Ask me anything!
+                        Hi! I'm Trenz, your AI wellness assistant. I can help you compare products, analyze reviews, and find the perfect items for your needs. Ask me anything!
                         <div class="message-timestamp">Just now</div>
                     </div>
                 </div>
@@ -1652,7 +1652,7 @@
             'WELLNESS20': 20,
             'SAVE10': 10,
             'FIRST25': 25,
-            'AIVORA15': 15
+            'Trenz15': 15
         };
 
         // Initialize
@@ -1858,7 +1858,7 @@
                         <button class="btn btn-primary" onclick="addToCart(${product.id})">Add to Cart</button>
                         <button class="btn btn-secondary" onclick="addToCompare(${product.id})">Compare</button>
                     </div>
-                    <button class="btn btn-secondary" onclick="askAboutProduct(${product.id})" style="width: 100%; margin-top: 10px;">Ask Aivora</button>
+                    <button class="btn btn-secondary" onclick="askAboutProduct(${product.id})" style="width: 100%; margin-top: 10px;">Ask Trenz</button>
                 </div>
             `;
         }
@@ -2235,7 +2235,7 @@
             const typingDiv = document.createElement('div');
             typingDiv.className = 'message bot-message';
             typingDiv.id = 'typing';
-            typingDiv.textContent = 'Aivora is thinking...';
+            typingDiv.textContent = 'Trenz is thinking...';
             document.getElementById('chatMessages').appendChild(typingDiv);
             
             const productContext = products.map(p => 
@@ -2244,7 +2244,7 @@
             
             const cartContext = cart.length > 0 ? `\nCart: ${cart.map(item => `${item.name} (Qty: ${item.quantity})`).join(', ')}` : '';
             
-            const systemPrompt = `You are Aivora, an AI wellness shopping assistant. Help customers choose products based on their mood (${currentMood}).
+            const systemPrompt = `You are Trenz, an AI wellness shopping assistant. Help customers choose products based on their mood (${currentMood}).
             
 Available products:
 ${productContext}
