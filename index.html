@@ -289,7 +289,7 @@
             overflow: hidden;
             margin-bottom: 15px;
             position: relative;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: #f0f0f0;
         }
 
         .product-image {
@@ -297,6 +297,7 @@
             height: 100%;
             object-fit: cover;
             transition: transform 0.3s;
+            display: block;
         }
 
         .product-card:hover .product-image {
@@ -1242,62 +1243,62 @@
         const GROQ_API_KEY = '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';
         const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 
-        // Unsplash image mappings for products
-        const imageKeywords = {
-            'Chamomile Calm Tea': 'chamomile-tea-cup',
-            'Lavender Dream Tea': 'lavender-tea-flowers',
-            'Stress Relief Herbal Blend': 'herbal-tea-wellness',
-            'Soothing Aloe Vera Gel': 'aloe-vera-skincare',
-            'Calming Face Mask': 'face-mask-spa',
-            'Relaxing Aromatherapy Serum': 'aromatherapy-essential-oils',
-            'Soft Cotton Lounge Set': 'comfortable-loungewear',
-            'Bamboo Comfort Pajamas': 'cozy-pajamas-bed',
-            'Relaxed Fit Hoodie': 'comfortable-hoodie',
-            'Energy Boost Green Tea': 'green-tea-matcha',
-            'Ginseng Vitality Tea': 'ginseng-tea-cup',
-            'Matcha Power Blend': 'matcha-green-tea',
-            'Refreshing Vitamin C Serum': 'vitamin-c-skincare',
-            'Energizing Eye Cream': 'eye-cream-skincare',
-            'Brightening Face Mist': 'face-mist-spray',
-            'Breathable Athleisure Set': 'athletic-wear-workout',
-            'Cooling Fabric T-Shirt': 'athletic-tshirt',
-            'Comfy Joggers': 'comfortable-joggers',
-            'Peaceful Mind Tea': 'peaceful-tea-meditation',
-            'Anxiety Relief Herbal Mix': 'herbal-tea-calm',
-            'Calming Passionflower Tea': 'passionflower-tea',
-            'Gentle Soothing Cleanser': 'gentle-cleanser-skincare',
-            'Calming CBD Cream': 'cbd-cream-wellness',
-            'Stress-Relief Face Oil': 'face-oil-skincare',
-            'Weighted Comfort Blanket': 'weighted-blanket-cozy',
-            'Ultra-Soft Robe': 'soft-bathrobe',
-            'Cozy Knit Sweater': 'cozy-knit-sweater',
-            'Tropical Fruit Tea': 'tropical-fruit-tea',
-            'Citrus Burst Green Tea': 'citrus-tea-lemon',
-            'Berry Bliss Herbal Tea': 'berry-tea-fruits',
-            'Radiant Glow Serum': 'glowing-skincare-serum',
-            'Brightening Day Cream': 'day-cream-skincare',
-            'Luminous Face Mask': 'luminous-face-mask',
-            'Vibrant Summer Dress': 'summer-dress-colorful',
-            'Colorful Casual Outfit': 'casual-outfit-fashion',
-            'Stylish Comfort Set': 'comfortable-stylish-outfit',
-            'Mood Lift Herbal Tea': 'uplifting-herbal-tea',
-            'Comforting Vanilla Chai': 'chai-tea-vanilla',
-            'Uplifting Lemon Balm Tea': 'lemon-balm-tea',
-            'Self-Care Face Mask Set': 'face-mask-set-spa',
-            'Nurturing Night Cream': 'night-cream-skincare',
-            'Comforting Body Butter': 'body-butter-cream',
-            'Cozy Fleece Blanket Set': 'cozy-fleece-blanket',
-            'Warm Comfort Sleepwear': 'warm-pajamas-sleepwear',
-            'Snuggle-Soft Loungewear': 'soft-loungewear-comfort',
-            'Power Boost Black Tea': 'black-tea-strong',
-            'Athletic Performance Tea': 'performance-tea-workout',
-            'Focus & Energy Blend': 'energy-tea-focus',
-            'Energizing Face Wash': 'energizing-face-wash',
-            'Active Hydration Gel': 'hydration-gel-skincare',
-            'Sport Recovery Lotion': 'sport-recovery-cream',
-            'Performance Activewear Set': 'activewear-performance',
-            'Dynamic Sports Outfit': 'sports-outfit-athletic',
-            'Pro Athletic Gear': 'athletic-gear-professional'
+        // Direct Unsplash image URLs (curated high-quality images)
+        const productImages = {
+            'Chamomile Calm Tea': 'https://images.unsplash.com/photo-1594631252845-29fc4cc8cde9?w=400&h=300&fit=crop',
+            'Lavender Dream Tea': 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=400&h=300&fit=crop',
+            'Stress Relief Herbal Blend': 'https://images.unsplash.com/photo-1564890369478-c89ca6d9cde9?w=400&h=300&fit=crop',
+            'Soothing Aloe Vera Gel': 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=400&h=300&fit=crop',
+            'Calming Face Mask': 'https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=400&h=300&fit=crop',
+            'Relaxing Aromatherapy Serum': 'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=400&h=300&fit=crop',
+            'Soft Cotton Lounge Set': 'https://images.unsplash.com/photo-1578102718171-ec1f91680562?w=400&h=300&fit=crop',
+            'Bamboo Comfort Pajamas': 'https://images.unsplash.com/photo-1584293648398-9e52f5bef8f8?w=400&h=300&fit=crop',
+            'Relaxed Fit Hoodie': 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400&h=300&fit=crop',
+            'Energy Boost Green Tea': 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=400&h=300&fit=crop',
+            'Ginseng Vitality Tea': 'https://images.unsplash.com/photo-1597318121031-6c0c0e9b5571?w=400&h=300&fit=crop',
+            'Matcha Power Blend': 'https://images.unsplash.com/photo-1515823064-d6e0c04616a7?w=400&h=300&fit=crop',
+            'Refreshing Vitamin C Serum': 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=400&h=300&fit=crop',
+            'Energizing Eye Cream': 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=400&h=300&fit=crop',
+            'Brightening Face Mist': 'https://images.unsplash.com/photo-1571875257727-256c39da42af?w=400&h=300&fit=crop',
+            'Breathable Athleisure Set': 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=400&h=300&fit=crop',
+            'Cooling Fabric T-Shirt': 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=300&fit=crop',
+            'Comfy Joggers': 'https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=400&h=300&fit=crop',
+            'Peaceful Mind Tea': 'https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=400&h=300&fit=crop',
+            'Anxiety Relief Herbal Mix': 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=400&h=300&fit=crop',
+            'Calming Passionflower Tea': 'https://images.unsplash.com/photo-1558642891-54be180ea339?w=400&h=300&fit=crop',
+            'Gentle Soothing Cleanser': 'https://images.unsplash.com/photo-1556228852-80a39606bd3c?w=400&h=300&fit=crop',
+            'Calming CBD Cream': 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=400&h=300&fit=crop',
+            'Stress-Relief Face Oil': 'https://images.unsplash.com/photo-1570554886111-e80fcca6a029?w=400&h=300&fit=crop',
+            'Weighted Comfort Blanket': 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=300&fit=crop',
+            'Ultra-Soft Robe': 'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=400&h=300&fit=crop',
+            'Cozy Knit Sweater': 'https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=400&h=300&fit=crop',
+            'Tropical Fruit Tea': 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=400&h=300&fit=crop',
+            'Citrus Burst Green Tea': 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=400&h=300&fit=crop',
+            'Berry Bliss Herbal Tea': 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=400&h=300&fit=crop',
+            'Radiant Glow Serum': 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=400&h=300&fit=crop',
+            'Brightening Day Cream': 'https://images.unsplash.com/photo-1556228578-dd5e5f7ead12?w=400&h=300&fit=crop',
+            'Luminous Face Mask': 'https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=400&h=300&fit=crop',
+            'Vibrant Summer Dress': 'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=400&h=300&fit=crop',
+            'Colorful Casual Outfit': 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=400&h=300&fit=crop',
+            'Stylish Comfort Set': 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=400&h=300&fit=crop',
+            'Mood Lift Herbal Tea': 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=400&h=300&fit=crop',
+            'Comforting Vanilla Chai': 'https://images.unsplash.com/photo-1571934811356-5cc061b6821f?w=400&h=300&fit=crop',
+            'Uplifting Lemon Balm Tea': 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=400&h=300&fit=crop',
+            'Self-Care Face Mask Set': 'https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=400&h=300&fit=crop',
+            'Nurturing Night Cream': 'https://images.unsplash.com/photo-1556228578-dd5e5f7ead12?w=400&h=300&fit=crop',
+            'Comforting Body Butter': 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=400&h=300&fit=crop',
+            'Cozy Fleece Blanket Set': 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=300&fit=crop',
+            'Warm Comfort Sleepwear': 'https://images.unsplash.com/photo-1584293648398-9e52f5bef8f8?w=400&h=300&fit=crop',
+            'Snuggle-Soft Loungewear': 'https://images.unsplash.com/photo-1578102718171-ec1f91680562?w=400&h=300&fit=crop',
+            'Power Boost Black Tea': 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=400&h=300&fit=crop',
+            'Athletic Performance Tea': 'https://images.unsplash.com/photo-1597318121031-6c0c0e9b5571?w=400&h=300&fit=crop',
+            'Focus & Energy Blend': 'https://images.unsplash.com/photo-1515823064-d6e0c04616a7?w=400&h=300&fit=crop',
+            'Energizing Face Wash': 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=400&h=300&fit=crop',
+            'Active Hydration Gel': 'https://images.unsplash.com/photo-1556228578-dd5e5f7ead12?w=400&h=300&fit=crop',
+            'Sport Recovery Lotion': 'https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=400&h=300&fit=crop',
+            'Performance Activewear Set': 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=400&h=300&fit=crop',
+            'Dynamic Sports Outfit': 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=400&h=300&fit=crop',
+            'Pro Athletic Gear': 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=400&h=300&fit=crop'
         };
 
         // Enhanced product database
@@ -1555,12 +1556,6 @@
             }, 1000);
         }
 
-        // Get Unsplash Image
-        function getUnsplashImage(productName) {
-            const keyword = imageKeywords[productName] || 'wellness-product';
-            return `https://source.unsplash.com/400x300/?${keyword}`;
-        }
-
         // Display Products
         function displayProducts(mood) {
             const productsSection = document.getElementById('productsSection');
@@ -1578,7 +1573,7 @@
                     const categoryName = category.charAt(0).toUpperCase() + category.slice(0, -1);
                     product.id = productId++;
                     product.category = categoryName;
-                    product.imageUrl = getUnsplashImage(product.name);
+                    product.imageUrl = productImages[product.name];
                     products.push(product);
                     productsGrid.innerHTML += createProductCard(product);
                 });
@@ -1601,7 +1596,7 @@
                         ${isWishlisted ? '❤️' : '🤍'}
                     </button>
                     <div class="product-image-container">
-                        <img src="${product.imageUrl}" alt="${product.name}" class="product-image" loading="lazy" onerror="this.src='https://via.placeholder.com/400x300?text=${encodeURIComponent(product.name)}'">
+                        <img src="${product.imageUrl}" alt="${product.name}" class="product-image" loading="lazy">
                     </div>
                     <div class="product-category">${product.category}</div>
                     <div class="product-name">${product.name}</div>
