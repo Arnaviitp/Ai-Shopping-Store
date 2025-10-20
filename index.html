@@ -2,50 +2,46 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Aivora — Smart Shopping Store</title>
+  <title>Aivora — Advanced Single Page (HF APIs)</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    :root {
-      --bg: #0d0f14; --card: #141924; --accent: #8fe3cf; --text: #e8f1f2;
-      --muted: #a7b3b8; --good: #53d769; --warn: #f5c451; --bad: #ff6b6b;
-    }
-    * { box-sizing: border-box; }
-    body { margin:0; font-family: Inter, system-ui, Segoe UI, Roboto, Arial, sans-serif;
-      background: linear-gradient(180deg, #0d0f14, #0b1320); color: var(--text); }
-    .topbar { position: sticky; top:0; z-index:10; display:flex; align-items:baseline; gap:1rem;
-      padding:1rem 2rem; background: rgba(10,12,18,0.8); backdrop-filter: blur(8px); border-bottom:1px solid #1f2533; }
-    .topbar h1 { margin:0; font-size:1.5rem; color: var(--accent); }
-    .subtitle { color: var(--muted); font-size:0.95rem; }
-    .container { display:grid; grid-template-columns:1fr; gap:1rem; padding:1rem; max-width:1100px; margin:0 auto; }
-    .panel { background: var(--card); border:1px solid #1f2533; border-radius:12px; padding:1rem; }
-    .grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap:0.75rem; margin-top:0.5rem; }
-    .card { background:#101626; border:1px solid #212a3b; border-radius:10px; padding:0.75rem; display:flex; flex-direction:column; gap:0.5rem; }
-    .card img { width:100%; height:140px; object-fit:cover; border-radius:8px; background:#0e1422; }
-    .card .name { font-weight:600; }
-    .card .meta { font-size:0.9rem; color: var(--muted); }
-    .card .price { font-weight:600; color: var(--accent); }
-    .card .actions { display:flex; gap:0.5rem; }
-    .card .actions button { flex:1; padding:0.5rem; border-radius:8px; border:1px solid #2a3246; background:#161c2b; color:var(--text); cursor:pointer; }
-    .card .actions button:hover { border-color: var(--accent); color: var(--accent); }
-    .tray { display:flex; gap:0.5rem; flex-wrap: wrap; }
-    .tag { background:#162032; padding:0.4rem 0.6rem; border-radius:999px; border:1px solid #2a3246; font-size:0.9rem; }
-    .results { margin-top:0.75rem; }
-    .result-block { background:#0f1524; border:1px solid #202a40; border-radius:10px; padding:0.75rem; margin:0.5rem 0; }
-    .checkout label { display:inline-flex; flex-direction:column; margin-right:0.75rem; margin-bottom:0.5rem; }
-    .checkout input { margin-top:0.25rem; padding:0.4rem 0.5rem; background:#0e1422; color:var(--text); border:1px solid #2a3246; border-radius:6px; width:160px; }
-    .checkout button { padding:0.5rem 0.9rem; border-radius:8px; border:1px solid #2a3246; background:#161c2b; color:var(--text); cursor:pointer; }
-    .chatbot { position: fixed; right: 16px; bottom: 16px; width: 340px; max-height: 72vh; display:flex; flex-direction:column;
-      background:#0f1524; border:1px solid #202a40; border-radius:12px; overflow:hidden; box-shadow:0 10px 30px rgba(0,0,0,0.4); }
-    .chat-header { padding:0.6rem 0.8rem; background:#11182a; border-bottom:1px solid #202a40; color: var(--accent); }
-    .chat-log { padding:0.6rem; overflow:auto; flex:1; font-size:0.95rem; }
-    .chat-msg { margin:0.35rem 0; }
-    .chat-msg.user { text-align:right; color: var(--accent); }
-    .chat-input { display:flex; gap:0.4rem; padding:0.6rem; border-top:1px solid #202a40; }
-    .chat-input input { flex:1; padding:0.45rem; background:#0e1422; color:var(--text); border:1px solid #2a3246; border-radius:6px; }
-    .chat-input button { padding:0.45rem 0.7rem; border-radius:6px; border:1px solid #2a3246; background:#161c2b; color:var(--text); cursor:pointer; }
-    .row { display:flex; gap:0.5rem; flex-wrap:wrap; align-items:center; }
-    .hint { color: var(--muted); font-size:0.9rem; }
-    .pill { background:#162032; border:1px solid #2a3246; border-radius:999px; padding:0.3rem 0.6rem; }
+    :root { --bg:#0d0f14; --card:#141924; --accent:#8fe3cf; --text:#e8f1f2; --muted:#a7b3b8; --good:#53d769; --warn:#f5c451; --bad:#ff6b6b; }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;background:linear-gradient(180deg,#0d0f14,#0b1320);color:var(--text)}
+    .topbar{position:sticky;top:0;z-index:10;display:flex;align-items:baseline;gap:1rem;padding:1rem 2rem;background:rgba(10,12,18,.8);backdrop-filter:blur(8px);border-bottom:1px solid #1f2533}
+    .topbar h1{margin:0;font-size:1.5rem;color:var(--accent)}
+    .subtitle{color:var(--muted);font-size:.95rem}
+    .container{display:grid;grid-template-columns:1fr;gap:1rem;padding:1rem;max-width:1100px;margin:0 auto}
+    .panel{background:var(--card);border:1px solid #1f2533;border-radius:12px;padding:1rem}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.75rem;margin-top:.5rem}
+    .card{background:#101626;border:1px solid #212a3b;border-radius:10px;padding:.75rem;display:flex;flex-direction:column;gap:.5rem}
+    .card img{width:100%;height:160px;object-fit:cover;border-radius:8px;background:#0e1422}
+    .card .name{font-weight:600}
+    .card .meta{font-size:.9rem;color:var(--muted)}
+    .card .actions{display:flex;gap:.5rem}
+    .card .actions button{flex:1;padding:.5rem;border-radius:8px;border:1px solid #2a3246;background:#161c2b;color:var(--text);cursor:pointer}
+    .card .actions button:hover{border-color:var(--accent);color:var(--accent)}
+    .tray{display:flex;gap:.5rem;flex-wrap:wrap}
+    .tag{background:#162032;padding:.4rem .6rem;border-radius:999px;border:1px solid #2a3246;font-size:.9rem}
+    .results{margin-top:.75rem}
+    .result-block{background:#0f1524;border:1px solid #202a40;border-radius:10px;padding:.75rem;margin:.5rem 0}
+    .checkout label{display:inline-flex;flex-direction:column;margin-right:.75rem;margin-bottom:.5rem}
+    .checkout input{margin-top:.25rem;padding:.4rem .5rem;background:#0e1422;color:var(--text);border:1px solid #2a3246;border-radius:6px;width:160px}
+    .checkout button{padding:.5rem .9rem;border-radius:8px;border:1px solid #2a3246;background:#161c2b;color:var(--text);cursor:pointer}
+    .chatbot{position:fixed;right:16px;bottom:16px;width:360px;max-height:75vh;display:flex;flex-direction:column;background:#0f1524;border:1px solid #202a40;border-radius:12px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+    .chat-header{padding:.6rem .8rem;background:#11182a;border-bottom:1px solid #202a40;color:var(--accent)}
+    .chat-log{padding:.6rem;overflow:auto;flex:1;font-size:.95rem}
+    .chat-msg{margin:.35rem 0}
+    .chat-msg.user{text-align:right;color:var(--accent)}
+    .chat-input{display:flex;gap:.4rem;padding:.6rem;border-top:1px solid #202a40}
+    .chat-input input{flex:1;padding:.45rem;background:#0e1422;color:var(--text);border:1px solid #2a3246;border-radius:6px}
+    .chat-input button{padding:.45rem .7rem;border-radius:6px;border:1px solid #2a3246;background:#161c2b;color:var(--text);cursor:pointer}
+    .row{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center}
+    .pill{background:#162032;border:1px solid #2a3246;border-radius:999px;padding:.3rem .6rem}
+    .hint{color:var(--muted);font-size:.9rem}
+    .status-ok{color:var(--good)}
+    .status-warn{color:var(--warn)}
+    .status-bad{color:var(--bad)}
   </style>
 </head>
 <body>
@@ -58,11 +54,12 @@
     <section class="panel">
       <h2>Your mood</h2>
       <div class="row">
-        <input id="mood-text" placeholder="How are you feeling?" style="flex:1; padding:0.5rem; background:#0e1422; color:#e8f1f2; border:1px solid #2a3246; border-radius:6px;">
+        <input id="mood-text" placeholder="How are you feeling?" style="flex:1;padding:.5rem;background:#0e1422;color:#e8f1f2;border:1px solid #2a3246;border-radius:6px">
         <button id="mood-detect">Detect Mood</button>
         <span id="mood-output" class="pill">mood: —</span>
+        <span id="mood-status" class="hint"></span>
       </div>
-      <div class="hint">Type a short note like “feeling a bit stressed and tired” then Detect Mood.</div>
+      <div class="hint">Example: “feeling a bit stressed and tired after classes.”</div>
     </section>
 
     <section class="panel">
@@ -75,6 +72,7 @@
       <div id="compare-tray" class="tray"></div>
       <div class="row">
         <button id="compare-btn" disabled>Compare & Rank (HF)</button>
+        <span id="compare-status" class="hint"></span>
       </div>
       <div id="compare-results" class="results"></div>
     </section>
@@ -110,20 +108,31 @@
   </aside>
 
   <script>
-    // =========== CONFIG (direct API usage) ===========
-    const HF_TOKEN = "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"; // WARNING: visible client-side
-    const HF_CHAT_BASE = "https://router.huggingface.co/v1"; // OpenAI-compatible
-    const HF_CHAT_MODEL = "meta-llama/Llama-3.1-8B-Instruct:openrouter"; // pick any available provider/model [example]
+    // ================== CONFIG ==================
+    const HF_TOKEN = "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"; // visible in client (demo only)
+    const HF_CHAT_BASE = "https://router.huggingface.co/v1";   // OpenAI-compatible
+    const HF_CHAT_MODEL = "meta-llama/Llama-3.1-8B-Instruct:openrouter"; // pick a supported model
     const HF_SENTIMENT_MODEL = "distilbert-base-uncased-finetuned-sst-2-english";
 
-    // =========== MOCK CATALOG + REVIEWS ===========
+    // ================== IMAGES ==================
+    // Picsum seeded placeholders for stable visuals
+    const IMG = {
+      teaChamomile: "https://picsum.photos/seed/tea-chamomile/600/400",
+      teaLavender: "https://picsum.photos/seed/tea-lavender/600/400",
+      skinCentella: "https://picsum.photos/seed/skin-centella/600/400",
+      skinCeramide: "https://picsum.photos/seed/skin-ceramide/600/400",
+      outfitCotton: "https://picsum.photos/seed/outfit-cotton/600/400",
+      outfitBamboo: "https://picsum.photos/seed/outfit-bamboo/600/400"
+    };
+
+    // ================== CATALOG + REVIEWS ==================
     const CATALOG = [
-      { id:"tea-chamomile-serene", name:"Chamomile Serene Tea", category:"teas", price:299, rating:4.5, moods:["calm","stressed","tired"], tags:["herbal","caffeine-free","soothing"], img:"" },
-      { id:"tea-lavender-lull", name:"Lavender Lull Blend", category:"teas", price:349, rating:4.4, moods:["calm","stressed"], tags:["aromatic","floral","evening"], img:"" },
-      { id:"skin-centella-gel", name:"Centella Calm Gel", category:"skincare", price:799, rating:4.6, moods:["stressed","tired"], tags:["gentle","fragrance-free","sensitive-skin"], img:"" },
-      { id:"skin-ceramide-milk", name:"Ceramide Barrier Milk", category:"skincare", price:899, rating:4.3, moods:["stressed","calm"], tags:["barrier-repair","hydrating","lightweight"], img:"" },
-      { id:"outfit-cotton-lounge", name:"Ultra-Soft Cotton Lounge Set", category:"outfits", price:1499, rating:4.7, moods:["calm","tired"], tags:["breathable","comfy","relaxed-fit"], img:"" },
-      { id:"outfit-bamboo-pjs", name:"Bamboo Cloud PJs", category:"outfits", price:1799, rating:4.5, moods:["calm","stressed"], tags:["cooling","buttery-soft","sleep"], img:"" }
+      { id:"tea-chamomile-serene", name:"Chamomile Serene Tea", category:"teas", price:299, rating:4.5, moods:["calm","stressed","tired"], tags:["herbal","caffeine-free","soothing"], img:IMG.teaChamomile },
+      { id:"tea-lavender-lull", name:"Lavender Lull Blend", category:"teas", price:349, rating:4.4, moods:["calm","stressed"], tags:["aromatic","floral","evening"], img:IMG.teaLavender },
+      { id:"skin-centella-gel", name:"Centella Calm Gel", category:"skincare", price:799, rating:4.6, moods:["stressed","tired"], tags:["gentle","fragrance-free","sensitive-skin"], img:IMG.skinCentella },
+      { id:"skin-ceramide-milk", name:"Ceramide Barrier Milk", category:"skincare", price:899, rating:4.3, moods:["stressed","calm"], tags:["barrier-repair","hydrating","lightweight"], img:IMG.skinCeramide },
+      { id:"outfit-cotton-lounge", name:"Ultra-Soft Cotton Lounge Set", category:"outfits", price:1499, rating:4.7, moods:["calm","tired"], tags:["breathable","comfy","relaxed-fit"], img:IMG.outfitCotton },
+      { id:"outfit-bamboo-pjs", name:"Bamboo Cloud PJs", category:"outfits", price:1799, rating:4.5, moods:["calm","stressed"], tags:["cooling","buttery-soft","sleep"], img:IMG.outfitBamboo }
     ];
     const REVIEWS = {
       "tea-chamomile-serene": [
@@ -158,25 +167,153 @@
       ]
     };
 
-    // =========== DOM ===========
+    // ================== RESILIENT FETCH HELPERS ==================
+    async function fetchWithTimeout(url, options = {}, timeoutMs = 20000) {
+      const controller = new AbortController();
+      const id = setTimeout(() => controller.abort(), timeoutMs);
+      try {
+        const res = await fetch(url, { ...options, signal: controller.signal });
+        clearTimeout(id);
+        return res;
+      } catch (e) {
+        clearTimeout(id);
+        throw e;
+      }
+    }
+
+    async function fetchRetry(url, options, { retries = 2, timeoutMs = 20000, backoffMs = 700 } = {}) {
+      let lastErr;
+      for (let i = 0; i <= retries; i++) {
+        try {
+          const res = await fetchWithTimeout(url, options, timeoutMs);
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          return res;
+        } catch (e) {
+          lastErr = e;
+          if (i < retries) await new Promise(r => setTimeout(r, backoffMs * (i + 1)));
+        }
+      }
+      throw lastErr;
+    }
+
+    function setStatus(el, msg, cls = "status-warn") {
+      el.className = "hint " + cls;
+      el.textContent = msg;
+    }
+
+    // ================== HF API (CHAT) ==================
+    async function hfChat(prompt) {
+      const body = {
+        model: HF_CHAT_MODEL,
+        messages: [
+          { role: "system", content: "You are Aivora, a concise shopping assistant that compares options and ranks them clearly." },
+          { role: "user", content: prompt }
+        ],
+        temperature: 0.4,
+        max_tokens: 600,
+        stream: false
+      };
+      const res = await fetchRetry(`${HF_CHAT_BASE}/chat/completions`, {
+        method: "POST",
+        headers: { "Authorization": `Bearer ${HF_TOKEN}`, "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      }, { retries: 2, timeoutMs: 20000 });
+      const json = await res.json();
+      return json?.choices?.[0]?.message?.content || "";
+    } // Chat Completions via HF router [web:146]
+
+    // ================== HF API (TEXT CLASSIFICATION) ==================
+    async function hfClassifySentimentBatch(texts) {
+      const endpoint = `https://api-inference.huggingface.co/models/${encodeURIComponent(HF_SENTIMENT_MODEL)}`;
+      const res = await fetchRetry(endpoint, {
+        method: "POST",
+        headers: { "Authorization": `Bearer ${HF_TOKEN}`, "Content-Type": "application/json" },
+        body: JSON.stringify({ inputs: texts, options: { wait_for_model: true } })
+      }, { retries: 2, timeoutMs: 20000 });
+      return res.json();
+    } // Text classification Inference API [web:171]
+
+    function moodFromSentiment(out) {
+      const pos = out.find(x => x.label?.toUpperCase().includes('POSITIVE'))?.score || 0;
+      const neg = out.find(x => x.label?.toUpperCase().includes('NEGATIVE'))?.score || 0;
+      if (pos - neg >= 0.25) return "calm";
+      if (neg - pos >= 0.25) return "stressed";
+      return "tired";
+    } // basic mapping from SST-2 labels [web:171]
+
+    async function detectMoodFromText(text) {
+      const out = await hfClassifySentimentBatch([text]);
+      return moodFromSentiment(out?.[0] || []);
+    }
+
+    async function productSentimentCompound(productId) {
+      const list = (REVIEWS[productId] || []).map(r => r.text);
+      if (!list.length) return { compoundAvg: 0, n: 0 };
+      const out = await hfClassifySentimentBatch(list);
+      const compounds = out.map(arr => {
+        const pos = arr.find(x => x.label?.toUpperCase().includes('POSITIVE'))?.score || 0;
+        const neg = arr.find(x => x.label?.toUpperCase().includes('NEGATIVE'))?.score || 0;
+        return pos - neg;
+      });
+      const sum = compounds.reduce((a,b)=>a+b,0);
+      return { compoundAvg: sum/compounds.length, n: compounds.length };
+    }
+
+    async function rankByCategoryHF(category) {
+      const items = CATALOG.filter(p => p.category === category);
+      if (!items.length) return [];
+      const maxRating = Math.max(...items.map(p => p.rating || 0), 1);
+      const results = [];
+      for (const p of items) {
+        const s = await productSentimentCompound(p.id);
+        const normalizedRating = (p.rating || 0) / maxRating;
+        const score = 0.6 * s.compoundAvg + 0.4 * normalizedRating;
+        results.push({ ...p, sentiment: { compound: Number(s.compoundAvg.toFixed(4)), count: s.n }, rankScore: Number(score.toFixed(4)) });
+      }
+      results.sort((a,b)=> b.rankScore - a.rankScore);
+      return results;
+    }
+
+    // ================== EMI ==================
+    function calcEmi({ principal, annualRatePct, months }) {
+      const r = (annualRatePct / 100) / 12;
+      if (r === 0) return principal / months;
+      const num = principal * r * Math.pow(1 + r, months);
+      const den = Math.pow(1 + r, months) - 1;
+      return num / den;
+    } // standard amortization
+
+    function evaluatePlans({ amount, monthlyIncome, existingEmi=0, annualRatePct=12 }) {
+      const tenures = [3,6,9,12,18,24];
+      const plans = tenures.map(m => {
+        const monthlyEmi = calcEmi({ principal: amount, annualRatePct, months: m });
+        const foir = ((existingEmi + monthlyEmi) / monthlyIncome) * 100;
+        return { months:m, annualRatePct, monthlyEmi: Number(monthlyEmi.toFixed(2)), foir: Number(foir.toFixed(2)), affordable: foir <= 55 };
+      });
+      const affordable = plans.filter(p=>p.affordable).sort((a,b)=>a.months-b.months);
+      const recommended = affordable[0] || plans[plans.length-1];
+      return { plans, recommended };
+    }
+
+    // ================== UI ==================
     const moodText = document.getElementById('mood-text');
     const moodDetectBtn = document.getElementById('mood-detect');
     const moodOutput = document.getElementById('mood-output');
+    const moodStatus = document.getElementById('mood-status');
     const suggestionsEl = document.getElementById('suggestions');
     const trayEl = document.getElementById('compare-tray');
     const compareBtn = document.getElementById('compare-btn');
     const compareResults = document.getElementById('compare-results');
+    const compareStatus = document.getElementById('compare-status');
     const emiBtn = document.getElementById('emi-btn');
     const emiResults = document.getElementById('emi-results');
     const chatLog = document.getElementById('chat-log');
     const chatText = document.getElementById('chat-text');
     const chatSend = document.getElementById('chat-send');
 
-    // =========== STATE ===========
     let compareTray = [];
     let currentMood = null;
 
-    // =========== HELPERS ===========
     function logUser(msg) {
       const el = document.createElement('div'); el.className = 'chat-msg user'; el.textContent = msg; chatLog.appendChild(el); chatLog.scrollTop = chatLog.scrollHeight;
     }
@@ -188,7 +325,7 @@
       const el = document.createElement('div');
       el.className = 'card';
       el.innerHTML = `
-        <img alt="${p.name}"/>
+        <img src="${p.img}" alt="${p.name}"/>
         <div class="name">${p.name}</div>
         <div class="meta">₹${p.price} • ★ ${p.rating}</div>
         <div class="meta">${p.tags.join(' • ')}</div>
@@ -224,12 +361,10 @@
 
     function addToTray(product) {
       if (compareTray.find(p => p.id === product.id)) return;
-      compareTray.push(product);
-      renderTray();
+      compareTray.push(product); renderTray();
     }
     function removeFromTray(id) {
-      compareTray = compareTray.filter(p => p.id !== id);
-      renderTray();
+      compareTray = compareTray.filter(p => p.id !== id); renderTray();
     }
     function renderTray() {
       trayEl.innerHTML = '';
@@ -241,152 +376,93 @@
       compareBtn.disabled = compareTray.length < 2;
     }
 
-    // =========== HF API CALLS ===========
-    async function hfChat(prompt) {
-      // OpenAI-compatible Chat Completions via HF router
-      const body = {
-        model: HF_CHAT_MODEL,
-        messages: [
-          { role: "system", content: "You are Aivora, a concise shopping assistant that compares options and ranks them clearly." },
-          { role: "user", content: prompt }
-        ],
-        temperature: 0.4,
-        max_tokens: 512,
-        stream: false
-      };
-      const res = await fetch(`${HF_CHAT_BASE}/chat/completions`, {
-        method: "POST",
-        headers: { "Authorization": `Bearer ${HF_TOKEN}`, "Content-Type": "application/json" },
-        body: JSON.stringify(body)
-      });
-      if (!res.ok) throw new Error(`HF chat ${res.status}`);
-      const json = await res.json();
-      return json?.choices?.[0]?.message?.content || "";
-    } // [web:146]
-
-    async function hfClassifySentimentBatch(texts) {
-      const endpoint = `https://api-inference.huggingface.co/models/${encodeURIComponent(HF_SENTIMENT_MODEL)}`;
-      const res = await fetch(endpoint, {
-        method: "POST",
-        headers: { "Authorization": `Bearer ${HF_TOKEN}`, "Content-Type": "application/json" },
-        body: JSON.stringify({ inputs: texts, options: { wait_for_model: true } })
-      });
-      if (!res.ok) throw new Error(`HF classify ${res.status}`);
-      return res.json();
-    } // [web:171][web:156]
-
-    // Map sentiment to mood
-    function moodFromSentiment(out) {
-      // For SST-2, arr like [{label:"POSITIVE", score:0.98}, {label:"NEGATIVE", score:0.02}]
-      const pos = out.find(x => x.label.toUpperCase().includes('POSITIVE'))?.score || 0;
-      const neg = out.find(x => x.label.toUpperCase().includes('NEGATIVE'))?.score || 0;
-      if (pos - neg >= 0.25) return "calm";
-      if (neg - pos >= 0.25) return "stressed";
-      return "tired";
-    } // [web:171]
-
-    async function detectMoodFromText(text) {
-      const out = await hfClassifySentimentBatch([text]);
-      return moodFromSentiment(out?.[0] || []);
-    } // [web:171]
-
-    async function productSentimentCompound(productId) {
-      const list = (REVIEWS[productId] || []).map(r => r.text);
-      if (!list.length) return { compoundAvg: 0, n: 0 };
-      const out = await hfClassifySentimentBatch(list);
-      // convert to compound-like: pos - neg
-      const compounds = out.map(arr => {
-        const pos = arr.find(x => x.label.toUpperCase().includes('POSITIVE'))?.score || 0;
-        const neg = arr.find(x => x.label.toUpperCase().includes('NEGATIVE'))?.score || 0;
-        return pos - neg;
-      });
-      const sum = compounds.reduce((a,b)=>a+b,0);
-      return { compoundAvg: sum/compounds.length, n: compounds.length };
-    } // [web:171][web:156]
-
-    async function rankByCategoryHF(category) {
-      const items = CATALOG.filter(p => p.category === category);
-      if (!items.length) return [];
-      const maxRating = Math.max(...items.map(p => p.rating || 0), 1);
-      const results = [];
-      for (const p of items) {
-        const s = await productSentimentCompound(p.id);
-        const normalizedRating = (p.rating || 0) / maxRating;
-        const score = 0.6 * s.compoundAvg + 0.4 * normalizedRating;
-        results.push({ ...p, sentiment: { compound: Number(s.compoundAvg.toFixed(4)), count: s.n }, rankScore: Number(score.toFixed(4)) });
-      }
-      results.sort((a,b)=> b.rankScore - a.rankScore);
-      return results;
-    } // [web:171]
-
-    // =========== EMI ===========
-    function calcEmi({ principal, annualRatePct, months }) {
-      const r = (annualRatePct / 100) / 12;
-      if (r === 0) return principal / months;
-      const num = principal * r * Math.pow(1 + r, months);
-      const den = Math.pow(1 + r, months) - 1;
-      return num / den;
-    } // standard amortization [web:140]
-
-    function evaluatePlans({ amount, monthlyIncome, existingEmi=0, annualRatePct=12 }) {
-      const tenures = [3,6,9,12];
-      const plans = tenures.map(m => {
-        const monthlyEmi = calcEmi({ principal: amount, annualRatePct, months: m });
-        const foir = ((existingEmi + monthlyEmi) / monthlyIncome) * 100;
-        return { months:m, annualRatePct, monthlyEmi: Number(monthlyEmi.toFixed(2)), foir: Number(foir.toFixed(2)), affordable: foir <= 55 };
-      });
-      const affordable = plans.filter(p=>p.affordable).sort((a,b)=>a.months-b.months);
-      const recommended = affordable[0] || plans[plans.length-1];
-      return { plans, recommended };
-    } // FOIR guidance banding common usage [web:140]
-
-    // =========== UI HANDLERS ===========
+    // Mood detection handler with resilient feedback
     moodDetectBtn.onclick = async () => {
       const text = moodText.value.trim();
-      if (!text) { moodOutput.textContent = "mood: —"; currentMood = null; renderSuggestions(null); return; }
+      if (!text) { moodOutput.textContent = "mood: —"; currentMood = null; renderSuggestions(null); setStatus(moodStatus, "Enter a short description.", "status-warn"); return; }
       try {
-        moodOutput.textContent = "mood: …";
+        setStatus(moodStatus, "Detecting mood…", "status-warn");
         const mood = await detectMoodFromText(text);
         currentMood = mood;
         moodOutput.textContent = "mood: " + mood;
         renderSuggestions(mood);
+        setStatus(moodStatus, "Mood personalized.", "status-ok");
         logBot(`Personalized picks for "${mood}" are ready.`);
       } catch (e) {
-        moodOutput.textContent = "mood: error";
-        logBot("Mood service unavailable.");
+        // graceful fallback: still show default suggestions
+        renderSuggestions(null);
+        setStatus(moodStatus, "Mood service temporarily unavailable; showing best picks.", "status-bad");
       }
     };
 
+    // Compare with HF ranking and robust status
     compareBtn.onclick = async () => {
+      const ids = compareTray.map(p=>p.id);
+      if (ids.length < 2) { setStatus(compareStatus, "Add at least two items.", "status-warn"); return; }
+      compareResults.innerHTML = '';
+      setStatus(compareStatus, "Ranking selected items…", "status-warn");
       try {
-        const ids = compareTray.map(p=>p.id);
-        const byCat = {};
+        // group selected by category to rank within category
+        const byCatSel = {};
         ids.forEach(id => {
           const p = CATALOG.find(x=>x.id===id);
-          if (!p) return;
-          byCat[p.category] = byCat[p.category] || [];
-          byCat[p.category].push(p);
+          if (p) (byCatSel[p.category] = byCatSel[p.category] || []).push(p);
         });
-
-        compareResults.innerHTML = '';
-        for (const cat of Object.keys(byCat)) {
-          const ranked = await rankByCategoryHF(cat);
-          const rankedSelected = ranked.filter(r => ids.includes(r.id));
+        for (const cat of Object.keys(byCatSel)) {
+          const rankedAll = await rankByCategoryHF(cat);
+          const rankedSel = rankedAll.filter(x => ids.includes(x.id));
           const block = document.createElement('div'); block.className='result-block';
           block.innerHTML = `<div><strong>${cat.toUpperCase()} — Ranked (sentiment → rating)</strong></div>`;
-          rankedSelected.forEach((p, idx) => {
+          rankedSel.forEach((p, idx) => {
             const line = document.createElement('div');
             line.textContent = `${idx+1}. ${p.name} — ₹${p.price} • ★ ${p.rating} • sentiment ${p.sentiment.compound} (${p.sentiment.count} reviews)`;
             block.appendChild(line);
           });
           compareResults.appendChild(block);
         }
-        logBot("Shared a ranked list based on real sentiments and ratings.");
+        setStatus(compareStatus, "Comparison complete.", "status-ok");
       } catch (e) {
-        logBot("Comparison service unavailable.");
+        setStatus(compareStatus, "Comparison unavailable; showing local ratings only.", "status-bad");
+        // fallback: local sort by rating
+        const selected = CATALOG.filter(p => ids.includes(p.id)).sort((a,b)=>b.rating-a.rating);
+        const block = document.createElement('div'); block.className='result-block';
+        block.innerHTML = `<div><strong>Fallback — Ranked by rating</strong></div>`;
+        selected.forEach((p, idx) => {
+          const line = document.createElement('div');
+          line.textContent = `${idx+1}. ${p.name} — ₹${p.price} • ★ ${p.rating}`;
+          block.appendChild(line);
+        });
+        compareResults.appendChild(block);
       }
     };
 
+    // Chat with retries and graceful fallback guidance
+    const chatQueue = [];
+    let chatBusy = false;
+    async function processChatQueue() {
+      if (chatBusy) return;
+      chatBusy = true;
+      while (chatQueue.length) {
+        const q = chatQueue.shift();
+        try {
+          const reply = await hfChat(q);
+          logBot(reply || "Okay.");
+        } catch (e) {
+          logBot("Chat temporarily unavailable. Try again in a moment.");
+        }
+      }
+      chatBusy = false;
+    }
+
+    chatSend.onclick = () => {
+      const q = chatText.value.trim(); if (!q) return;
+      chatText.value=''; logUser(q);
+      chatQueue.push(q);
+      processChatQueue();
+    };
+    chatText.addEventListener('keydown', e => { if (e.key === 'Enter') chatSend.click(); });
+
+    // EMI
     function renderEmi({ plans, recommended }) {
       emiResults.innerHTML = '';
       plans.forEach(p => {
@@ -400,7 +476,6 @@
       rec.innerHTML = `<div><strong>Recommended:</strong> ${recommended.months} months @ EMI ₹${recommended.monthlyEmi} (FOIR ${recommended.foir}%)</div>`;
       emiResults.appendChild(rec);
     }
-
     emiBtn.onclick = () => {
       const amount = Number(document.getElementById('amount').value || 0);
       const monthlyIncome = Number(document.getElementById('income').value || 0);
@@ -408,20 +483,7 @@
       const annualRatePct = Number(document.getElementById('rate').value || 0);
       const result = evaluatePlans({ amount, monthlyIncome, existingEmi, annualRatePct });
       renderEmi(result);
-      logBot("Calculated EMI options and highlighted an affordable plan.");
     };
-
-    chatSend.onclick = async () => {
-      const q = chatText.value.trim(); if (!q) return;
-      chatText.value=''; logUser(q);
-      try {
-        const reply = await hfChat(q);
-        logBot(reply);
-      } catch (e) {
-        logBot("Chat service unavailable.");
-      }
-    };
-    chatText.addEventListener('keydown', e => { if (e.key === 'Enter') chatSend.click(); });
 
     // Init
     renderSuggestions(null);
@@ -429,3 +491,4 @@
   </script>
 </body>
 </html>
+
