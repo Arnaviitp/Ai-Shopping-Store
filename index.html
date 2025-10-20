@@ -3,9 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Lumosis × Aivora — Mood-Aware AI Shopping</title>
+  <title>Lumosis × Aivora — AI Mood Marketplace</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap');
+
+    * {
+      box-sizing: border-box;
+      transition: all 0.3s ease;
+    }
 
     body {
       margin: 0;
@@ -17,22 +22,21 @@
 
     header {
       text-align: center;
-      padding: 40px 20px;
-      font-size: 2.5rem;
+      padding: 30px 20px;
+      font-size: 2rem;
       font-weight: 700;
+      color: cyan;
       text-shadow: 0 0 20px cyan;
-      letter-spacing: 1.5px;
     }
 
     section {
-      max-width: 900px;
+      max-width: 1200px;
       margin: auto;
-      padding: 30px;
+      padding: 20px;
       background: rgba(255,255,255,0.05);
       border-radius: 20px;
-      box-shadow: 0 0 20px rgba(0,255,255,0.2);
+      box-shadow: 0 0 30px rgba(0,255,255,0.15);
       backdrop-filter: blur(8px);
-      transition: 0.3s;
     }
 
     select, button {
@@ -41,7 +45,7 @@
       border: none;
       font-size: 1rem;
       cursor: pointer;
-      margin-top: 15px;
+      margin-top: 10px;
       outline: none;
     }
 
@@ -55,7 +59,6 @@
       background: linear-gradient(90deg, #00b4db, #0083b0);
       color: #fff;
       font-weight: 600;
-      transition: all 0.3s ease;
     }
 
     button:hover {
@@ -64,9 +67,9 @@
     }
 
     .suggestions {
-      margin-top: 20px;
+      margin-top: 30px;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 20px;
     }
 
@@ -76,7 +79,14 @@
       border-radius: 15px;
       padding: 15px;
       text-align: center;
-      transition: all 0.3s ease;
+    }
+
+    .card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 10px;
     }
 
     .card:hover {
@@ -85,7 +95,7 @@
     }
 
     .chatbot {
-      margin-top: 30px;
+      margin-top: 40px;
       padding: 20px;
       background: rgba(0,0,0,0.4);
       border-radius: 15px;
@@ -129,11 +139,32 @@
       color: #fff;
     }
 
-    footer {
-      margin-top: 40px;
+    .price {
+      font-weight: bold;
+      color: #0ff;
+      font-size: 1.1rem;
+    }
+
+    #emiSection {
+      margin-top: 30px;
       text-align: center;
+      background: rgba(255,255,255,0.08);
+      padding: 15px;
+      border-radius: 10px;
+      border: 1px solid cyan;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 30px;
       font-size: 0.9rem;
       opacity: 0.7;
+      padding: 15px;
+    }
+
+    @media (max-width: 768px) {
+      header { font-size: 1.8rem; }
+      .chatbot h3, h2 { font-size: 1.2rem; }
     }
   </style>
 </head>
@@ -155,48 +186,58 @@
     <div class="suggestions" id="suggestions"></div>
 
     <div class="chatbot">
-      <h3>💬 Aivora — Your Smart Shopping Assistant</h3>
+      <h3>💬 Aivora — Smart Shopping Assistant</h3>
       <div class="chat-display" id="chatDisplay"></div>
       <div class="input-area">
-        <input type="text" id="chatInput" placeholder="Ask Aivora for comparisons..." />
+        <input type="text" id="chatInput" placeholder="Ask Aivora for advice or comparisons..." />
         <button onclick="sendMessage()">Send</button>
       </div>
     </div>
 
-    <div id="emiSection" style="display:none; margin-top:20px;">
+    <div id="emiSection" style="display:none;">
       <h3>💳 Smart EMI Plan</h3>
       <p id="emiResult">Calculating best payment options...</p>
     </div>
   </section>
 
-  <footer>© 2025 Lumosis × Aivora — AI Mood Experience</footer>
+  <footer>© 2025 Lumosis × Aivora — Futuristic AI Mood Marketplace</footer>
 
   <script>
     const suggestionsData = {
       tired: [
-        { name: "Chamomile Calm Tea", type: "Tea", price: "₹499" },
-        { name: "Aloe Sleep Serum", type: "Skincare", price: "₹899" },
-        { name: "Cloud Cotton Hoodie", type: "Outfit", price: "₹1499" }
+        { name: "Chamomile Calm Tea", price: 499, img: "https://m.media-amazon.com/images/I/81q4K9d8gNL._SL1500_.jpg" },
+        { name: "Aloe Sleep Serum", price: 899, img: "https://m.media-amazon.com/images/I/61DckZZ6tqL._SL1500_.jpg" },
+        { name: "Cloud Cotton Hoodie", price: 1499, img: "https://m.media-amazon.com/images/I/81yL5msO1IL._SL1500_.jpg" },
+        { name: "Weighted Blanket", price: 1999, img: "https://m.media-amazon.com/images/I/71K1bkkVC+L._SL1500_.jpg" },
+        { name: "Calming Scented Candle", price: 499, img: "https://m.media-amazon.com/images/I/71gU4KHNvoL._SL1500_.jpg" }
       ],
       stressed: [
-        { name: "Lavender Zen Tea", type: "Tea", price: "₹599" },
-        { name: "Soothing Clay Mask", type: "Skincare", price: "₹799" },
-        { name: "Soft Linen Loungewear", type: "Outfit", price: "₹1399" }
+        { name: "Lavender Zen Tea", price: 599, img: "https://m.media-amazon.com/images/I/71TEhY5eRUL._SL1500_.jpg" },
+        { name: "Soothing Clay Mask", price: 799, img: "https://m.media-amazon.com/images/I/61cSbnVvjVL._SL1500_.jpg" },
+        { name: "Soft Linen Loungewear", price: 1399, img: "https://m.media-amazon.com/images/I/81vmU2fNn6L._SL1500_.jpg" },
+        { name: "Aroma Diffuser", price: 999, img: "https://m.media-amazon.com/images/I/61cJbME5F5L._SL1500_.jpg" },
+        { name: "Stress Relief Bath Salt", price: 699, img: "https://m.media-amazon.com/images/I/61bcqsw7uLL._SL1500_.jpg" }
       ],
       happy: [
-        { name: "Lemon Vital Tea", type: "Tea", price: "₹399" },
-        { name: "Glow Radiance Cream", type: "Skincare", price: "₹999" },
-        { name: "Sunny Day Dress", type: "Outfit", price: "₹1599" }
+        { name: "Lemon Vital Tea", price: 399, img: "https://m.media-amazon.com/images/I/71zYHvwNSeL._SL1500_.jpg" },
+        { name: "Glow Radiance Cream", price: 999, img: "https://m.media-amazon.com/images/I/61D+3Z0sKxL._SL1500_.jpg" },
+        { name: "Sunny Day Dress", price: 1599, img: "https://m.media-amazon.com/images/I/71zCOTq5DeL._SL1500_.jpg" },
+        { name: "Vanilla Body Lotion", price: 499, img: "https://m.media-amazon.com/images/I/61bZpGxrMJL._SL1500_.jpg" },
+        { name: "Floral Perfume", price: 1299, img: "https://m.media-amazon.com/images/I/71PCvSm+SeL._SL1500_.jpg" }
       ],
       sad: [
-        { name: "Peppermint Refresh Tea", type: "Tea", price: "₹549" },
-        { name: "Hydrating Gel Balm", type: "Skincare", price: "₹899" },
-        { name: "Comfort Knit Sweater", type: "Outfit", price: "₹1499" }
+        { name: "Peppermint Refresh Tea", price: 549, img: "https://m.media-amazon.com/images/I/71P-2bTnPGL._SL1500_.jpg" },
+        { name: "Hydrating Gel Balm", price: 899, img: "https://m.media-amazon.com/images/I/71olhtvXDhL._SL1500_.jpg" },
+        { name: "Comfort Knit Sweater", price: 1499, img: "https://m.media-amazon.com/images/I/61cKcTbvxVL._SL1500_.jpg" },
+        { name: "Mood Lift Candle", price: 499, img: "https://m.media-amazon.com/images/I/61+G4OrfVGL._SL1500_.jpg" },
+        { name: "Therapy Plush Blanket", price: 1799, img: "https://m.media-amazon.com/images/I/81qIquKjH9L._SL1500_.jpg" }
       ],
       energetic: [
-        { name: "Green Power Tea", type: "Tea", price: "₹499" },
-        { name: "Citrus Energy Mist", type: "Skincare", price: "₹799" },
-        { name: "Active Fit Joggers", type: "Outfit", price: "₹1299" }
+        { name: "Green Power Tea", price: 499, img: "https://m.media-amazon.com/images/I/71biDrzFgQL._SL1500_.jpg" },
+        { name: "Citrus Energy Mist", price: 799, img: "https://m.media-amazon.com/images/I/61Qphh2wz6L._SL1500_.jpg" },
+        { name: "Active Fit Joggers", price: 1299, img: "https://m.media-amazon.com/images/I/81RcNCPOy1L._SL1500_.jpg" },
+        { name: "Running Shoes", price: 2499, img: "https://m.media-amazon.com/images/I/71WadOvqRjL._SL1500_.jpg" },
+        { name: "Smart Water Bottle", price: 1399, img: "https://m.media-amazon.com/images/I/61Yx3ifEvIL._SL1500_.jpg" }
       ]
     };
 
@@ -210,10 +251,10 @@
         const card = document.createElement('div');
         card.className = 'card';
         card.innerHTML = `
+          <img src="${item.img}" alt="${item.name}">
           <h4>${item.name}</h4>
-          <p>${item.type}</p>
-          <p>${item.price}</p>
-          <button onclick="buyProduct('${item.name}', '${item.price}')">Buy Now</button>
+          <p class="price">₹${item.price}</p>
+          <button onclick="buyProduct('${item.name}', ${item.price})">Buy Now</button>
         `;
         container.appendChild(card);
       });
@@ -221,12 +262,13 @@
 
     function buyProduct(name, price) {
       document.getElementById('emiSection').style.display = 'block';
-      document.getElementById('emiResult').textContent = `Checking EMI options for ${name} (${price})...`;
+      document.getElementById('emiResult').textContent = `Checking EMI options for ${name}...`;
 
       setTimeout(() => {
+        const emi = (price / 3).toFixed(0);
         document.getElementById('emiResult').innerHTML = `
-          ✅ EMI Plan: 3 months × ${(parseInt(price.replace('₹', ''))/3).toFixed(0)}  
-          <br>💡 Smart Suggestion: Use Lumosis Pay for extra 10% cashback!
+          ✅ EMI Plan: 3 months × ₹${emi}<br>
+          💡 Suggestion: Use Lumosis Pay for 10% cashback!
         `;
       }, 2000);
     }
@@ -256,7 +298,7 @@
           body: JSON.stringify({
             model: "llama-3.1-8b-instant",
             messages: [
-              { role: "system", content: "You are Aivora, an AI shopping assistant that compares products and ranks them by customer sentiment and value." },
+              { role: "system", content: "You are Aivora, a futuristic AI shopping assistant that compares products, ranks them, and helps users make smart decisions." },
               { role: "user", content: userMsg }
             ],
             max_tokens: 150
@@ -266,10 +308,11 @@
         const data = await res.json();
         const botReply = data.choices?.[0]?.message?.content || "Sorry, I couldn’t process that.";
         botDiv.textContent = botReply;
-      } catch (err) {
+      } catch {
         botDiv.textContent = "⚠️ Network error or invalid API key.";
       }
     }
   </script>
 </body>
 </html>
+
