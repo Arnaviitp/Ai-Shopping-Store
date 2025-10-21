@@ -1,2044 +1,2747 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-    <meta name="description" content="AI-powered wellness shopping with personalized recommendations">
-    <meta name="theme-color" content="#667eea">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes"
+    />
+    <meta
+      name="description"
+      content="AI-powered wellness shopping with personalized recommendations"
+    />
+    <meta name="theme-color" content="#667eea" />
     <title>Smart Wellness Shopping - Powered by Trenz AI</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
+      }
 
+      :root {
+        --primary-color: #667eea;
+        --secondary-color: #764ba2;
+        --success-color: #2ecc71;
+        --warning-color: #f39c12;
+        --danger-color: #e74c3c;
+        --dark-bg: #1a1a2e;
+        --dark-card: #16213e;
+        --light-bg: #f8f9fa;
+        --container-padding: 30px;
+        --border-radius: 20px;
+        --card-gap: 20px;
+      }
+
+      /* Base styles */
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Oxygen, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px;
+        transition: all 0.3s ease;
+        line-height: 1.6;
+      }
+
+      body.dark-mode {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      }
+
+      body.dark-mode .container {
+        background: var(--dark-card);
+        color: #fff;
+      }
+
+      body.dark-mode .section {
+        background: var(--dark-bg);
+      }
+
+      body.dark-mode .product-card,
+      body.dark-mode .cart-item,
+      body.dark-mode .comparison-table,
+      body.dark-mode .mood-btn,
+      body.dark-mode .emi-calculator,
+      body.dark-mode .chatbot-container {
+        background: var(--dark-card);
+        color: #fff;
+      }
+
+      body.dark-mode .chat-messages {
+        background: var(--dark-bg);
+      }
+
+      body.dark-mode .bot-message {
+        background: #2d3748;
+        color: #fff;
+      }
+
+      body.dark-mode .search-input,
+      body.dark-mode .filter-select,
+      body.dark-mode .chat-input,
+      body.dark-mode .discount-input,
+      body.dark-mode input,
+      body.dark-mode select {
+        background: var(--dark-bg);
+        color: #fff;
+        border-color: #4a5568;
+      }
+
+      .container {
+        max-width: 1600px;
+        margin: 0 auto;
+        background: white;
+        border-radius: var(--border-radius);
+        padding: var(--container-padding);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        animation: fadeIn 0.5s ease;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Header - Responsive */
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        gap: 20px;
+        flex-wrap: wrap;
+      }
+
+      .header-title {
+        flex: 1 1 300px;
+        min-width: 250px;
+      }
+
+      .header-controls {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+      }
+
+      .theme-toggle,
+      .voice-toggle {
+        padding: 10px 18px;
+        background: var(--secondary-color);
+        color: white;
+        border: none;
+        border-radius: 25px;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-weight: 600;
+        font-size: 0.9em;
+        white-space: nowrap;
+        min-height: 40px;
+      }
+
+      .theme-toggle:hover,
+      .voice-toggle:hover {
+        transform: scale(1.05);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      }
+
+      .voice-toggle.listening {
+        background: var(--danger-color);
+        animation: pulse 1s infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+          box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.7);
+        }
+        50% {
+          transform: scale(1.05);
+          box-shadow: 0 0 0 10px rgba(231, 76, 60, 0);
+        }
+      }
+
+      h1 {
+        text-align: center;
+        color: #667eea;
+        margin-bottom: 10px;
+        font-size: clamp(1.8em, 5vw, 3em);
+        animation: slideDown 0.5s ease;
+        font-weight: 700;
+      }
+
+      @keyframes slideDown {
+        from {
+          transform: translateY(-50px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      .subtitle {
+        text-align: center;
+        color: #666;
+        margin-bottom: 30px;
+        font-size: clamp(0.95em, 2.5vw, 1.2em);
+        font-weight: 400;
+      }
+
+      /* Stats Bar - Fully Responsive */
+      .stats-bar {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 15px;
+        margin-bottom: 30px;
+      }
+
+      .stat-card {
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--secondary-color)
+        );
+        color: white;
+        padding: 20px;
+        border-radius: 15px;
+        text-align: center;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+
+      .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      }
+
+      .stat-number {
+        font-size: clamp(1.8em, 4vw, 2.5em);
+        font-weight: 700;
+        margin-bottom: 5px;
+      }
+
+      .stat-label {
+        font-size: clamp(0.85em, 2vw, 1em);
+        opacity: 0.95;
+        font-weight: 500;
+      }
+
+      .section {
+        margin-bottom: 30px;
+        padding: 25px;
+        background: #f8f9fa;
+        border-radius: 15px;
+        animation: slideUp 0.5s ease;
+      }
+
+      @keyframes slideUp {
+        from {
+          transform: translateY(30px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      .section-title {
+        font-size: clamp(1.3em, 3.5vw, 1.8em);
+        color: #764ba2;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        font-weight: 600;
+      }
+
+      /* Search and Filter - Adaptive Grid */
+      .search-filter-bar {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 12px;
+        margin-bottom: 20px;
+      }
+
+      .search-input,
+      .filter-select {
+        padding: 14px 20px;
+        border: 2px solid var(--primary-color);
+        border-radius: 25px;
+        font-size: 1em;
+        transition: all 0.3s;
+        width: 100%;
+        background: white;
+      }
+
+      .search-input:focus,
+      .filter-select:focus {
+        outline: none;
+        box-shadow: 0 0 15px rgba(102, 126, 234, 0.3);
+        border-color: var(--secondary-color);
+      }
+
+      /* Mood Selector - Responsive Grid */
+      .mood-selector {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 12px;
+        margin-bottom: 20px;
+      }
+
+      .mood-btn {
+        padding: 18px 15px;
+        border: 3px solid #667eea;
+        background: white;
+        border-radius: 15px;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-size: clamp(1em, 2.5vw, 1.15em);
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        touch-action: manipulation;
+        font-weight: 600;
+        min-height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .mood-btn:active {
+        transform: scale(0.95);
+      }
+
+      .mood-btn:hover {
+        background: #667eea;
+        color: white;
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+      }
+
+      .mood-btn.active {
+        background: #764ba2;
+        color: white;
+        border-color: #764ba2;
+        transform: scale(1.05);
+        box-shadow: 0 5px 15px rgba(118, 75, 162, 0.4);
+      }
+
+      /* Products Grid - Responsive Columns */
+      .products-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+        gap: var(--card-gap);
+        margin-top: 20px;
+      }
+
+      .product-card {
+        background: white;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .product-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+      }
+
+      .product-image-container {
+        width: 100%;
+        height: 220px;
+        border-radius: 12px;
+        overflow: hidden;
+        margin-bottom: 15px;
+        position: relative;
+        background: #f0f0f0;
+      }
+
+      .product-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s;
+        display: block;
+      }
+
+      .product-card:hover .product-image {
+        transform: scale(1.1);
+      }
+
+      .product-category {
+        color: #764ba2;
+        font-weight: 700;
+        font-size: 0.85em;
+        margin-bottom: 8px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .product-name {
+        font-size: clamp(1.1em, 2.5vw, 1.3em);
+        font-weight: 700;
+        margin-bottom: 10px;
+        color: #333;
+        line-height: 1.3;
+      }
+
+      .product-description {
+        font-size: 0.9em;
+        color: #666;
+        margin-bottom: 12px;
+        line-height: 1.6;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        flex-grow: 1;
+      }
+
+      .product-price {
+        color: #667eea;
+        font-size: clamp(1.2em, 3vw, 1.4em);
+        font-weight: 700;
+        margin: 12px 0;
+      }
+
+      .product-rating {
+        color: #f39c12;
+        margin: 8px 0;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.95em;
+        font-weight: 600;
+      }
+
+      .wishlist-btn {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: white;
+        border: none;
+        font-size: 1.5em;
+        cursor: pointer;
+        padding: 10px;
+        border-radius: 50%;
+        transition: all 0.3s;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        z-index: 10;
+        width: 45px;
+        height: 45px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .wishlist-btn:active {
+        transform: scale(0.9);
+      }
+
+      .wishlist-btn.active {
+        color: red;
+        transform: scale(1.15);
+      }
+
+      .sentiment-badge {
+        display: inline-block;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 0.8em;
+        font-weight: 700;
+        margin-top: 10px;
+        letter-spacing: 0.3px;
+      }
+
+      .sentiment-positive {
+        background: #2ecc71;
+        color: white;
+      }
+
+      .sentiment-neutral {
+        background: #f39c12;
+        color: white;
+      }
+
+      .btn {
+        padding: 14px 24px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: clamp(0.9em, 2vw, 1em);
+        transition: all 0.3s;
+        font-weight: 600;
+        position: relative;
+        overflow: hidden;
+        touch-action: manipulation;
+        min-height: 48px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+
+      .btn:active {
+        transform: scale(0.95);
+      }
+
+      .btn-primary {
+        background: #667eea;
+        color: white;
+      }
+
+      .btn-primary:hover {
+        background: #764ba2;
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+      }
+
+      .btn-secondary {
+        background: #f39c12;
+        color: white;
+      }
+
+      .btn-secondary:hover {
+        background: #e67e22;
+      }
+
+      .btn-success {
+        background: #2ecc71;
+        color: white;
+      }
+
+      .btn-success:hover {
+        background: #27ae60;
+      }
+
+      .btn-danger {
+        background: #e74c3c;
+        color: white;
+      }
+
+      .btn-danger:hover {
+        background: #c0392b;
+      }
+
+      /* Button Groups */
+      .button-group {
+        display: flex;
+        gap: 10px;
+        margin-top: 15px;
+        flex-wrap: wrap;
+      }
+
+      .button-group .btn {
+        flex: 1;
+        min-width: 120px;
+      }
+
+      /* Comparison Table - Responsive */
+      .comparison-section {
+        margin-top: 25px;
+      }
+
+      .comparison-table {
+        width: 100%;
+        overflow-x: auto;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .comparison-table table {
+        width: 100%;
+        min-width: 600px;
+        border-collapse: collapse;
+      }
+
+      .comparison-table th,
+      .comparison-table td {
+        padding: 15px;
+        text-align: left;
+        border-bottom: 1px solid #eee;
+      }
+
+      .comparison-table th {
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--secondary-color)
+        );
+        color: white;
+        font-weight: 700;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+      }
+
+      .comparison-table tr:hover {
+        background: #f8f9fa;
+      }
+
+      /* Chatbot - Adaptive Design */
+      .chatbot-container {
+        background: white;
+        border-radius: 15px;
+        padding: 20px;
+        height: 600px;
+        display: flex;
+        flex-direction: column;
+        box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.05);
+      }
+
+      .chat-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #eee;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .chat-status {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #2ecc71;
+        font-weight: 600;
+        font-size: 0.95em;
+      }
+
+      .status-indicator {
+        width: 10px;
+        height: 10px;
+        background: #2ecc71;
+        border-radius: 50%;
+        animation: pulse 2s infinite;
+      }
+
+      .chat-messages {
+        flex: 1;
+        overflow-y: auto;
+        margin-bottom: 15px;
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 10px;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .chat-messages::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      .chat-messages::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+      }
+
+      .chat-messages::-webkit-scrollbar-thumb {
+        background: var(--primary-color);
+        border-radius: 10px;
+      }
+
+      .message {
+        margin-bottom: 15px;
+        padding: 14px 18px;
+        border-radius: 15px;
+        max-width: 85%;
+        word-wrap: break-word;
+        animation: messageSlide 0.3s ease;
+        font-size: 0.95em;
+        line-height: 1.6;
+      }
+
+      @keyframes messageSlide {
+        from {
+          transform: translateX(-20px);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+
+      .user-message {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        margin-left: auto;
+        text-align: right;
+        border-bottom-right-radius: 5px;
+      }
+
+      .bot-message {
+        background: #e9ecef;
+        color: #333;
+        border-bottom-left-radius: 5px;
+      }
+
+      .message-timestamp {
+        font-size: 0.75em;
+        opacity: 0.7;
+        margin-top: 6px;
+        font-style: italic;
+      }
+
+      .chat-input-container {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .chat-input {
+        flex: 1;
+        padding: 14px;
+        border: 2px solid #667eea;
+        border-radius: 10px;
+        font-size: 1em;
+        transition: all 0.3s;
+      }
+
+      .chat-input:focus {
+        outline: none;
+        box-shadow: 0 0 15px rgba(102, 126, 234, 0.3);
+      }
+
+      .voice-btn {
+        padding: 14px;
+        background: var(--warning-color);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 1.2em;
+        transition: all 0.3s;
+        min-width: 48px;
+        min-height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .voice-btn:active {
+        transform: scale(0.9);
+      }
+
+      .voice-btn.listening {
+        background: var(--danger-color);
+        animation: pulse 1s infinite;
+      }
+
+      /* Cart - Responsive Design */
+      .cart-item {
+        background: white;
+        padding: 18px;
+        border-radius: 12px;
+        margin-bottom: 15px;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 15px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        animation: slideRight 0.3s ease;
+        align-items: center;
+      }
+
+      @keyframes slideRight {
+        from {
+          transform: translateX(-30px);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+
+      .cart-item-details {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+      }
+
+      .cart-item-image {
+        width: 80px;
+        height: 80px;
+        border-radius: 10px;
+        object-fit: cover;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        flex-shrink: 0;
+      }
+
+      .cart-item-info {
+        flex: 1;
+      }
+
+      .cart-item-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-end;
+      }
+
+      .quantity-controls {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+      }
+
+      .quantity-btn {
+        width: 40px;
+        height: 40px;
+        border: none;
+        background: var(--primary-color);
+        color: white;
+        border-radius: 50%;
+        cursor: pointer;
+        font-weight: 700;
+        transition: all 0.3s;
+        touch-action: manipulation;
+        font-size: 1.2em;
+      }
+
+      .quantity-btn:active {
+        transform: scale(0.9);
+      }
+
+      .quantity-btn:hover {
+        background: var(--secondary-color);
+      }
+
+      .cart-total {
+        font-size: clamp(1.3em, 3vw, 1.6em);
+        font-weight: 700;
+        color: #764ba2;
+        text-align: right;
+        margin-top: 20px;
+        padding: 20px;
+        background: #f8f9fa;
+        border-radius: 12px;
+      }
+
+      .discount-section {
+        margin-top: 20px;
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .discount-input {
+        flex: 1;
+        min-width: 250px;
+        padding: 14px;
+        border: 2px solid var(--primary-color);
+        border-radius: 10px;
+        font-size: 1em;
+      }
+
+      /* EMI Calculator - Responsive */
+      .emi-calculator {
+        background: white;
+        padding: 20px;
+        border-radius: 15px;
+      }
+
+      .input-group {
+        margin-bottom: 25px;
+      }
+
+      .input-group label {
+        display: block;
+        margin-bottom: 10px;
+        font-weight: 700;
+        color: #333;
+        font-size: 1em;
+      }
+
+      .input-group input,
+      .input-group select {
+        width: 100%;
+        padding: 14px;
+        border: 2px solid #667eea;
+        border-radius: 10px;
+        font-size: 1em;
+        transition: all 0.3s;
+      }
+
+      .input-group input:focus,
+      .input-group select:focus {
+        outline: none;
+        box-shadow: 0 0 15px rgba(102, 126, 234, 0.3);
+      }
+
+      .emi-result {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 25px;
+        border-radius: 15px;
+        margin-top: 25px;
+        text-align: center;
+        animation: scaleIn 0.5s ease;
+      }
+
+      @keyframes scaleIn {
+        from {
+          transform: scale(0.8);
+          opacity: 0;
+        }
+        to {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      .emi-amount {
+        font-size: clamp(2.5em, 6vw, 3em);
+        font-weight: 700;
+        margin: 20px 0;
+      }
+
+      .payment-options {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 15px;
+        margin-top: 25px;
+      }
+
+      .payment-option {
+        padding: 25px 15px;
+        border: 2px solid var(--primary-color);
+        border-radius: 15px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s;
+        touch-action: manipulation;
+        font-size: 0.95em;
+        font-weight: 600;
+        min-height: 100px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+
+      .payment-option:active {
+        transform: scale(0.95);
+      }
+
+      .payment-option:hover {
+        background: var(--primary-color);
+        color: white;
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+      }
+
+      .payment-option.selected {
+        background: var(--secondary-color);
+        color: white;
+        border-color: var(--secondary-color);
+      }
+
+      .progress-bar {
+        width: 100%;
+        height: 10px;
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 10px;
+        overflow: hidden;
+        margin: 20px 0;
+      }
+
+      .progress-fill {
+        height: 100%;
+        background: white;
+        transition: width 0.5s ease;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      .loading {
+        text-align: center;
+        padding: 20px;
+        color: #667eea;
+        font-style: italic;
+        font-size: 1.1em;
+      }
+
+      /* Notifications */
+      .notification {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 16px 24px;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        z-index: 1000;
+        animation: slideInRight 0.3s ease;
+        max-width: 350px;
+        font-size: 0.95em;
+        font-weight: 600;
+      }
+
+      @keyframes slideInRight {
+        from {
+          transform: translateX(400px);
+        }
+        to {
+          transform: translateX(0);
+        }
+      }
+
+      .notification.success {
+        border-left: 5px solid var(--success-color);
+      }
+
+      .notification.error {
+        border-left: 5px solid var(--danger-color);
+      }
+
+      /* Tablet Styles (768px - 1024px) */
+      @media (min-width: 768px) and (max-width: 1024px) {
         :root {
-            --primary-color: #667eea;
-            --secondary-color: #764ba2;
-            --success-color: #2ecc71;
-            --warning-color: #f39c12;
-            --danger-color: #e74c3c;
-            --dark-bg: #1a1a2e;
-            --dark-card: #16213e;
-            --light-bg: #f8f9fa;
-            --container-padding: 30px;
-            --border-radius: 20px;
-            --card-gap: 20px;
+          --container-padding: 25px;
+          --card-gap: 18px;
         }
 
-        /* Base styles */
+        .products-grid {
+          grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        }
+
+        .mood-selector {
+          grid-template-columns: repeat(3, 1fr);
+        }
+
+        .stats-bar {
+          grid-template-columns: repeat(2, 1fr);
+        }
+
+        .chatbot-container {
+          height: 550px;
+        }
+      }
+
+      /* Mobile Landscape (568px - 767px) */
+      @media (min-width: 568px) and (max-width: 767px) and (orientation: landscape) {
+        .chatbot-container {
+          height: 400px;
+        }
+
+        .products-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      /* Mobile Styles (max-width: 767px) */
+      @media (max-width: 767px) {
+        :root {
+          --container-padding: 15px;
+          --border-radius: 15px;
+          --card-gap: 15px;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-            transition: all 0.3s ease;
-            line-height: 1.6;
-        }
-
-        body.dark-mode {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-        }
-
-        body.dark-mode .container {
-            background: var(--dark-card);
-            color: #fff;
-        }
-
-        body.dark-mode .section {
-            background: var(--dark-bg);
-        }
-
-        body.dark-mode .product-card,
-        body.dark-mode .cart-item,
-        body.dark-mode .comparison-table,
-        body.dark-mode .mood-btn,
-        body.dark-mode .emi-calculator,
-        body.dark-mode .chatbot-container {
-            background: var(--dark-card);
-            color: #fff;
-        }
-
-        body.dark-mode .chat-messages {
-            background: var(--dark-bg);
-        }
-
-        body.dark-mode .bot-message {
-            background: #2d3748;
-            color: #fff;
-        }
-
-        body.dark-mode .search-input,
-        body.dark-mode .filter-select,
-        body.dark-mode .chat-input,
-        body.dark-mode .discount-input,
-        body.dark-mode input,
-        body.dark-mode select {
-            background: var(--dark-bg);
-            color: #fff;
-            border-color: #4a5568;
+          padding: 10px;
         }
 
         .container {
-            max-width: 1600px;
-            margin: 0 auto;
-            background: white;
-            border-radius: var(--border-radius);
-            padding: var(--container-padding);
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            animation: fadeIn 0.5s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Header - Responsive */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .header-title {
-            flex: 1 1 300px;
-            min-width: 250px;
-        }
-
-        .header-controls {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-            flex-wrap: wrap;
-            justify-content: flex-end;
-        }
-
-        .theme-toggle, .voice-toggle {
-            padding: 10px 18px;
-            background: var(--secondary-color);
-            color: white;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 600;
-            font-size: 0.9em;
-            white-space: nowrap;
-            min-height: 40px;
-        }
-
-        .theme-toggle:hover, .voice-toggle:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-        }
-
-        .voice-toggle.listening {
-            background: var(--danger-color);
-            animation: pulse 1s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.7); }
-            50% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(231, 76, 60, 0); }
+          padding: 15px;
+          border-radius: 15px;
         }
 
         h1 {
-            text-align: center;
-            color: #667eea;
-            margin-bottom: 10px;
-            font-size: clamp(1.8em, 5vw, 3em);
-            animation: slideDown 0.5s ease;
-            font-weight: 700;
-        }
-
-        @keyframes slideDown {
-            from { transform: translateY(-50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+          font-size: 1.8em;
         }
 
         .subtitle {
-            text-align: center;
-            color: #666;
-            margin-bottom: 30px;
-            font-size: clamp(0.95em, 2.5vw, 1.2em);
-            font-weight: 400;
+          font-size: 0.95em;
         }
 
-        /* Stats Bar - Fully Responsive */
+        .header {
+          flex-direction: column;
+          align-items: stretch;
+          gap: 15px;
+        }
+
+        .header-title {
+          text-align: center;
+        }
+
+        .header-controls {
+          justify-content: center;
+          gap: 8px;
+        }
+
+        .theme-toggle,
+        .voice-toggle {
+          flex: 1;
+          min-width: 100px;
+        }
+
         .stats-bar {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-            gap: 15px;
-            margin-bottom: 30px;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 10px;
         }
 
         .stat-card {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            padding: 20px;
-            border-radius: 15px;
-            text-align: center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+          padding: 15px;
         }
 
         .stat-number {
-            font-size: clamp(1.8em, 4vw, 2.5em);
-            font-weight: 700;
-            margin-bottom: 5px;
+          font-size: 1.6em;
         }
 
-        .stat-label {
-            font-size: clamp(0.85em, 2vw, 1em);
-            opacity: 0.95;
-            font-weight: 500;
+        .products-grid {
+          grid-template-columns: 1fr;
+          gap: 15px;
         }
 
-        .section {
-            margin-bottom: 30px;
-            padding: 25px;
-            background: #f8f9fa;
-            border-radius: 15px;
-            animation: slideUp 0.5s ease;
-        }
-
-        @keyframes slideUp {
-            from { transform: translateY(30px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        .section-title {
-            font-size: clamp(1.3em, 3.5vw, 1.8em);
-            color: #764ba2;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
-            font-weight: 600;
-        }
-
-        /* Search and Filter - Adaptive Grid */
         .search-filter-bar {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 12px;
-            margin-bottom: 20px;
+          grid-template-columns: 1fr;
         }
 
-        .search-input, .filter-select {
-            padding: 14px 20px;
-            border: 2px solid var(--primary-color);
-            border-radius: 25px;
-            font-size: 1em;
-            transition: all 0.3s;
-            width: 100%;
-            background: white;
-        }
-
-        .search-input:focus, .filter-select:focus {
-            outline: none;
-            box-shadow: 0 0 15px rgba(102, 126, 234, 0.3);
-            border-color: var(--secondary-color);
-        }
-
-        /* Mood Selector - Responsive Grid */
         .mood-selector {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 12px;
-            margin-bottom: 20px;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 10px;
         }
 
         .mood-btn {
-            padding: 18px 15px;
-            border: 3px solid #667eea;
-            background: white;
-            border-radius: 15px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: clamp(1em, 2.5vw, 1.15em);
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-            touch-action: manipulation;
-            font-weight: 600;
-            min-height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+          padding: 15px 10px;
+          font-size: 0.95em;
+          min-height: 55px;
         }
 
-        .mood-btn:active {
-            transform: scale(0.95);
+        .section {
+          padding: 15px;
+          margin-bottom: 20px;
         }
 
-        .mood-btn:hover {
-            background: #667eea;
-            color: white;
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
-        }
-
-        .mood-btn.active {
-            background: #764ba2;
-            color: white;
-            border-color: #764ba2;
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(118, 75, 162, 0.4);
-        }
-
-        /* Products Grid - Responsive Columns */
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
-            gap: var(--card-gap);
-            margin-top: 20px;
+        .section-title {
+          font-size: 1.3em;
         }
 
         .product-card {
-            background: white;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .product-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+          padding: 15px;
         }
 
         .product-image-container {
-            width: 100%;
-            height: 220px;
-            border-radius: 12px;
-            overflow: hidden;
-            margin-bottom: 15px;
-            position: relative;
-            background: #f0f0f0;
+          height: 200px;
         }
 
-        .product-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.3s;
-            display: block;
-        }
-
-        .product-card:hover .product-image {
-            transform: scale(1.1);
-        }
-
-        .product-category {
-            color: #764ba2;
-            font-weight: 700;
-            font-size: 0.85em;
-            margin-bottom: 8px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .product-name {
-            font-size: clamp(1.1em, 2.5vw, 1.3em);
-            font-weight: 700;
-            margin-bottom: 10px;
-            color: #333;
-            line-height: 1.3;
-        }
-
-        .product-description {
-            font-size: 0.9em;
-            color: #666;
-            margin-bottom: 12px;
-            line-height: 1.6;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            flex-grow: 1;
-        }
-
-        .product-price {
-            color: #667eea;
-            font-size: clamp(1.2em, 3vw, 1.4em);
-            font-weight: 700;
-            margin: 12px 0;
-        }
-
-        .product-rating {
-            color: #f39c12;
-            margin: 8px 0;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 0.95em;
-            font-weight: 600;
-        }
-
-        .wishlist-btn {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: white;
-            border: none;
-            font-size: 1.5em;
-            cursor: pointer;
-            padding: 10px;
-            border-radius: 50%;
-            transition: all 0.3s;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-            z-index: 10;
-            width: 45px;
-            height: 45px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .wishlist-btn:active {
-            transform: scale(0.9);
-        }
-
-        .wishlist-btn.active {
-            color: red;
-            transform: scale(1.15);
-        }
-
-        .sentiment-badge {
-            display: inline-block;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.8em;
-            font-weight: 700;
-            margin-top: 10px;
-            letter-spacing: 0.3px;
-        }
-
-        .sentiment-positive {
-            background: #2ecc71;
-            color: white;
-        }
-
-        .sentiment-neutral {
-            background: #f39c12;
-            color: white;
-        }
-
-        .btn {
-            padding: 14px 24px;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: clamp(0.9em, 2vw, 1em);
-            transition: all 0.3s;
-            font-weight: 600;
-            position: relative;
-            overflow: hidden;
-            touch-action: manipulation;
-            min-height: 48px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-        }
-
-        .btn:active {
-            transform: scale(0.95);
-        }
-
-        .btn-primary {
-            background: #667eea;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: #764ba2;
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-        }
-
-        .btn-secondary {
-            background: #f39c12;
-            color: white;
-        }
-
-        .btn-secondary:hover {
-            background: #e67e22;
-        }
-
-        .btn-success {
-            background: #2ecc71;
-            color: white;
-        }
-
-        .btn-success:hover {
-            background: #27ae60;
-        }
-
-        .btn-danger {
-            background: #e74c3c;
-            color: white;
-        }
-
-        .btn-danger:hover {
-            background: #c0392b;
-        }
-
-        /* Button Groups */
         .button-group {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-            flex-wrap: wrap;
+          flex-direction: column;
         }
 
         .button-group .btn {
-            flex: 1;
-            min-width: 120px;
+          width: 100%;
         }
 
-        /* Comparison Table - Responsive */
-        .comparison-section {
-            margin-top: 25px;
-        }
-
-        .comparison-table {
-            width: 100%;
-            overflow-x: auto;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .comparison-table table {
-            width: 100%;
-            min-width: 600px;
-            border-collapse: collapse;
-        }
-
-        .comparison-table th,
-        .comparison-table td {
-            padding: 15px;
-            text-align: left;
-            border-bottom: 1px solid #eee;
-        }
-
-        .comparison-table th {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            font-weight: 700;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-        }
-
-        .comparison-table tr:hover {
-            background: #f8f9fa;
-        }
-
-        /* Chatbot - Adaptive Design */
         .chatbot-container {
-            background: white;
-            border-radius: 15px;
-            padding: 20px;
-            height: 600px;
-            display: flex;
-            flex-direction: column;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.05);
+          height: 450px;
+          padding: 15px;
         }
 
         .chat-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #eee;
-            flex-wrap: wrap;
-            gap: 12px;
+          flex-direction: column;
+          align-items: stretch;
         }
 
-        .chat-status {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: #2ecc71;
-            font-weight: 600;
-            font-size: 0.95em;
-        }
-
-        .status-indicator {
-            width: 10px;
-            height: 10px;
-            background: #2ecc71;
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-
-        .chat-messages {
-            flex: 1;
-            overflow-y: auto;
-            margin-bottom: 15px;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .chat-messages::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .chat-messages::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 10px;
-        }
-
-        .chat-messages::-webkit-scrollbar-thumb {
-            background: var(--primary-color);
-            border-radius: 10px;
+        .chat-header > div {
+          width: 100%;
         }
 
         .message {
-            margin-bottom: 15px;
-            padding: 14px 18px;
-            border-radius: 15px;
-            max-width: 85%;
-            word-wrap: break-word;
-            animation: messageSlide 0.3s ease;
-            font-size: 0.95em;
-            line-height: 1.6;
-        }
-
-        @keyframes messageSlide {
-            from { transform: translateX(-20px); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-
-        .user-message {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            margin-left: auto;
-            text-align: right;
-            border-bottom-right-radius: 5px;
-        }
-
-        .bot-message {
-            background: #e9ecef;
-            color: #333;
-            border-bottom-left-radius: 5px;
-        }
-
-        .message-timestamp {
-            font-size: 0.75em;
-            opacity: 0.7;
-            margin-top: 6px;
-            font-style: italic;
+          max-width: 90%;
+          font-size: 0.9em;
         }
 
         .chat-input-container {
-            display: flex;
-            gap: 10px;
-            align-items: center;
+          gap: 8px;
         }
 
-        .chat-input {
-            flex: 1;
-            padding: 14px;
-            border: 2px solid #667eea;
-            border-radius: 10px;
-            font-size: 1em;
-            transition: all 0.3s;
-        }
-
-        .chat-input:focus {
-            outline: none;
-            box-shadow: 0 0 15px rgba(102, 126, 234, 0.3);
-        }
-
-        .voice-btn {
-            padding: 14px;
-            background: var(--warning-color);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 1.2em;
-            transition: all 0.3s;
-            min-width: 48px;
-            min-height: 48px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .voice-btn:active {
-            transform: scale(0.9);
-        }
-
-        .voice-btn.listening {
-            background: var(--danger-color);
-            animation: pulse 1s infinite;
-        }
-
-        /* Cart - Responsive Design */
         .cart-item {
-            background: white;
-            padding: 18px;
-            border-radius: 12px;
-            margin-bottom: 15px;
-            display: grid;
-            grid-template-columns: 1fr auto;
-            gap: 15px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            animation: slideRight 0.3s ease;
-            align-items: center;
-        }
-
-        @keyframes slideRight {
-            from { transform: translateX(-30px); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
+          grid-template-columns: 1fr;
+          padding: 15px;
         }
 
         .cart-item-details {
-            display: flex;
-            gap: 15px;
-            align-items: center;
+          flex-wrap: wrap;
         }
 
         .cart-item-image {
-            width: 80px;
-            height: 80px;
-            border-radius: 10px;
-            object-fit: cover;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            flex-shrink: 0;
-        }
-
-        .cart-item-info {
-            flex: 1;
+          width: 70px;
+          height: 70px;
         }
 
         .cart-item-actions {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            align-items: flex-end;
-        }
-
-        .quantity-controls {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-        }
-
-        .quantity-btn {
-            width: 40px;
-            height: 40px;
-            border: none;
-            background: var(--primary-color);
-            color: white;
-            border-radius: 50%;
-            cursor: pointer;
-            font-weight: 700;
-            transition: all 0.3s;
-            touch-action: manipulation;
-            font-size: 1.2em;
-        }
-
-        .quantity-btn:active {
-            transform: scale(0.9);
-        }
-
-        .quantity-btn:hover {
-            background: var(--secondary-color);
-        }
-
-        .cart-total {
-            font-size: clamp(1.3em, 3vw, 1.6em);
-            font-weight: 700;
-            color: #764ba2;
-            text-align: right;
-            margin-top: 20px;
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 12px;
-        }
-
-        .discount-section {
-            margin-top: 20px;
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-
-        .discount-input {
-            flex: 1;
-            min-width: 250px;
-            padding: 14px;
-            border: 2px solid var(--primary-color);
-            border-radius: 10px;
-            font-size: 1em;
-        }
-
-        /* EMI Calculator - Responsive */
-        .emi-calculator {
-            background: white;
-            padding: 20px;
-            border-radius: 15px;
-        }
-
-        .input-group {
-            margin-bottom: 25px;
-        }
-
-        .input-group label {
-            display: block;
-            margin-bottom: 10px;
-            font-weight: 700;
-            color: #333;
-            font-size: 1em;
-        }
-
-        .input-group input, .input-group select {
-            width: 100%;
-            padding: 14px;
-            border: 2px solid #667eea;
-            border-radius: 10px;
-            font-size: 1em;
-            transition: all 0.3s;
-        }
-
-        .input-group input:focus, .input-group select:focus {
-            outline: none;
-            box-shadow: 0 0 15px rgba(102, 126, 234, 0.3);
-        }
-
-        .emi-result {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 25px;
-            border-radius: 15px;
-            margin-top: 25px;
-            text-align: center;
-            animation: scaleIn 0.5s ease;
-        }
-
-        @keyframes scaleIn {
-            from { transform: scale(0.8); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
-
-        .emi-amount {
-            font-size: clamp(2.5em, 6vw, 3em);
-            font-weight: 700;
-            margin: 20px 0;
+          width: 100%;
+          flex-direction: row;
+          justify-content: space-between;
+          align-items: center;
         }
 
         .payment-options {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-            gap: 15px;
-            margin-top: 25px;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 12px;
         }
 
         .payment-option {
-            padding: 25px 15px;
-            border: 2px solid var(--primary-color);
-            border-radius: 15px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-            touch-action: manipulation;
-            font-size: 0.95em;
-            font-weight: 600;
-            min-height: 100px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
+          padding: 20px 10px;
+          min-height: 90px;
+          font-size: 0.9em;
         }
 
-        .payment-option:active {
-            transform: scale(0.95);
+        .comparison-table {
+          font-size: 0.85em;
         }
 
-        .payment-option:hover {
-            background: var(--primary-color);
-            color: white;
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        .btn {
+          width: 100%;
+          margin: 5px 0;
         }
 
-        .payment-option.selected {
-            background: var(--secondary-color);
-            color: white;
-            border-color: var(--secondary-color);
+        .discount-section {
+          flex-direction: column;
         }
 
-        .progress-bar {
-            width: 100%;
-            height: 10px;
-            background: rgba(255,255,255,0.3);
-            border-radius: 10px;
-            overflow: hidden;
-            margin: 20px 0;
+        .discount-input {
+          width: 100%;
+          min-width: 100%;
         }
 
-        .progress-fill {
-            height: 100%;
-            background: white;
-            transition: width 0.5s ease;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        .loading {
-            text-align: center;
-            padding: 20px;
-            color: #667eea;
-            font-style: italic;
-            font-size: 1.1em;
-        }
-
-        /* Notifications */
         .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 16px 24px;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-            z-index: 1000;
-            animation: slideInRight 0.3s ease;
-            max-width: 350px;
-            font-size: 0.95em;
-            font-weight: 600;
+          right: 10px;
+          top: 10px;
+          max-width: calc(100% - 20px);
+        }
+      }
+
+      /* Small Mobile (max-width: 480px) */
+      @media (max-width: 480px) {
+        .stat-number {
+          font-size: 1.4em;
         }
 
-        @keyframes slideInRight {
-            from { transform: translateX(400px); }
-            to { transform: translateX(0); }
+        .product-image-container {
+          height: 180px;
         }
 
-        .notification.success {
-            border-left: 5px solid var(--success-color);
+        .mood-selector {
+          grid-template-columns: 1fr;
         }
 
-        .notification.error {
-            border-left: 5px solid var(--danger-color);
+        .chatbot-container {
+          height: 400px;
         }
 
-        /* Tablet Styles (768px - 1024px) */
-        @media (min-width: 768px) and (max-width: 1024px) {
-            :root {
-                --container-padding: 25px;
-                --card-gap: 18px;
-            }
-
-            .products-grid {
-                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            }
-
-            .mood-selector {
-                grid-template-columns: repeat(3, 1fr);
-            }
-
-            .stats-bar {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .chatbot-container {
-                height: 550px;
-            }
+        .emi-amount {
+          font-size: 2em;
         }
 
-        /* Mobile Landscape (568px - 767px) */
-        @media (min-width: 568px) and (max-width: 767px) and (orientation: landscape) {
-            .chatbot-container {
-                height: 400px;
-            }
-
-            .products-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
+        .cart-item-image {
+          width: 60px;
+          height: 60px;
         }
 
-        /* Mobile Styles (max-width: 767px) */
-        @media (max-width: 767px) {
-            :root {
-                --container-padding: 15px;
-                --border-radius: 15px;
-                --card-gap: 15px;
-            }
+        .payment-options {
+          grid-template-columns: 1fr;
+        }
+      }
 
-            body {
-                padding: 10px;
-            }
-
-            .container {
-                padding: 15px;
-                border-radius: 15px;
-            }
-            
-            h1 {
-                font-size: 1.8em;
-            }
-
-            .subtitle {
-                font-size: 0.95em;
-            }
-
-            .header {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 15px;
-            }
-
-            .header-title {
-                text-align: center;
-            }
-
-            .header-controls {
-                justify-content: center;
-                gap: 8px;
-            }
-
-            .theme-toggle, .voice-toggle {
-                flex: 1;
-                min-width: 100px;
-            }
-
-            .stats-bar {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 10px;
-            }
-
-            .stat-card {
-                padding: 15px;
-            }
-
-            .stat-number {
-                font-size: 1.6em;
-            }
-
-            .products-grid {
-                grid-template-columns: 1fr;
-                gap: 15px;
-            }
-
-            .search-filter-bar {
-                grid-template-columns: 1fr;
-            }
-
-            .mood-selector {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 10px;
-            }
-
-            .mood-btn {
-                padding: 15px 10px;
-                font-size: 0.95em;
-                min-height: 55px;
-            }
-
-            .section {
-                padding: 15px;
-                margin-bottom: 20px;
-            }
-
-            .section-title {
-                font-size: 1.3em;
-            }
-
-            .product-card {
-                padding: 15px;
-            }
-
-            .product-image-container {
-                height: 200px;
-            }
-
-            .button-group {
-                flex-direction: column;
-            }
-
-            .button-group .btn {
-                width: 100%;
-            }
-
-            .chatbot-container {
-                height: 450px;
-                padding: 15px;
-            }
-
-            .chat-header {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .chat-header > div {
-                width: 100%;
-            }
-
-            .message {
-                max-width: 90%;
-                font-size: 0.9em;
-            }
-
-            .chat-input-container {
-                gap: 8px;
-            }
-
-            .cart-item {
-                grid-template-columns: 1fr;
-                padding: 15px;
-            }
-
-            .cart-item-details {
-                flex-wrap: wrap;
-            }
-
-            .cart-item-image {
-                width: 70px;
-                height: 70px;
-            }
-
-            .cart-item-actions {
-                width: 100%;
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: center;
-            }
-
-            .payment-options {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 12px;
-            }
-
-            .payment-option {
-                padding: 20px 10px;
-                min-height: 90px;
-                font-size: 0.9em;
-            }
-
-            .comparison-table {
-                font-size: 0.85em;
-            }
-
-            .btn {
-                width: 100%;
-                margin: 5px 0;
-            }
-
-            .discount-section {
-                flex-direction: column;
-            }
-
-            .discount-input {
-                width: 100%;
-                min-width: 100%;
-            }
-
-            .notification {
-                right: 10px;
-                top: 10px;
-                max-width: calc(100% - 20px);
-            }
+      /* Large Desktop (min-width: 1440px) */
+      @media (min-width: 1440px) {
+        .container {
+          max-width: 1800px;
         }
 
-        /* Small Mobile (max-width: 480px) */
-        @media (max-width: 480px) {
-            .stat-number {
-                font-size: 1.4em;
-            }
-
-            .product-image-container {
-                height: 180px;
-            }
-
-            .mood-selector {
-                grid-template-columns: 1fr;
-            }
-
-            .chatbot-container {
-                height: 400px;
-            }
-
-            .emi-amount {
-                font-size: 2em;
-            }
-
-            .cart-item-image {
-                width: 60px;
-                height: 60px;
-            }
-
-            .payment-options {
-                grid-template-columns: 1fr;
-            }
+        .products-grid {
+          grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
         }
 
-        /* Large Desktop (min-width: 1440px) */
-        @media (min-width: 1440px) {
-            .container {
-                max-width: 1800px;
-            }
-
-            .products-grid {
-                grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            }
-
-            .stats-bar {
-                grid-template-columns: repeat(4, 1fr);
-            }
-
-            .chatbot-container {
-                height: 650px;
-            }
+        .stats-bar {
+          grid-template-columns: repeat(4, 1fr);
         }
 
-        /* Extra Large Desktop (min-width: 1920px) */
-        @media (min-width: 1920px) {
-            .container {
-                max-width: 2000px;
-                padding: 40px;
-            }
+        .chatbot-container {
+          height: 650px;
+        }
+      }
 
-            .products-grid {
-                grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            }
+      /* Extra Large Desktop (min-width: 1920px) */
+      @media (min-width: 1920px) {
+        .container {
+          max-width: 2000px;
+          padding: 40px;
         }
 
-        /* Touch-friendly enhancements for all touch devices */
-        @media (hover: none) and (pointer: coarse) {
-            .btn, .mood-btn, .quantity-btn, .payment-option, .wishlist-btn {
-                min-height: 48px;
-                min-width: 48px;
-            }
+        .products-grid {
+          grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        }
+      }
 
-            .theme-toggle, .voice-toggle {
-                min-height: 44px;
-            }
+      /* Touch-friendly enhancements for all touch devices */
+      @media (hover: none) and (pointer: coarse) {
+        .btn,
+        .mood-btn,
+        .quantity-btn,
+        .payment-option,
+        .wishlist-btn {
+          min-height: 48px;
+          min-width: 48px;
         }
 
-        /* Print Styles */
-        @media print {
-            body {
-                background: white;
-                padding: 0;
-            }
-
-            .container {
-                box-shadow: none;
-            }
-
-            .header-controls,
-            .chatbot-container,
-            .btn,
-            .wishlist-btn {
-                display: none;
-            }
+        .theme-toggle,
+        .voice-toggle {
+          min-height: 44px;
         }
+      }
+
+      /* Print Styles */
+      @media print {
+        body {
+          background: white;
+          padding: 0;
+        }
+
+        .container {
+          box-shadow: none;
+        }
+
+        .header-controls,
+        .chatbot-container,
+        .btn,
+        .wishlist-btn {
+          display: none;
+        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <div class="header-title">
-                <h1>🌸 Smart Wellness Shopping</h1>
-                <p class="subtitle">AI-Powered Personalized Shopping with Voice Assistant</p>
-            </div>
-            <div class="header-controls">
-                <button class="theme-toggle" onclick="toggleTheme()">🌙 Dark</button>
-                <button class="voice-toggle" onclick="toggleVoiceMode()" id="voiceToggle">🎤 Voice</button>
-                <button class="btn btn-primary" onclick="showWishlist()">❤️ <span id="wishlistCount">0</span></button>
-            </div>
+      <!-- Header -->
+      <div class="header">
+        <div class="header-title">
+          <h1>🌸 Smart Wellness Shopping</h1>
+          <p class="subtitle">
+            AI-Powered Personalized Shopping with Voice Assistant
+          </p>
+        </div>
+        <div class="header-controls">
+          <button class="theme-toggle" onclick="toggleTheme()">🌙 Dark</button>
+          <button
+            class="voice-toggle"
+            onclick="toggleVoiceMode()"
+            id="voiceToggle"
+          >
+            🎤 Voice
+          </button>
+          <button class="btn btn-primary" onclick="showWishlist()">
+            ❤️ <span id="wishlistCount">0</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Stats Bar -->
+      <div class="stats-bar">
+        <div class="stat-card">
+          <div class="stat-number" id="productCount">0</div>
+          <div class="stat-label">Products</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="cartCount">0</div>
+          <div class="stat-label">Cart Items</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">₹<span id="savingsAmount">0</span></div>
+          <div class="stat-label">Savings</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="aiResponses">0</div>
+          <div class="stat-label">AI Chats</div>
+        </div>
+      </div>
+
+      <!-- Mood Selection -->
+      <div class="section">
+        <div class="section-title">
+          <span>😊</span>
+          <span>How are you feeling?</span>
+        </div>
+        <div class="mood-selector">
+          <button class="mood-btn" onclick="selectMood('stressed')">
+            😰 Stressed
+          </button>
+          <button class="mood-btn" onclick="selectMood('tired')">
+            😴 Tired
+          </button>
+          <button class="mood-btn" onclick="selectMood('anxious')">
+            😟 Anxious
+          </button>
+          <button class="mood-btn" onclick="selectMood('happy')">
+            😊 Happy
+          </button>
+          <button class="mood-btn" onclick="selectMood('sad')">😢 Sad</button>
+          <button class="mood-btn" onclick="selectMood('energetic')">
+            ⚡ Energetic
+          </button>
+        </div>
+        <div id="moodFeedback" class="loading hidden"></div>
+      </div>
+
+      <!-- Product Recommendations -->
+      <div id="productsSection" class="section hidden">
+        <div class="section-title">
+          <span>🛍️</span>
+          <span>Recommended for You</span>
         </div>
 
-        <!-- Stats Bar -->
-        <div class="stats-bar">
-            <div class="stat-card">
-                <div class="stat-number" id="productCount">0</div>
-                <div class="stat-label">Products</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number" id="cartCount">0</div>
-                <div class="stat-label">Cart Items</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number">₹<span id="savingsAmount">0</span></div>
-                <div class="stat-label">Savings</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number" id="aiResponses">0</div>
-                <div class="stat-label">AI Chats</div>
-            </div>
+        <!-- Search and Filter -->
+        <div class="search-filter-bar">
+          <input
+            type="text"
+            class="search-input"
+            id="searchInput"
+            placeholder="🔍 Search products..."
+            oninput="filterProducts()"
+          />
+          <select
+            class="filter-select"
+            id="categoryFilter"
+            onchange="filterProducts()"
+          >
+            <option value="all">All Categories</option>
+            <option value="Tea">Teas</option>
+            <option value="Skincare">Skincare</option>
+            <option value="Outfit">Outfits</option>
+          </select>
+          <select
+            class="filter-select"
+            id="sortFilter"
+            onchange="sortProducts()"
+          >
+            <option value="default">Sort By</option>
+            <option value="price-low">Price: Low to High</option>
+            <option value="price-high">Price: High to Low</option>
+            <option value="rating">Rating: High to Low</option>
+            <option value="popular">Most Popular</option>
+          </select>
         </div>
 
-        <!-- Mood Selection -->
-        <div class="section">
-            <div class="section-title">
-                <span>😊</span>
-                <span>How are you feeling?</span>
-            </div>
-            <div class="mood-selector">
-                <button class="mood-btn" onclick="selectMood('stressed')">😰 Stressed</button>
-                <button class="mood-btn" onclick="selectMood('tired')">😴 Tired</button>
-                <button class="mood-btn" onclick="selectMood('anxious')">😟 Anxious</button>
-                <button class="mood-btn" onclick="selectMood('happy')">😊 Happy</button>
-                <button class="mood-btn" onclick="selectMood('sad')">😢 Sad</button>
-                <button class="mood-btn" onclick="selectMood('energetic')">⚡ Energetic</button>
-            </div>
-            <div id="moodFeedback" class="loading hidden"></div>
+        <div id="productsGrid" class="products-grid"></div>
+
+        <!-- Product Comparison -->
+        <div id="comparisonSection" class="comparison-section hidden">
+          <h3 style="margin-bottom: 15px">Product Comparison</h3>
+          <div id="comparisonTable" class="comparison-table"></div>
+          <button
+            class="btn btn-secondary"
+            onclick="clearComparison()"
+            style="margin-top: 15px"
+          >
+            Clear Comparison
+          </button>
         </div>
+      </div>
 
-        <!-- Product Recommendations -->
-        <div id="productsSection" class="section hidden">
-            <div class="section-title">
-                <span>🛍️</span>
-                <span>Recommended for You</span>
-            </div>
-            
-            <!-- Search and Filter -->
-            <div class="search-filter-bar">
-                <input type="text" class="search-input" id="searchInput" placeholder="🔍 Search products..." oninput="filterProducts()">
-                <select class="filter-select" id="categoryFilter" onchange="filterProducts()">
-                    <option value="all">All Categories</option>
-                    <option value="Tea">Teas</option>
-                    <option value="Skincare">Skincare</option>
-                    <option value="Outfit">Outfits</option>
-                </select>
-                <select class="filter-select" id="sortFilter" onchange="sortProducts()">
-                    <option value="default">Sort By</option>
-                    <option value="price-low">Price: Low to High</option>
-                    <option value="price-high">Price: High to Low</option>
-                    <option value="rating">Rating: High to Low</option>
-                    <option value="popular">Most Popular</option>
-                </select>
-            </div>
-
-            <div id="productsGrid" class="products-grid"></div>
-
-            <!-- Product Comparison -->
-            <div id="comparisonSection" class="comparison-section hidden">
-                <h3 style="margin-bottom: 15px;">Product Comparison</h3>
-                <div id="comparisonTable" class="comparison-table"></div>
-                <button class="btn btn-secondary" onclick="clearComparison()" style="margin-top: 15px;">Clear Comparison</button>
-            </div>
+      <!-- Aivora Chatbot -->
+      <div id="chatbotSection" class="section hidden">
+        <div class="section-title">
+          <span>🤖</span>
+          <span>Chat with Trenz</span>
         </div>
-
-        <!-- Aivora Chatbot -->
-        <div id="chatbotSection" class="section hidden">
-            <div class="section-title">
-                <span>🤖</span>
-                <span>Chat with Trenz</span>
+        <div class="chatbot-container">
+          <div class="chat-header">
+            <div class="chat-status">
+              <div class="status-indicator"></div>
+              <span>Trenz Online</span>
             </div>
-            <div class="chatbot-container">
-                <div class="chat-header">
-                    <div class="chat-status">
-                        <div class="status-indicator"></div>
-                        <span>Trenz Online</span>
-                    </div>
-                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                        <button class="btn btn-secondary" onclick="clearChat()">Clear</button>
-                        <button class="btn btn-primary" onclick="speakLastMessage()">🔊 Speak</button>
-                    </div>
-                </div>
-                <div id="chatMessages" class="chat-messages">
-                    <div class="message bot-message">
-                        Hi! I'm Trenz, your AI wellness assistant. I can help you compare products, analyze reviews, and find the perfect items for your needs. Ask me anything!
-                        <div class="message-timestamp">Just now</div>
-                    </div>
-                </div>
-                <div class="chat-input-container">
-                    <button class="voice-btn" id="chatVoiceBtn" onclick="startChatVoice()">🎤</button>
-                    <input type="text" id="chatInput" class="chat-input" placeholder="Type or speak..." onkeypress="handleChatKeyPress(event)">
-                    <button class="btn btn-primary" onclick="sendMessage()">Send</button>
-                </div>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap">
+              <button class="btn btn-secondary" onclick="clearChat()">
+                Clear
+              </button>
+              <button class="btn btn-primary" onclick="speakLastMessage()">
+                🔊 Speak
+              </button>
             </div>
+          </div>
+          <div id="chatMessages" class="chat-messages">
+            <div class="message bot-message">
+              Hi! I'm Trenz, your AI wellness assistant. I can help you compare
+              products, analyze reviews, and find the perfect items for your
+              needs. Ask me anything!
+              <div class="message-timestamp">Just now</div>
+            </div>
+          </div>
+          <div class="chat-input-container">
+            <button
+              class="voice-btn"
+              id="chatVoiceBtn"
+              onclick="startChatVoice()"
+            >
+              🎤
+            </button>
+            <input
+              type="text"
+              id="chatInput"
+              class="chat-input"
+              placeholder="Type or speak..."
+              onkeypress="handleChatKeyPress(event)"
+            />
+            <button class="btn btn-primary" onclick="sendMessage()">
+              Send
+            </button>
+          </div>
         </div>
+      </div>
 
-        <!-- Wishlist -->
-        <div id="wishlistSection" class="section hidden">
-            <div class="section-title">
-                <span>❤️</span>
-                <span>Your Wishlist</span>
-            </div>
-            <div id="wishlistGrid" class="products-grid"></div>
+      <!-- Wishlist -->
+      <div id="wishlistSection" class="section hidden">
+        <div class="section-title">
+          <span>❤️</span>
+          <span>Your Wishlist</span>
         </div>
+        <div id="wishlistGrid" class="products-grid"></div>
+      </div>
 
-        <!-- Shopping Cart -->
-        <div id="cartSection" class="section hidden">
-            <div class="section-title">
-                <span>🛒</span>
-                <span>Shopping Cart</span>
-            </div>
-            <div id="cartItems"></div>
-            <div class="discount-section">
-                <input type="text" class="discount-input" id="discountCode" placeholder="Enter discount code">
-                <button class="btn btn-success" onclick="applyDiscount()">Apply</button>
-            </div>
-            <div id="cartTotal" class="cart-total"></div>
-            <div class="button-group">
-                <button class="btn btn-primary" onclick="proceedToEMI()">Proceed to Payment 💳</button>
-                <button class="btn btn-secondary" onclick="saveCart()">Save Cart 💾</button>
-            </div>
+      <!-- Shopping Cart -->
+      <div id="cartSection" class="section hidden">
+        <div class="section-title">
+          <span>🛒</span>
+          <span>Shopping Cart</span>
         </div>
-
-        <!-- EMI Calculator -->
-        <div id="emiSection" class="section hidden">
-            <div class="section-title">
-                <span>💳</span>
-                <span>Payment Plan</span>
-            </div>
-            <div class="emi-calculator">
-                <div class="input-group">
-                    <label>Loan Amount (₹)</label>
-                    <input type="number" id="loanAmount" readonly>
-                </div>
-                <div class="input-group">
-                    <label>Interest Rate (% per annum)</label>
-                    <input type="number" id="interestRate" value="12" step="0.1" oninput="calculateEMI()">
-                </div>
-                <div class="input-group">
-                    <label>Loan Tenure</label>
-                    <select id="tenure" onchange="calculateEMI()">
-                        <option value="3">3 Months</option>
-                        <option value="6">6 Months</option>
-                        <option value="12" selected>12 Months</option>
-                        <option value="24">24 Months</option>
-                        <option value="36">36 Months</option>
-                    </select>
-                </div>
-                
-                <h3 style="margin-top: 25px; margin-bottom: 15px; font-size: 1.2em;">Payment Method</h3>
-                <div class="payment-options">
-                    <div class="payment-option" onclick="selectPayment('card')">
-                        <span style="font-size: 2em;">💳</span>
-                        <span>Card</span>
-                    </div>
-                    <div class="payment-option" onclick="selectPayment('upi')">
-                        <span style="font-size: 2em;">📱</span>
-                        <span>UPI</span>
-                    </div>
-                    <div class="payment-option" onclick="selectPayment('netbanking')">
-                        <span style="font-size: 2em;">🏦</span>
-                        <span>Banking</span>
-                    </div>
-                    <div class="payment-option" onclick="selectPayment('wallet')">
-                        <span style="font-size: 2em;">👛</span>
-                        <span>Wallet</span>
-                    </div>
-                </div>
-
-                <button class="btn btn-primary" onclick="calculateEMI()" style="margin-top: 25px;">Calculate EMI</button>
-                <div id="emiResult" class="emi-result hidden">
-                    <div style="font-size: 1.1em; opacity: 0.95;">Monthly EMI</div>
-                    <div class="emi-amount" id="emiAmount"></div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="emiProgress"></div>
-                    </div>
-                    <div id="emiDetails"></div>
-                    <button class="btn btn-success" onclick="confirmOrder()" style="margin-top: 20px;">Confirm Order 🎉</button>
-                </div>
-            </div>
+        <div id="cartItems"></div>
+        <div class="discount-section">
+          <input
+            type="text"
+            class="discount-input"
+            id="discountCode"
+            placeholder="Enter discount code"
+          />
+          <button class="btn btn-success" onclick="applyDiscount()">
+            Apply
+          </button>
         </div>
+        <div id="cartTotal" class="cart-total"></div>
+        <div class="button-group">
+          <button class="btn btn-primary" onclick="proceedToEMI()">
+            Proceed to Payment 💳
+          </button>
+          <button class="btn btn-secondary" onclick="saveCart()">
+            Save Cart 💾
+          </button>
+        </div>
+      </div>
+
+      <!-- EMI Calculator -->
+      <div id="emiSection" class="section hidden">
+        <div class="section-title">
+          <span>💳</span>
+          <span>Payment Plan</span>
+        </div>
+        <div class="emi-calculator">
+          <div class="input-group">
+            <label>Loan Amount (₹)</label>
+            <input type="number" id="loanAmount" readonly />
+          </div>
+          <div class="input-group">
+            <label>Interest Rate (% per annum)</label>
+            <input
+              type="number"
+              id="interestRate"
+              value="12"
+              step="0.1"
+              oninput="calculateEMI()"
+            />
+          </div>
+          <div class="input-group">
+            <label>Loan Tenure</label>
+            <select id="tenure" onchange="calculateEMI()">
+              <option value="3">3 Months</option>
+              <option value="6">6 Months</option>
+              <option value="12" selected>12 Months</option>
+              <option value="24">24 Months</option>
+              <option value="36">36 Months</option>
+            </select>
+          </div>
+
+          <h3 style="margin-top: 25px; margin-bottom: 15px; font-size: 1.2em">
+            Payment Method
+          </h3>
+          <div class="payment-options">
+            <div class="payment-option" onclick="selectPayment('card')">
+              <span style="font-size: 2em">💳</span>
+              <span>Card</span>
+            </div>
+            <div class="payment-option" onclick="selectPayment('upi')">
+              <span style="font-size: 2em">📱</span>
+              <span>UPI</span>
+            </div>
+            <div class="payment-option" onclick="selectPayment('netbanking')">
+              <span style="font-size: 2em">🏦</span>
+              <span>Banking</span>
+            </div>
+            <div class="payment-option" onclick="selectPayment('wallet')">
+              <span style="font-size: 2em">👛</span>
+              <span>Wallet</span>
+            </div>
+          </div>
+
+          <button
+            class="btn btn-primary"
+            onclick="calculateEMI()"
+            style="margin-top: 25px"
+          >
+            Calculate EMI
+          </button>
+          <div id="emiResult" class="emi-result hidden">
+            <div style="font-size: 1.1em; opacity: 0.95">Monthly EMI</div>
+            <div class="emi-amount" id="emiAmount"></div>
+            <div class="progress-bar">
+              <div class="progress-fill" id="emiProgress"></div>
+            </div>
+            <div id="emiDetails"></div>
+            <button
+              class="btn btn-success"
+              onclick="confirmOrder()"
+              style="margin-top: 20px"
+            >
+              Confirm Order 🎉
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
 
     <script>
-        // Global variables
-        let currentMood = '';
-        let cart = [];
-        let wishlist = [];
-        let products = [];
-        let comparisonList = [];
-        let selectedPayment = '';
-        let discountApplied = 0;
-        let aiInteractions = 0;
-        let voiceModeEnabled = false;
-        let recognition;
-        let synthesis = window.speechSynthesis;
-        
-        // Direct Unsplash image URLs
-        const productImages = {
-            'Chamomile Calm Tea': 'https://images.unsplash.com/photo-1594631252845-29fc4cc8cde9?w=400&h=300&fit=crop',
-            'Lavender Dream Tea': 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=400&h=300&fit=crop',
-            'Stress Relief Herbal Blend': 'https://images.unsplash.com/photo-1564890369478-c89ca6d9cde9?w=400&h=300&fit=crop',
-            'Soothing Aloe Vera Gel': 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=400&h=300&fit=crop',
-            'Calming Face Mask': 'https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=400&h=300&fit=crop',
-            'Relaxing Aromatherapy Serum': 'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=400&h=300&fit=crop',
-            'Soft Cotton Lounge Set': 'https://images.unsplash.com/photo-1578102718171-ec1f91680562?w=400&h=300&fit=crop',
-            'Bamboo Comfort Pajamas': 'https://images.unsplash.com/photo-1584293648398-9e52f5bef8f8?w=400&h=300&fit=crop',
-            'Relaxed Fit Hoodie': 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400&h=300&fit=crop',
-            'Energy Boost Green Tea': 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=400&h=300&fit=crop',
-            'Ginseng Vitality Tea': 'https://images.unsplash.com/photo-1597318121031-6c0c0e9b5571?w=400&h=300&fit=crop',
-            'Matcha Power Blend': 'https://images.unsplash.com/photo-1515823064-d6e0c04616a7?w=400&h=300&fit=crop',
-            'Refreshing Vitamin C Serum': 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=400&h=300&fit=crop',
-            'Energizing Eye Cream': 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=400&h=300&fit=crop',
-            'Brightening Face Mist': 'https://images.unsplash.com/photo-1571875257727-256c39da42af?w=400&h=300&fit=crop',
-            'Breathable Athleisure Set': 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=400&h=300&fit=crop',
-            'Cooling Fabric T-Shirt': 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=300&fit=crop',
-            'Comfy Joggers': 'https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=400&h=300&fit=crop',
-            'Peaceful Mind Tea': 'https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=400&h=300&fit=crop',
-            'Anxiety Relief Herbal Mix': 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=400&h=300&fit=crop',
-            'Calming Passionflower Tea': 'https://images.unsplash.com/photo-1558642891-54be180ea339?w=400&h=300&fit=crop',
-            'Gentle Soothing Cleanser': 'https://images.unsplash.com/photo-1556228852-80a39606bd3c?w=400&h=300&fit=crop',
-            'Calming CBD Cream': 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=400&h=300&fit=crop',
-            'Stress-Relief Face Oil': 'https://images.unsplash.com/photo-1570554886111-e80fcca6a029?w=400&h=300&fit=crop',
-            'Weighted Comfort Blanket': 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=300&fit=crop',
-            'Ultra-Soft Robe': 'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=400&h=300&fit=crop',
-            'Cozy Knit Sweater': 'https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=400&h=300&fit=crop',
-            'Tropical Fruit Tea': 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=400&h=300&fit=crop',
-            'Citrus Burst Green Tea': 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=400&h=300&fit=crop',
-            'Berry Bliss Herbal Tea': 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=400&h=300&fit=crop',
-            'Radiant Glow Serum': 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=400&h=300&fit=crop',
-            'Brightening Day Cream': 'https://images.unsplash.com/photo-1556228578-dd5e5f7ead12?w=400&h=300&fit=crop',
-            'Luminous Face Mask': 'https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=400&h=300&fit=crop',
-            'Vibrant Summer Dress': 'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=400&h=300&fit=crop',
-            'Colorful Casual Outfit': 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=400&h=300&fit=crop',
-            'Stylish Comfort Set': 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=400&h=300&fit=crop',
-            'Mood Lift Herbal Tea': 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=400&h=300&fit=crop',
-            'Comforting Vanilla Chai': 'https://images.unsplash.com/photo-1571934811356-5cc061b6821f?w=400&h=300&fit=crop',
-            'Uplifting Lemon Balm Tea': 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=400&h=300&fit=crop',
-            'Self-Care Face Mask Set': 'https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=400&h=300&fit=crop',
-            'Nurturing Night Cream': 'https://images.unsplash.com/photo-1556228578-dd5e5f7ead12?w=400&h=300&fit=crop',
-            'Comforting Body Butter': 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=400&h=300&fit=crop',
-            'Cozy Fleece Blanket Set': 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=300&fit=crop',
-            'Warm Comfort Sleepwear': 'https://images.unsplash.com/photo-1584293648398-9e52f5bef8f8?w=400&h=300&fit=crop',
-            'Snuggle-Soft Loungewear': 'https://images.unsplash.com/photo-1578102718171-ec1f91680562?w=400&h=300&fit=crop',
-            'Power Boost Black Tea': 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=400&h=300&fit=crop',
-            'Athletic Performance Tea': 'https://images.unsplash.com/photo-1597318121031-6c0c0e9b5571?w=400&h=300&fit=crop',
-            'Focus & Energy Blend': 'https://images.unsplash.com/photo-1515823064-d6e0c04616a7?w=400&h=300&fit=crop',
-            'Energizing Face Wash': 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=400&h=300&fit=crop',
-            'Active Hydration Gel': 'https://images.unsplash.com/photo-1556228578-dd5e5f7ead12?w=400&h=300&fit=crop',
-            'Sport Recovery Lotion': 'https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=400&h=300&fit=crop',
-            'Performance Activewear Set': 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=400&h=300&fit=crop',
-            'Dynamic Sports Outfit': 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=400&h=300&fit=crop',
-            'Pro Athletic Gear': 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=400&h=300&fit=crop'
-        };
+      // Global variables
+      let currentMood = "";
+      let cart = [];
+      let wishlist = [];
+      let products = [];
+      let comparisonList = [];
+      let selectedPayment = "";
+      let discountApplied = 0;
+      let aiInteractions = 0;
+      let voiceModeEnabled = false;
+      let recognition;
+      let synthesis = window.speechSynthesis;
 
-        // Product database
-        const moodProducts = {
-            stressed: {
-                teas: [
-                    { name: 'Chamomile Calm Tea', price: 299, originalPrice: 399, rating: 4.5, sentiment: 'positive', reviews: 156, description: 'Organic chamomile flowers for ultimate relaxation' },
-                    { name: 'Lavender Dream Tea', price: 349, originalPrice: 449, rating: 4.7, sentiment: 'positive', reviews: 203, description: 'French lavender with hints of honey' },
-                    { name: 'Stress Relief Herbal Blend', price: 399, originalPrice: 499, rating: 4.6, sentiment: 'positive', reviews: 178, description: 'Powerful blend of adaptogenic herbs' }
-                ],
-                skincare: [
-                    { name: 'Soothing Aloe Vera Gel', price: 599, originalPrice: 799, rating: 4.4, sentiment: 'positive', reviews: 312, description: 'Pure aloe vera for instant relief' },
-                    { name: 'Calming Face Mask', price: 799, originalPrice: 999, rating: 4.8, sentiment: 'positive', reviews: 445, description: 'Clay mask with essential oils' },
-                    { name: 'Relaxing Aromatherapy Serum', price: 1299, originalPrice: 1699, rating: 4.6, sentiment: 'positive', reviews: 267, description: 'Infused with lavender and chamomile' }
-                ],
-                outfits: [
-                    { name: 'Soft Cotton Lounge Set', price: 1999, originalPrice: 2499, rating: 4.5, sentiment: 'positive', reviews: 189, description: 'Premium organic cotton for comfort' },
-                    { name: 'Bamboo Comfort Pajamas', price: 1499, originalPrice: 1999, rating: 4.7, sentiment: 'positive', reviews: 234, description: 'Eco-friendly bamboo fabric' },
-                    { name: 'Relaxed Fit Hoodie', price: 1799, originalPrice: 2299, rating: 4.6, sentiment: 'positive', reviews: 298, description: 'Cozy fleece with kangaroo pocket' }
-                ]
+      // Direct Unsplash image URLs
+      const productImages = {
+        "Chamomile Calm Tea":
+          "https://images.unsplash.com/photo-1594631252845-29fc4cc8cde9?w=400&h=300&fit=crop",
+        "Lavender Dream Tea":
+          "https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=400&h=300&fit=crop",
+        "Stress Relief Herbal Blend":
+          "https://images.unsplash.com/photo-1564890369478-c89ca6d9cde9?w=400&h=300&fit=crop",
+        "Soothing Aloe Vera Gel":
+          "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=400&h=300&fit=crop",
+        "Calming Face Mask":
+          "https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=400&h=300&fit=crop",
+        "Relaxing Aromatherapy Serum":
+          "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=400&h=300&fit=crop",
+        "Soft Cotton Lounge Set":
+          "https://images.unsplash.com/photo-1578102718171-ec1f91680562?w=400&h=300&fit=crop",
+        "Bamboo Comfort Pajamas":
+          "https://images.unsplash.com/photo-1584293648398-9e52f5bef8f8?w=400&h=300&fit=crop",
+        "Relaxed Fit Hoodie":
+          "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400&h=300&fit=crop",
+        "Energy Boost Green Tea":
+          "https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=400&h=300&fit=crop",
+        "Ginseng Vitality Tea":
+          "https://images.unsplash.com/photo-1597318121031-6c0c0e9b5571?w=400&h=300&fit=crop",
+        "Matcha Power Blend":
+          "https://images.unsplash.com/photo-1515823064-d6e0c04616a7?w=400&h=300&fit=crop",
+        "Refreshing Vitamin C Serum":
+          "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=400&h=300&fit=crop",
+        "Energizing Eye Cream":
+          "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=400&h=300&fit=crop",
+        "Brightening Face Mist":
+          "https://images.unsplash.com/photo-1571875257727-256c39da42af?w=400&h=300&fit=crop",
+        "Breathable Athleisure Set":
+          "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=400&h=300&fit=crop",
+        "Cooling Fabric T-Shirt":
+          "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=300&fit=crop",
+        "Comfy Joggers":
+          "https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=400&h=300&fit=crop",
+        "Peaceful Mind Tea":
+          "https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=400&h=300&fit=crop",
+        "Anxiety Relief Herbal Mix":
+          "https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=400&h=300&fit=crop",
+        "Calming Passionflower Tea":
+          "https://images.unsplash.com/photo-1558642891-54be180ea339?w=400&h=300&fit=crop",
+        "Gentle Soothing Cleanser":
+          "https://images.unsplash.com/photo-1556228852-80a39606bd3c?w=400&h=300&fit=crop",
+        "Calming CBD Cream":
+          "https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=400&h=300&fit=crop",
+        "Stress-Relief Face Oil":
+          "https://images.unsplash.com/photo-1570554886111-e80fcca6a029?w=400&h=300&fit=crop",
+        "Weighted Comfort Blanket":
+          "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=300&fit=crop",
+        "Ultra-Soft Robe":
+          "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=400&h=300&fit=crop",
+        "Cozy Knit Sweater":
+          "https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=400&h=300&fit=crop",
+        "Tropical Fruit Tea":
+          "https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=400&h=300&fit=crop",
+        "Citrus Burst Green Tea":
+          "https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=400&h=300&fit=crop",
+        "Berry Bliss Herbal Tea":
+          "https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=400&h=300&fit=crop",
+        "Radiant Glow Serum":
+          "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=400&h=300&fit=crop",
+        "Brightening Day Cream":
+          "https://images.unsplash.com/photo-1556228578-dd5e5f7ead12?w=400&h=300&fit=crop",
+        "Luminous Face Mask":
+          "https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=400&h=300&fit=crop",
+        "Vibrant Summer Dress":
+          "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=400&h=300&fit=crop",
+        "Colorful Casual Outfit":
+          "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=400&h=300&fit=crop",
+        "Stylish Comfort Set":
+          "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=400&h=300&fit=crop",
+        "Mood Lift Herbal Tea":
+          "https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=400&h=300&fit=crop",
+        "Comforting Vanilla Chai":
+          "https://images.unsplash.com/photo-1571934811356-5cc061b6821f?w=400&h=300&fit=crop",
+        "Uplifting Lemon Balm Tea":
+          "https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=400&h=300&fit=crop",
+        "Self-Care Face Mask Set":
+          "https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=400&h=300&fit=crop",
+        "Nurturing Night Cream":
+          "https://images.unsplash.com/photo-1556228578-dd5e5f7ead12?w=400&h=300&fit=crop",
+        "Comforting Body Butter":
+          "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=400&h=300&fit=crop",
+        "Cozy Fleece Blanket Set":
+          "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=300&fit=crop",
+        "Warm Comfort Sleepwear":
+          "https://images.unsplash.com/photo-1584293648398-9e52f5bef8f8?w=400&h=300&fit=crop",
+        "Snuggle-Soft Loungewear":
+          "https://images.unsplash.com/photo-1578102718171-ec1f91680562?w=400&h=300&fit=crop",
+        "Power Boost Black Tea":
+          "https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=400&h=300&fit=crop",
+        "Athletic Performance Tea":
+          "https://images.unsplash.com/photo-1597318121031-6c0c0e9b5571?w=400&h=300&fit=crop",
+        "Focus & Energy Blend":
+          "https://images.unsplash.com/photo-1515823064-d6e0c04616a7?w=400&h=300&fit=crop",
+        "Energizing Face Wash":
+          "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=400&h=300&fit=crop",
+        "Active Hydration Gel":
+          "https://images.unsplash.com/photo-1556228578-dd5e5f7ead12?w=400&h=300&fit=crop",
+        "Sport Recovery Lotion":
+          "https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=400&h=300&fit=crop",
+        "Performance Activewear Set":
+          "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=400&h=300&fit=crop",
+        "Dynamic Sports Outfit":
+          "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=400&h=300&fit=crop",
+        "Pro Athletic Gear":
+          "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=400&h=300&fit=crop",
+      };
+
+      // Product database
+      const moodProducts = {
+        stressed: {
+          teas: [
+            {
+              name: "Chamomile Calm Tea",
+              price: 299,
+              originalPrice: 399,
+              rating: 4.5,
+              sentiment: "positive",
+              reviews: 156,
+              description: "Organic chamomile flowers for ultimate relaxation",
             },
-            tired: {
-                teas: [
-                    { name: 'Energy Boost Green Tea', price: 279, originalPrice: 399, rating: 4.3, sentiment: 'positive', reviews: 145, description: 'Natural caffeine boost' },
-                    { name: 'Ginseng Vitality Tea', price: 449, originalPrice: 599, rating: 4.6, sentiment: 'positive', reviews: 198, description: 'Korean red ginseng blend' },
-                    { name: 'Matcha Power Blend', price: 599, originalPrice: 799, rating: 4.8, sentiment: 'positive', reviews: 287, description: 'Premium Japanese matcha' }
-                ],
-                skincare: [
-                    { name: 'Refreshing Vitamin C Serum', price: 1099, originalPrice: 1499, rating: 4.7, sentiment: 'positive', reviews: 356, description: 'Brightens and energizes skin' },
-                    { name: 'Energizing Eye Cream', price: 899, originalPrice: 1199, rating: 4.5, sentiment: 'positive', reviews: 223, description: 'Reduces dark circles instantly' },
-                    { name: 'Brightening Face Mist', price: 699, originalPrice: 899, rating: 4.4, sentiment: 'neutral', reviews: 178, description: 'Refreshing citrus mist' }
-                ],
-                outfits: [
-                    { name: 'Breathable Athleisure Set', price: 2499, originalPrice: 2999, rating: 4.6, sentiment: 'positive', reviews: 312, description: 'Moisture-wicking fabric' },
-                    { name: 'Cooling Fabric T-Shirt', price: 899, originalPrice: 1199, rating: 4.5, sentiment: 'positive', reviews: 267, description: 'Stay cool all day' },
-                    { name: 'Comfy Joggers', price: 1299, originalPrice: 1699, rating: 4.7, sentiment: 'positive', reviews: 345, description: 'Perfect for lounging' }
-                ]
+            {
+              name: "Lavender Dream Tea",
+              price: 349,
+              originalPrice: 449,
+              rating: 4.7,
+              sentiment: "positive",
+              reviews: 203,
+              description: "French lavender with hints of honey",
             },
-            anxious: {
-                teas: [
-                    { name: 'Peaceful Mind Tea', price: 329, originalPrice: 449, rating: 4.6, sentiment: 'positive', reviews: 189, description: 'Calms anxiety naturally' },
-                    { name: 'Anxiety Relief Herbal Mix', price: 399, originalPrice: 549, rating: 4.8, sentiment: 'positive', reviews: 267, description: 'Clinically studied herbs' },
-                    { name: 'Calming Passionflower Tea', price: 379, originalPrice: 499, rating: 4.5, sentiment: 'positive', reviews: 201, description: 'Traditional anxiety remedy' }
-                ],
-                skincare: [
-                    { name: 'Gentle Soothing Cleanser', price: 799, originalPrice: 999, rating: 4.6, sentiment: 'positive', reviews: 298, description: 'pH-balanced formula' },
-                    { name: 'Calming CBD Cream', price: 1499, originalPrice: 1999, rating: 4.7, sentiment: 'positive', reviews: 234, description: 'Full-spectrum CBD' },
-                    { name: 'Stress-Relief Face Oil', price: 1199, originalPrice: 1599, rating: 4.5, sentiment: 'positive', reviews: 189, description: 'Nourishing botanical oils' }
-                ],
-                outfits: [
-                    { name: 'Weighted Comfort Blanket', price: 2999, originalPrice: 3999, rating: 4.8, sentiment: 'positive', reviews: 412, description: 'Therapeutic weighted design' },
-                    { name: 'Ultra-Soft Robe', price: 1799, originalPrice: 2299, rating: 4.6, sentiment: 'positive', reviews: 298, description: 'Plush microfiber' },
-                    { name: 'Cozy Knit Sweater', price: 2199, originalPrice: 2799, rating: 4.7, sentiment: 'positive', reviews: 356, description: 'Hand-knitted comfort' }
-                ]
+            {
+              name: "Stress Relief Herbal Blend",
+              price: 399,
+              originalPrice: 499,
+              rating: 4.6,
+              sentiment: "positive",
+              reviews: 178,
+              description: "Powerful blend of adaptogenic herbs",
             },
-            happy: {
-                teas: [
-                    { name: 'Tropical Fruit Tea', price: 299, originalPrice: 399, rating: 4.5, sentiment: 'positive', reviews: 178, description: 'Exotic fruit medley' },
-                    { name: 'Citrus Burst Green Tea', price: 329, originalPrice: 449, rating: 4.6, sentiment: 'positive', reviews: 223, description: 'Zesty and refreshing' },
-                    { name: 'Berry Bliss Herbal Tea', price: 349, originalPrice: 449, rating: 4.7, sentiment: 'positive', reviews: 267, description: 'Sweet berry fusion' }
-                ],
-                skincare: [
-                    { name: 'Radiant Glow Serum', price: 1299, originalPrice: 1699, rating: 4.8, sentiment: 'positive', reviews: 389, description: 'Instant luminosity' },
-                    { name: 'Brightening Day Cream', price: 999, originalPrice: 1299, rating: 4.6, sentiment: 'positive', reviews: 312, description: 'SPF 30 protection' },
-                    { name: 'Luminous Face Mask', price: 799, originalPrice: 999, rating: 4.5, sentiment: 'positive', reviews: 245, description: 'Golden glow treatment' }
-                ],
-                outfits: [
-                    { name: 'Vibrant Summer Dress', price: 2499, originalPrice: 2999, rating: 4.7, sentiment: 'positive', reviews: 356, description: 'Colorful floral pattern' },
-                    { name: 'Colorful Casual Outfit', price: 2199, originalPrice: 2699, rating: 4.6, sentiment: 'positive', reviews: 298, description: 'Mix and match set' },
-                    { name: 'Stylish Comfort Set', price: 2799, originalPrice: 3299, rating: 4.8, sentiment: 'positive', reviews: 423, description: 'Fashion meets comfort' }
-                ]
+          ],
+          skincare: [
+            {
+              name: "Soothing Aloe Vera Gel",
+              price: 599,
+              originalPrice: 799,
+              rating: 4.4,
+              sentiment: "positive",
+              reviews: 312,
+              description: "Pure aloe vera for instant relief",
             },
-            sad: {
-                teas: [
-                    { name: 'Mood Lift Herbal Tea', price: 349, originalPrice: 499, rating: 4.6, sentiment: 'positive', reviews: 198, description: 'St. Johns Wort blend' },
-                    { name: 'Comforting Vanilla Chai', price: 329, originalPrice: 449, rating: 4.7, sentiment: 'positive', reviews: 234, description: 'Warm spices and vanilla' },
-                    { name: 'Uplifting Lemon Balm Tea', price: 299, originalPrice: 399, rating: 4.5, sentiment: 'positive', reviews: 189, description: 'Natural mood booster' }
-                ],
-                skincare: [
-                    { name: 'Self-Care Face Mask Set', price: 1099, originalPrice: 1499, rating: 4.7, sentiment: 'positive', reviews: 312, description: '5-pack variety set' },
-                    { name: 'Nurturing Night Cream', price: 1299, originalPrice: 1699, rating: 4.6, sentiment: 'positive', reviews: 267, description: 'Deep hydration therapy' },
-                    { name: 'Comforting Body Butter', price: 899, originalPrice: 1199, rating: 4.5, sentiment: 'positive', reviews: 223, description: 'Shea and cocoa butter' }
-                ],
-                outfits: [
-                    { name: 'Cozy Fleece Blanket Set', price: 1999, originalPrice: 2499, rating: 4.8, sentiment: 'positive', reviews: 389, description: 'Ultra-soft fleece' },
-                    { name: 'Warm Comfort Sleepwear', price: 1799, originalPrice: 2299, rating: 4.6, sentiment: 'positive', reviews: 298, description: 'Thermal insulation' },
-                    { name: 'Snuggle-Soft Loungewear', price: 2199, originalPrice: 2699, rating: 4.7, sentiment: 'positive', reviews: 345, description: 'Cloud-like softness' }
-                ]
+            {
+              name: "Calming Face Mask",
+              price: 799,
+              originalPrice: 999,
+              rating: 4.8,
+              sentiment: "positive",
+              reviews: 445,
+              description: "Clay mask with essential oils",
             },
-            energetic: {
-                teas: [
-                    { name: 'Power Boost Black Tea', price: 279, originalPrice: 399, rating: 4.5, sentiment: 'positive', reviews: 167, description: 'Strong Assam blend' },
-                    { name: 'Athletic Performance Tea', price: 499, originalPrice: 649, rating: 4.7, sentiment: 'positive', reviews: 245, description: 'Pre-workout formula' },
-                    { name: 'Focus & Energy Blend', price: 399, originalPrice: 549, rating: 4.6, sentiment: 'positive', reviews: 201, description: 'Yerba mate base' }
-                ],
-                skincare: [
-                    { name: 'Energizing Face Wash', price: 699, originalPrice: 899, rating: 4.5, sentiment: 'positive', reviews: 289, description: 'Invigorating mint formula' },
-                    { name: 'Active Hydration Gel', price: 999, originalPrice: 1299, rating: 4.6, sentiment: 'positive', reviews: 312, description: 'Hyaluronic acid boost' },
-                    { name: 'Sport Recovery Lotion', price: 1199, originalPrice: 1599, rating: 4.7, sentiment: 'positive', reviews: 267, description: 'Muscle soothing blend' }
-                ],
-                outfits: [
-                    { name: 'Performance Activewear Set', price: 3499, originalPrice: 4499, rating: 4.8, sentiment: 'positive', reviews: 445, description: 'Pro-grade fabric' },
-                    { name: 'Dynamic Sports Outfit', price: 2999, originalPrice: 3799, rating: 4.7, sentiment: 'positive', reviews: 389, description: 'Full range motion' },
-                    { name: 'Pro Athletic Gear', price: 3999, originalPrice: 4999, rating: 4.6, sentiment: 'positive', reviews: 356, description: 'Competition ready' }
-                ]
-            }
-        };
+            {
+              name: "Relaxing Aromatherapy Serum",
+              price: 1299,
+              originalPrice: 1699,
+              rating: 4.6,
+              sentiment: "positive",
+              reviews: 267,
+              description: "Infused with lavender and chamomile",
+            },
+          ],
+          outfits: [
+            {
+              name: "Soft Cotton Lounge Set",
+              price: 1999,
+              originalPrice: 2499,
+              rating: 4.5,
+              sentiment: "positive",
+              reviews: 189,
+              description: "Premium organic cotton for comfort",
+            },
+            {
+              name: "Bamboo Comfort Pajamas",
+              price: 1499,
+              originalPrice: 1999,
+              rating: 4.7,
+              sentiment: "positive",
+              reviews: 234,
+              description: "Eco-friendly bamboo fabric",
+            },
+            {
+              name: "Relaxed Fit Hoodie",
+              price: 1799,
+              originalPrice: 2299,
+              rating: 4.6,
+              sentiment: "positive",
+              reviews: 298,
+              description: "Cozy fleece with kangaroo pocket",
+            },
+          ],
+        },
+        tired: {
+          teas: [
+            {
+              name: "Energy Boost Green Tea",
+              price: 279,
+              originalPrice: 399,
+              rating: 4.3,
+              sentiment: "positive",
+              reviews: 145,
+              description: "Natural caffeine boost",
+            },
+            {
+              name: "Ginseng Vitality Tea",
+              price: 449,
+              originalPrice: 599,
+              rating: 4.6,
+              sentiment: "positive",
+              reviews: 198,
+              description: "Korean red ginseng blend",
+            },
+            {
+              name: "Matcha Power Blend",
+              price: 599,
+              originalPrice: 799,
+              rating: 4.8,
+              sentiment: "positive",
+              reviews: 287,
+              description: "Premium Japanese matcha",
+            },
+          ],
+          skincare: [
+            {
+              name: "Refreshing Vitamin C Serum",
+              price: 1099,
+              originalPrice: 1499,
+              rating: 4.7,
+              sentiment: "positive",
+              reviews: 356,
+              description: "Brightens and energizes skin",
+            },
+            {
+              name: "Energizing Eye Cream",
+              price: 899,
+              originalPrice: 1199,
+              rating: 4.5,
+              sentiment: "positive",
+              reviews: 223,
+              description: "Reduces dark circles instantly",
+            },
+            {
+              name: "Brightening Face Mist",
+              price: 699,
+              originalPrice: 899,
+              rating: 4.4,
+              sentiment: "neutral",
+              reviews: 178,
+              description: "Refreshing citrus mist",
+            },
+          ],
+          outfits: [
+            {
+              name: "Breathable Athleisure Set",
+              price: 2499,
+              originalPrice: 2999,
+              rating: 4.6,
+              sentiment: "positive",
+              reviews: 312,
+              description: "Moisture-wicking fabric",
+            },
+            {
+              name: "Cooling Fabric T-Shirt",
+              price: 899,
+              originalPrice: 1199,
+              rating: 4.5,
+              sentiment: "positive",
+              reviews: 267,
+              description: "Stay cool all day",
+            },
+            {
+              name: "Comfy Joggers",
+              price: 1299,
+              originalPrice: 1699,
+              rating: 4.7,
+              sentiment: "positive",
+              reviews: 345,
+              description: "Perfect for lounging",
+            },
+          ],
+        },
+        anxious: {
+          teas: [
+            {
+              name: "Peaceful Mind Tea",
+              price: 329,
+              originalPrice: 449,
+              rating: 4.6,
+              sentiment: "positive",
+              reviews: 189,
+              description: "Calms anxiety naturally",
+            },
+            {
+              name: "Anxiety Relief Herbal Mix",
+              price: 399,
+              originalPrice: 549,
+              rating: 4.8,
+              sentiment: "positive",
+              reviews: 267,
+              description: "Clinically studied herbs",
+            },
+            {
+              name: "Calming Passionflower Tea",
+              price: 379,
+              originalPrice: 499,
+              rating: 4.5,
+              sentiment: "positive",
+              reviews: 201,
+              description: "Traditional anxiety remedy",
+            },
+          ],
+          skincare: [
+            {
+              name: "Gentle Soothing Cleanser",
+              price: 799,
+              originalPrice: 999,
+              rating: 4.6,
+              sentiment: "positive",
+              reviews: 298,
+              description: "pH-balanced formula",
+            },
+            {
+              name: "Calming CBD Cream",
+              price: 1499,
+              originalPrice: 1999,
+              rating: 4.7,
+              sentiment: "positive",
+              reviews: 234,
+              description: "Full-spectrum CBD",
+            },
+            {
+              name: "Stress-Relief Face Oil",
+              price: 1199,
+              originalPrice: 1599,
+              rating: 4.5,
+              sentiment: "positive",
+              reviews: 189,
+              description: "Nourishing botanical oils",
+            },
+          ],
+          outfits: [
+            {
+              name: "Weighted Comfort Blanket",
+              price: 2999,
+              originalPrice: 3999,
+              rating: 4.8,
+              sentiment: "positive",
+              reviews: 412,
+              description: "Therapeutic weighted design",
+            },
+            {
+              name: "Ultra-Soft Robe",
+              price: 1799,
+              originalPrice: 2299,
+              rating: 4.6,
+              sentiment: "positive",
+              reviews: 298,
+              description: "Plush microfiber",
+            },
+            {
+              name: "Cozy Knit Sweater",
+              price: 2199,
+              originalPrice: 2799,
+              rating: 4.7,
+              sentiment: "positive",
+              reviews: 356,
+              description: "Hand-knitted comfort",
+            },
+          ],
+        },
+        happy: {
+          teas: [
+            {
+              name: "Tropical Fruit Tea",
+              price: 299,
+              originalPrice: 399,
+              rating: 4.5,
+              sentiment: "positive",
+              reviews: 178,
+              description: "Exotic fruit medley",
+            },
+            {
+              name: "Citrus Burst Green Tea",
+              price: 329,
+              originalPrice: 449,
+              rating: 4.6,
+              sentiment: "positive",
+              reviews: 223,
+              description: "Zesty and refreshing",
+            },
+            {
+              name: "Berry Bliss Herbal Tea",
+              price: 349,
+              originalPrice: 449,
+              rating: 4.7,
+              sentiment: "positive",
+              reviews: 267,
+              description: "Sweet berry fusion",
+            },
+          ],
+          skincare: [
+            {
+              name: "Radiant Glow Serum",
+              price: 1299,
+              originalPrice: 1699,
+              rating: 4.8,
+              sentiment: "positive",
+              reviews: 389,
+              description: "Instant luminosity",
+            },
+            {
+              name: "Brightening Day Cream",
+              price: 999,
+              originalPrice: 1299,
+              rating: 4.6,
+              sentiment: "positive",
+              reviews: 312,
+              description: "SPF 30 protection",
+            },
+            {
+              name: "Luminous Face Mask",
+              price: 799,
+              originalPrice: 999,
+              rating: 4.5,
+              sentiment: "positive",
+              reviews: 245,
+              description: "Golden glow treatment",
+            },
+          ],
+          outfits: [
+            {
+              name: "Vibrant Summer Dress",
+              price: 2499,
+              originalPrice: 2999,
+              rating: 4.7,
+              sentiment: "positive",
+              reviews: 356,
+              description: "Colorful floral pattern",
+            },
+            {
+              name: "Colorful Casual Outfit",
+              price: 2199,
+              originalPrice: 2699,
+              rating: 4.6,
+              sentiment: "positive",
+              reviews: 298,
+              description: "Mix and match set",
+            },
+            {
+              name: "Stylish Comfort Set",
+              price: 2799,
+              originalPrice: 3299,
+              rating: 4.8,
+              sentiment: "positive",
+              reviews: 423,
+              description: "Fashion meets comfort",
+            },
+          ],
+        },
+        sad: {
+          teas: [
+            {
+              name: "Mood Lift Herbal Tea",
+              price: 349,
+              originalPrice: 499,
+              rating: 4.6,
+              sentiment: "positive",
+              reviews: 198,
+              description: "St. Johns Wort blend",
+            },
+            {
+              name: "Comforting Vanilla Chai",
+              price: 329,
+              originalPrice: 449,
+              rating: 4.7,
+              sentiment: "positive",
+              reviews: 234,
+              description: "Warm spices and vanilla",
+            },
+            {
+              name: "Uplifting Lemon Balm Tea",
+              price: 299,
+              originalPrice: 399,
+              rating: 4.5,
+              sentiment: "positive",
+              reviews: 189,
+              description: "Natural mood booster",
+            },
+          ],
+          skincare: [
+            {
+              name: "Self-Care Face Mask Set",
+              price: 1099,
+              originalPrice: 1499,
+              rating: 4.7,
+              sentiment: "positive",
+              reviews: 312,
+              description: "5-pack variety set",
+            },
+            {
+              name: "Nurturing Night Cream",
+              price: 1299,
+              originalPrice: 1699,
+              rating: 4.6,
+              sentiment: "positive",
+              reviews: 267,
+              description: "Deep hydration therapy",
+            },
+            {
+              name: "Comforting Body Butter",
+              price: 899,
+              originalPrice: 1199,
+              rating: 4.5,
+              sentiment: "positive",
+              reviews: 223,
+              description: "Shea and cocoa butter",
+            },
+          ],
+          outfits: [
+            {
+              name: "Cozy Fleece Blanket Set",
+              price: 1999,
+              originalPrice: 2499,
+              rating: 4.8,
+              sentiment: "positive",
+              reviews: 389,
+              description: "Ultra-soft fleece",
+            },
+            {
+              name: "Warm Comfort Sleepwear",
+              price: 1799,
+              originalPrice: 2299,
+              rating: 4.6,
+              sentiment: "positive",
+              reviews: 298,
+              description: "Thermal insulation",
+            },
+            {
+              name: "Snuggle-Soft Loungewear",
+              price: 2199,
+              originalPrice: 2699,
+              rating: 4.7,
+              sentiment: "positive",
+              reviews: 345,
+              description: "Cloud-like softness",
+            },
+          ],
+        },
+        energetic: {
+          teas: [
+            {
+              name: "Power Boost Black Tea",
+              price: 279,
+              originalPrice: 399,
+              rating: 4.5,
+              sentiment: "positive",
+              reviews: 167,
+              description: "Strong Assam blend",
+            },
+            {
+              name: "Athletic Performance Tea",
+              price: 499,
+              originalPrice: 649,
+              rating: 4.7,
+              sentiment: "positive",
+              reviews: 245,
+              description: "Pre-workout formula",
+            },
+            {
+              name: "Focus & Energy Blend",
+              price: 399,
+              originalPrice: 549,
+              rating: 4.6,
+              sentiment: "positive",
+              reviews: 201,
+              description: "Yerba mate base",
+            },
+          ],
+          skincare: [
+            {
+              name: "Energizing Face Wash",
+              price: 699,
+              originalPrice: 899,
+              rating: 4.5,
+              sentiment: "positive",
+              reviews: 289,
+              description: "Invigorating mint formula",
+            },
+            {
+              name: "Active Hydration Gel",
+              price: 999,
+              originalPrice: 1299,
+              rating: 4.6,
+              sentiment: "positive",
+              reviews: 312,
+              description: "Hyaluronic acid boost",
+            },
+            {
+              name: "Sport Recovery Lotion",
+              price: 1199,
+              originalPrice: 1599,
+              rating: 4.7,
+              sentiment: "positive",
+              reviews: 267,
+              description: "Muscle soothing blend",
+            },
+          ],
+          outfits: [
+            {
+              name: "Performance Activewear Set",
+              price: 3499,
+              originalPrice: 4499,
+              rating: 4.8,
+              sentiment: "positive",
+              reviews: 445,
+              description: "Pro-grade fabric",
+            },
+            {
+              name: "Dynamic Sports Outfit",
+              price: 2999,
+              originalPrice: 3799,
+              rating: 4.7,
+              sentiment: "positive",
+              reviews: 389,
+              description: "Full range motion",
+            },
+            {
+              name: "Pro Athletic Gear",
+              price: 3999,
+              originalPrice: 4999,
+              rating: 4.6,
+              sentiment: "positive",
+              reviews: 356,
+              description: "Competition ready",
+            },
+          ],
+        },
+      };
 
-        const discountCodes = {
-            'WELLNESS20': 20,
-            'SAVE10': 10,
-            'FIRST25': 25,
-            'Trenz15': 15
-        };
+      const discountCodes = {
+        WELLNESS20: 20,
+        SAVE10: 10,
+        FIRST25: 25,
+        Trenz15: 15,
+      };
 
-        // Initialize
-        window.onload = function() {
-            loadFromLocalStorage();
-            setupSpeechRecognition();
-            updateStats();
-        };
+      // Initialize
+      window.onload = function () {
+        loadFromLocalStorage();
+        setupSpeechRecognition();
+        updateStats();
+      };
 
-        // LocalStorage
-        function loadFromLocalStorage() {
-            const savedCart = localStorage.getItem('wellnessCart');
-            const savedWishlist = localStorage.getItem('wellnessWishlist');
-            const savedMood = localStorage.getItem('currentMood');
-            
-            if (savedCart) {
-                cart = JSON.parse(savedCart);
-                updateCart();
-            }
-            
-            if (savedWishlist) {
-                wishlist = JSON.parse(savedWishlist);
-                updateWishlistCount();
-            }
-            
-            if (savedMood) {
-                currentMood = savedMood;
-                displayProducts(currentMood);
-            }
+      // LocalStorage
+      function loadFromLocalStorage() {
+        const savedCart = localStorage.getItem("wellnessCart");
+        const savedWishlist = localStorage.getItem("wellnessWishlist");
+        const savedMood = localStorage.getItem("currentMood");
 
-            if (localStorage.getItem('theme') === 'dark') {
-                document.body.classList.add('dark-mode');
-                document.querySelector('.theme-toggle').textContent = '☀️ Light';
-            }
+        if (savedCart) {
+          cart = JSON.parse(savedCart);
+          updateCart();
         }
 
-        function saveToLocalStorage() {
-            localStorage.setItem('wellnessCart', JSON.stringify(cart));
-            localStorage.setItem('wellnessWishlist', JSON.stringify(wishlist));
-            localStorage.setItem('currentMood', currentMood);
+        if (savedWishlist) {
+          wishlist = JSON.parse(savedWishlist);
+          updateWishlistCount();
         }
 
-        function saveCart() {
-            saveToLocalStorage();
-            showNotification('Cart saved successfully!', 'success');
+        if (savedMood) {
+          currentMood = savedMood;
+          displayProducts(currentMood);
         }
 
-        // Speech Recognition
-        function setupSpeechRecognition() {
-            if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-                recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-                recognition.continuous = false;
-                recognition.interimResults = false;
-                recognition.lang = 'en-US';
-                
-                recognition.onresult = function(event) {
-                    const transcript = event.results[0][0].transcript;
-                    document.getElementById('chatInput').value = transcript;
-                    sendMessage();
-                };
-                
-                recognition.onerror = function(event) {
-                    showNotification('Voice error. Try again.', 'error');
-                };
-            }
+        if (localStorage.getItem("theme") === "dark") {
+          document.body.classList.add("dark-mode");
+          document.querySelector(".theme-toggle").textContent = "☀️ Light";
+        }
+      }
+
+      function saveToLocalStorage() {
+        localStorage.setItem("wellnessCart", JSON.stringify(cart));
+        localStorage.setItem("wellnessWishlist", JSON.stringify(wishlist));
+        localStorage.setItem("currentMood", currentMood);
+      }
+
+      function saveCart() {
+        saveToLocalStorage();
+        showNotification("Cart saved successfully!", "success");
+      }
+
+      // Speech Recognition
+      function setupSpeechRecognition() {
+        if (
+          "webkitSpeechRecognition" in window ||
+          "SpeechRecognition" in window
+        ) {
+          recognition = new (window.SpeechRecognition ||
+            window.webkitSpeechRecognition)();
+          recognition.continuous = false;
+          recognition.interimResults = false;
+          recognition.lang = "en-US";
+
+          recognition.onresult = function (event) {
+            const transcript = event.results[0][0].transcript;
+            document.getElementById("chatInput").value = transcript;
+            sendMessage();
+          };
+
+          recognition.onerror = function (event) {
+            showNotification("Voice error. Try again.", "error");
+          };
+        }
+      }
+
+      function toggleVoiceMode() {
+        voiceModeEnabled = !voiceModeEnabled;
+        const btn = document.getElementById("voiceToggle");
+        if (voiceModeEnabled) {
+          btn.textContent = "🔊 On";
+          btn.classList.add("listening");
+          showNotification("Voice mode enabled!", "success");
+        } else {
+          btn.textContent = "🎤 Voice";
+          btn.classList.remove("listening");
+        }
+      }
+
+      function startChatVoice() {
+        if (!recognition) {
+          showNotification("Voice not supported", "error");
+          return;
         }
 
-        function toggleVoiceMode() {
-            voiceModeEnabled = !voiceModeEnabled;
-            const btn = document.getElementById('voiceToggle');
-            if (voiceModeEnabled) {
-                btn.textContent = '🔊 On';
-                btn.classList.add('listening');
-                showNotification('Voice mode enabled!', 'success');
-            } else {
-                btn.textContent = '🎤 Voice';
-                btn.classList.remove('listening');
-            }
-        }
+        const btn = document.getElementById("chatVoiceBtn");
+        btn.classList.add("listening");
+        recognition.start();
 
-        function startChatVoice() {
-            if (!recognition) {
-                showNotification('Voice not supported', 'error');
-                return;
-            }
-            
-            const btn = document.getElementById('chatVoiceBtn');
-            btn.classList.add('listening');
-            recognition.start();
-            
-            setTimeout(() => {
-                btn.classList.remove('listening');
-            }, 3000);
-        }
+        setTimeout(() => {
+          btn.classList.remove("listening");
+        }, 3000);
+      }
 
-        function speakLastMessage() {
-            const messages = document.querySelectorAll('.bot-message');
-            if (messages.length === 0) return;
-            
-            const lastMessage = messages[messages.length - 1].textContent;
-            const utterance = new SpeechSynthesisUtterance(lastMessage);
-            synthesis.speak(utterance);
-        }
+      function speakLastMessage() {
+        const messages = document.querySelectorAll(".bot-message");
+        if (messages.length === 0) return;
 
-        function speakText(text) {
-            if (voiceModeEnabled && synthesis) {
-                const utterance = new SpeechSynthesisUtterance(text);
-                synthesis.speak(utterance);
-            }
-        }
+        const lastMessage = messages[messages.length - 1].textContent;
+        const utterance = new SpeechSynthesisUtterance(lastMessage);
+        synthesis.speak(utterance);
+      }
 
-        // Theme
-        function toggleTheme() {
-            document.body.classList.toggle('dark-mode');
-            const btn = document.querySelector('.theme-toggle');
-            if (document.body.classList.contains('dark-mode')) {
-                btn.textContent = '☀️ Light';
-                localStorage.setItem('theme', 'dark');
-            } else {
-                btn.textContent = '🌙 Dark';
-                localStorage.setItem('theme', 'light');
-            }
+      function speakText(text) {
+        if (voiceModeEnabled && synthesis) {
+          const utterance = new SpeechSynthesisUtterance(text);
+          synthesis.speak(utterance);
         }
+      }
 
-        // Mood Selection
-        function selectMood(mood) {
-            currentMood = mood;
-            
-            document.querySelectorAll('.mood-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            event.target.classList.add('active');
-            
-            const feedback = document.getElementById('moodFeedback');
-            feedback.textContent = `Finding perfect products for your ${mood} mood...`;
-            feedback.classList.remove('hidden');
-            
-            setTimeout(() => {
-                displayProducts(mood);
-                feedback.classList.add('hidden');
-                saveToLocalStorage();
-            }, 1000);
+      // Theme
+      function toggleTheme() {
+        document.body.classList.toggle("dark-mode");
+        const btn = document.querySelector(".theme-toggle");
+        if (document.body.classList.contains("dark-mode")) {
+          btn.textContent = "☀️ Light";
+          localStorage.setItem("theme", "dark");
+        } else {
+          btn.textContent = "🌙 Dark";
+          localStorage.setItem("theme", "light");
         }
+      }
 
-        // Display Products
-        function displayProducts(mood) {
-            const productsSection = document.getElementById('productsSection');
-            const productsGrid = document.getElementById('productsGrid');
-            const chatbotSection = document.getElementById('chatbotSection');
-            
-            products = [];
-            productsGrid.innerHTML = '';
-            
-            const moodData = moodProducts[mood];
-            let productId = 0;
-            
-            ['teas', 'skincare', 'outfits'].forEach(category => {
-                moodData[category].forEach(product => {
-                    const categoryName = category.charAt(0).toUpperCase() + category.slice(0, -1);
-                    product.id = productId++;
-                    product.category = categoryName;
-                    product.imageUrl = productImages[product.name];
-                    products.push(product);
-                    productsGrid.innerHTML += createProductCard(product);
-                });
-            });
-            
-            productsSection.classList.remove('hidden');
-            chatbotSection.classList.remove('hidden');
-            updateStats();
-        }
+      // Mood Selection
+      function selectMood(mood) {
+        currentMood = mood;
 
-        // Create Product Card
-        function createProductCard(product) {
-            const savings = product.originalPrice - product.price;
-            const savingsPercent = Math.round((savings / product.originalPrice) * 100);
-            const isWishlisted = wishlist.some(item => item.id === product.id);
-            
-            return `
-                <div class="product-card" data-category="${product.category}" data-price="${product.price}" data-rating="${product.rating}">
-                    <button class="wishlist-btn ${isWishlisted ? 'active' : ''}" onclick="toggleWishlist(${product.id})">
-                        ${isWishlisted ? '❤️' : '🤍'}
+        document.querySelectorAll(".mood-btn").forEach((btn) => {
+          btn.classList.remove("active");
+        });
+        event.target.classList.add("active");
+
+        const feedback = document.getElementById("moodFeedback");
+        feedback.textContent = `Finding perfect products for your ${mood} mood...`;
+        feedback.classList.remove("hidden");
+
+        setTimeout(() => {
+          displayProducts(mood);
+          feedback.classList.add("hidden");
+          saveToLocalStorage();
+        }, 1000);
+      }
+
+      // Display Products
+      function displayProducts(mood) {
+        const productsSection = document.getElementById("productsSection");
+        const productsGrid = document.getElementById("productsGrid");
+        const chatbotSection = document.getElementById("chatbotSection");
+
+        products = [];
+        productsGrid.innerHTML = "";
+
+        const moodData = moodProducts[mood];
+        let productId = 0;
+
+        ["teas", "skincare", "outfits"].forEach((category) => {
+          moodData[category].forEach((product) => {
+            const categoryName =
+              category.charAt(0).toUpperCase() + category.slice(0, -1);
+            product.id = productId++;
+            product.category = categoryName;
+            product.imageUrl = productImages[product.name];
+            products.push(product);
+            productsGrid.innerHTML += createProductCard(product);
+          });
+        });
+
+        productsSection.classList.remove("hidden");
+        chatbotSection.classList.remove("hidden");
+        updateStats();
+      }
+
+      // Create Product Card
+      function createProductCard(product) {
+        const savings = product.originalPrice - product.price;
+        const savingsPercent = Math.round(
+          (savings / product.originalPrice) * 100
+        );
+        const isWishlisted = wishlist.some((item) => item.id === product.id);
+
+        return `
+                <div class="product-card" data-category="${
+                  product.category
+                }" data-price="${product.price}" data-rating="${
+          product.rating
+        }">
+                    <button class="wishlist-btn ${
+                      isWishlisted ? "active" : ""
+                    }" onclick="toggleWishlist(${product.id})">
+                        ${isWishlisted ? "❤️" : "🤍"}
                     </button>
                     <div class="product-image-container">
-                        <img src="${product.imageUrl}" alt="${product.name}" class="product-image" loading="lazy">
+                        <img src="${product.imageUrl}" alt="${
+          product.name
+        }" class="product-image" loading="lazy">
                     </div>
                     <div class="product-category">${product.category}</div>
                     <div class="product-name">${product.name}</div>
-                    <div class="product-description">${product.description}</div>
+                    <div class="product-description">${
+                      product.description
+                    }</div>
                     <div class="product-rating">
                         ⭐ ${product.rating} 
                         <span style="color: #666;">(${product.reviews})</span>
                     </div>
                     <div class="sentiment-badge sentiment-${product.sentiment}">
-                        ${product.sentiment.charAt(0).toUpperCase() + product.sentiment.slice(1)}
+                        ${
+                          product.sentiment.charAt(0).toUpperCase() +
+                          product.sentiment.slice(1)
+                        }
                     </div>
                     <div class="product-price">
                         ₹${product.price} 
-                        <span style="text-decoration: line-through; color: #999; font-size: 0.8em;">₹${product.originalPrice}</span>
+                        <span style="text-decoration: line-through; color: #999; font-size: 0.8em;">₹${
+                          product.originalPrice
+                        }</span>
                         <span style="color: #2ecc71; font-size: 0.8em;">(${savingsPercent}% off)</span>
                     </div>
                     <div class="button-group">
-                        <button class="btn btn-primary" onclick="addToCart(${product.id})">Add to Cart</button>
-                        <button class="btn btn-secondary" onclick="addToCompare(${product.id})">Compare</button>
+                        <button class="btn btn-primary" onclick="addToCart(${
+                          product.id
+                        })">Add to Cart</button>
+                        <button class="btn btn-secondary" onclick="addToCompare(${
+                          product.id
+                        })">Compare</button>
                     </div>
-                    <button class="btn btn-secondary" onclick="askAboutProduct(${product.id})" style="width: 100%; margin-top: 10px;">Ask Trenz</button>
+                    <button class="btn btn-secondary" onclick="askAboutProduct(${
+                      product.id
+                    })" style="width: 100%; margin-top: 10px;">Ask Trenz</button>
                 </div>
             `;
+      }
+
+      // Filter and Sort
+      function filterProducts() {
+        const searchTerm = document
+          .getElementById("searchInput")
+          .value.toLowerCase();
+        const categoryFilter = document.getElementById("categoryFilter").value;
+
+        document.querySelectorAll(".product-card").forEach((card) => {
+          const productName = card
+            .querySelector(".product-name")
+            .textContent.toLowerCase();
+          const productCategory = card.dataset.category;
+
+          const matchesSearch = productName.includes(searchTerm);
+          const matchesCategory =
+            categoryFilter === "all" || productCategory === categoryFilter;
+
+          card.style.display =
+            matchesSearch && matchesCategory ? "flex" : "none";
+        });
+      }
+
+      function sortProducts() {
+        const sortBy = document.getElementById("sortFilter").value;
+        const grid = document.getElementById("productsGrid");
+        const cards = Array.from(document.querySelectorAll(".product-card"));
+
+        cards.sort((a, b) => {
+          switch (sortBy) {
+            case "price-low":
+              return parseFloat(a.dataset.price) - parseFloat(b.dataset.price);
+            case "price-high":
+              return parseFloat(b.dataset.price) - parseFloat(a.dataset.price);
+            case "rating":
+              return (
+                parseFloat(b.dataset.rating) - parseFloat(a.dataset.rating)
+              );
+            case "popular":
+              return Math.random() - 0.5;
+            default:
+              return 0;
+          }
+        });
+
+        grid.innerHTML = "";
+        cards.forEach((card) => grid.appendChild(card));
+      }
+
+      // Wishlist
+      function toggleWishlist(productId) {
+        const product = products.find((p) => p.id === productId);
+        const index = wishlist.findIndex((item) => item.id === productId);
+
+        if (index > -1) {
+          wishlist.splice(index, 1);
+          showNotification("Removed from wishlist", "success");
+        } else {
+          wishlist.push(product);
+          showNotification("Added to wishlist!", "success");
         }
 
-        // Filter and Sort
-        function filterProducts() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const categoryFilter = document.getElementById('categoryFilter').value;
-            
-            document.querySelectorAll('.product-card').forEach(card => {
-                const productName = card.querySelector('.product-name').textContent.toLowerCase();
-                const productCategory = card.dataset.category;
-                
-                const matchesSearch = productName.includes(searchTerm);
-                const matchesCategory = categoryFilter === 'all' || productCategory === categoryFilter;
-                
-                card.style.display = matchesSearch && matchesCategory ? 'flex' : 'none';
-            });
+        saveToLocalStorage();
+        updateWishlistCount();
+        displayProducts(currentMood);
+      }
+
+      function updateWishlistCount() {
+        document.getElementById("wishlistCount").textContent = wishlist.length;
+      }
+
+      function showWishlist() {
+        const section = document.getElementById("wishlistSection");
+        const grid = document.getElementById("wishlistGrid");
+
+        if (wishlist.length === 0) {
+          showNotification("Wishlist is empty", "error");
+          return;
         }
 
-        function sortProducts() {
-            const sortBy = document.getElementById('sortFilter').value;
-            const grid = document.getElementById('productsGrid');
-            const cards = Array.from(document.querySelectorAll('.product-card'));
-            
-            cards.sort((a, b) => {
-                switch(sortBy) {
-                    case 'price-low':
-                        return parseFloat(a.dataset.price) - parseFloat(b.dataset.price);
-                    case 'price-high':
-                        return parseFloat(b.dataset.price) - parseFloat(a.dataset.price);
-                    case 'rating':
-                        return parseFloat(b.dataset.rating) - parseFloat(a.dataset.rating);
-                    case 'popular':
-                        return Math.random() - 0.5;
-                    default:
-                        return 0;
-                }
-            });
-            
-            grid.innerHTML = '';
-            cards.forEach(card => grid.appendChild(card));
+        grid.innerHTML = "";
+        wishlist.forEach((product) => {
+          grid.innerHTML += createProductCard(product);
+        });
+
+        section.classList.remove("hidden");
+        section.scrollIntoView({ behavior: "smooth" });
+      }
+
+      // Product Comparison
+      function addToCompare(productId) {
+        const product = products.find((p) => p.id === productId);
+
+        if (comparisonList.length >= 3) {
+          showNotification("Max 3 products for comparison", "error");
+          return;
         }
 
-        // Wishlist
-        function toggleWishlist(productId) {
-            const product = products.find(p => p.id === productId);
-            const index = wishlist.findIndex(item => item.id === productId);
-            
-            if (index > -1) {
-                wishlist.splice(index, 1);
-                showNotification('Removed from wishlist', 'success');
-            } else {
-                wishlist.push(product);
-                showNotification('Added to wishlist!', 'success');
+        if (comparisonList.find((p) => p.id === productId)) {
+          showNotification("Already in comparison", "error");
+          return;
+        }
+
+        comparisonList.push(product);
+        showNotification("Added to comparison", "success");
+
+        if (comparisonList.length >= 2) {
+          showComparison();
+        }
+      }
+
+      function showComparison() {
+        const section = document.getElementById("comparisonSection");
+        const tableDiv = document.getElementById("comparisonTable");
+
+        let html = "<table><thead><tr><th>Feature</th>";
+        comparisonList.forEach((product) => {
+          html += `<th>${product.name}</th>`;
+        });
+        html += "</tr></thead><tbody>";
+
+        const features = [
+          "Price",
+          "Rating",
+          "Reviews",
+          "Sentiment",
+          "Category",
+        ];
+        features.forEach((feature) => {
+          html += `<tr><td><strong>${feature}</strong></td>`;
+          comparisonList.forEach((product) => {
+            let value = "";
+            switch (feature) {
+              case "Price":
+                value = `₹${product.price}`;
+                break;
+              case "Rating":
+                value = `⭐ ${product.rating}`;
+                break;
+              case "Reviews":
+                value = product.reviews;
+                break;
+              case "Sentiment":
+                value = product.sentiment;
+                break;
+              case "Category":
+                value = product.category;
+                break;
             }
-            
-            saveToLocalStorage();
-            updateWishlistCount();
-            displayProducts(currentMood);
+            html += `<td>${value}</td>`;
+          });
+          html += "</tr>";
+        });
+
+        html += "</tbody></table>";
+        tableDiv.innerHTML = html;
+        section.classList.remove("hidden");
+        section.scrollIntoView({ behavior: "smooth" });
+      }
+
+      function clearComparison() {
+        comparisonList = [];
+        document.getElementById("comparisonSection").classList.add("hidden");
+      }
+
+      // Cart Functions
+      function addToCart(productId) {
+        const product = products.find((p) => p.id === productId);
+        const existingItem = cart.find((item) => item.id === productId);
+
+        if (existingItem) {
+          existingItem.quantity++;
+        } else {
+          cart.push({ ...product, quantity: 1 });
         }
 
-        function updateWishlistCount() {
-            document.getElementById('wishlistCount').textContent = wishlist.length;
+        updateCart();
+        saveToLocalStorage();
+        showNotification(`${product.name} added to cart!`, "success");
+      }
+
+      function updateCart() {
+        const cartSection = document.getElementById("cartSection");
+        const cartItems = document.getElementById("cartItems");
+        const cartTotal = document.getElementById("cartTotal");
+
+        if (cart.length === 0) {
+          cartSection.classList.add("hidden");
+          updateStats();
+          return;
         }
 
-        function showWishlist() {
-            const section = document.getElementById('wishlistSection');
-            const grid = document.getElementById('wishlistGrid');
-            
-            if (wishlist.length === 0) {
-                showNotification('Wishlist is empty', 'error');
-                return;
-            }
-            
-            grid.innerHTML = '';
-            wishlist.forEach(product => {
-                grid.innerHTML += createProductCard(product);
-            });
-            
-            section.classList.remove('hidden');
-            section.scrollIntoView({ behavior: 'smooth' });
-        }
+        cartSection.classList.remove("hidden");
+        cartItems.innerHTML = "";
+        let total = 0;
+        let savings = 0;
 
-        // Product Comparison
-        function addToCompare(productId) {
-            const product = products.find(p => p.id === productId);
-            
-            if (comparisonList.length >= 3) {
-                showNotification('Max 3 products for comparison', 'error');
-                return;
-            }
-            
-            if (comparisonList.find(p => p.id === productId)) {
-                showNotification('Already in comparison', 'error');
-                return;
-            }
-            
-            comparisonList.push(product);
-            showNotification('Added to comparison', 'success');
-            
-            if (comparisonList.length >= 2) {
-                showComparison();
-            }
-        }
+        cart.forEach((item, index) => {
+          const itemTotal = item.price * item.quantity;
+          const itemSavings = (item.originalPrice - item.price) * item.quantity;
+          total += itemTotal;
+          savings += itemSavings;
 
-        function showComparison() {
-            const section = document.getElementById('comparisonSection');
-            const tableDiv = document.getElementById('comparisonTable');
-            
-            let html = '<table><thead><tr><th>Feature</th>';
-            comparisonList.forEach(product => {
-                html += `<th>${product.name}</th>`;
-            });
-            html += '</tr></thead><tbody>';
-            
-            const features = ['Price', 'Rating', 'Reviews', 'Sentiment', 'Category'];
-            features.forEach(feature => {
-                html += `<tr><td><strong>${feature}</strong></td>`;
-                comparisonList.forEach(product => {
-                    let value = '';
-                    switch(feature) {
-                        case 'Price': value = `₹${product.price}`; break;
-                        case 'Rating': value = `⭐ ${product.rating}`; break;
-                        case 'Reviews': value = product.reviews; break;
-                        case 'Sentiment': value = product.sentiment; break;
-                        case 'Category': value = product.category; break;
-                    }
-                    html += `<td>${value}</td>`;
-                });
-                html += '</tr>';
-            });
-            
-            html += '</tbody></table>';
-            tableDiv.innerHTML = html;
-            section.classList.remove('hidden');
-            section.scrollIntoView({ behavior: 'smooth' });
-        }
-
-        function clearComparison() {
-            comparisonList = [];
-            document.getElementById('comparisonSection').classList.add('hidden');
-        }
-
-        // Cart Functions
-        function addToCart(productId) {
-            const product = products.find(p => p.id === productId);
-            const existingItem = cart.find(item => item.id === productId);
-            
-            if (existingItem) {
-                existingItem.quantity++;
-            } else {
-                cart.push({ ...product, quantity: 1 });
-            }
-            
-            updateCart();
-            saveToLocalStorage();
-            showNotification(`${product.name} added to cart!`, 'success');
-        }
-
-        function updateCart() {
-            const cartSection = document.getElementById('cartSection');
-            const cartItems = document.getElementById('cartItems');
-            const cartTotal = document.getElementById('cartTotal');
-            
-            if (cart.length === 0) {
-                cartSection.classList.add('hidden');
-                updateStats();
-                return;
-            }
-            
-            cartSection.classList.remove('hidden');
-            cartItems.innerHTML = '';
-            let total = 0;
-            let savings = 0;
-            
-            cart.forEach((item, index) => {
-                const itemTotal = item.price * item.quantity;
-                const itemSavings = (item.originalPrice - item.price) * item.quantity;
-                total += itemTotal;
-                savings += itemSavings;
-                
-                cartItems.innerHTML += `
+          cartItems.innerHTML += `
                     <div class="cart-item">
                         <div class="cart-item-details">
                             <img src="${item.imageUrl}" alt="${item.name}" class="cart-item-image" loading="lazy">
@@ -2059,22 +2762,26 @@
                         </div>
                     </div>
                 `;
-            });
-            
-            const discountAmount = (total * discountApplied) / 100;
-            const finalTotal = total - discountAmount;
-            
-            cartTotal.innerHTML = `
+        });
+
+        const discountAmount = (total * discountApplied) / 100;
+        const finalTotal = total - discountAmount;
+
+        cartTotal.innerHTML = `
                 <div style="display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.95em;">
                     <span>Subtotal:</span>
                     <span>₹${total}</span>
                 </div>
-                ${discountApplied > 0 ? `
+                ${
+                  discountApplied > 0
+                    ? `
                 <div style="display: flex; justify-content: space-between; margin-bottom: 10px; color: #2ecc71; font-size: 0.95em;">
                     <span>Discount (${discountApplied}%):</span>
                     <span>-₹${discountAmount.toFixed(2)}</span>
                 </div>
-                ` : ''}
+                `
+                    : ""
+                }
                 <div style="display: flex; justify-content: space-between; margin-bottom: 10px; color: #2ecc71; font-size: 0.95em;">
                     <span>You're Saving:</span>
                     <span>₹${(savings + discountAmount).toFixed(2)}</span>
@@ -2085,79 +2792,94 @@
                     <span>₹${finalTotal.toFixed(2)}</span>
                 </div>
             `;
-            
-            updateStats();
+
+        updateStats();
+      }
+
+      function updateQuantity(index, change) {
+        cart[index].quantity += change;
+        if (cart[index].quantity <= 0) {
+          removeFromCart(index);
+        } else {
+          updateCart();
+          saveToLocalStorage();
+        }
+      }
+
+      function removeFromCart(index) {
+        cart.splice(index, 1);
+        updateCart();
+        saveToLocalStorage();
+        showNotification("Item removed from cart", "success");
+      }
+
+      function applyDiscount() {
+        const code = document
+          .getElementById("discountCode")
+          .value.toUpperCase();
+        if (discountCodes[code]) {
+          discountApplied = discountCodes[code];
+          updateCart();
+          showNotification(`${discountApplied}% discount applied!`, "success");
+        } else {
+          showNotification("Invalid discount code", "error");
+        }
+      }
+
+      // EMI Functions
+      function proceedToEMI() {
+        if (cart.length === 0) {
+          showNotification("Your cart is empty!", "error");
+          return;
         }
 
-        function updateQuantity(index, change) {
-            cart[index].quantity += change;
-            if (cart[index].quantity <= 0) {
-                removeFromCart(index);
-            } else {
-                updateCart();
-                saveToLocalStorage();
-            }
-        }
+        const total = cart.reduce(
+          (sum, item) => sum + item.price * item.quantity,
+          0
+        );
+        const finalTotal = total - (total * discountApplied) / 100;
+        document.getElementById("loanAmount").value = finalTotal.toFixed(2);
+        document.getElementById("emiSection").classList.remove("hidden");
+        document
+          .getElementById("emiSection")
+          .scrollIntoView({ behavior: "smooth" });
+        calculateEMI();
+      }
 
-        function removeFromCart(index) {
-            cart.splice(index, 1);
-            updateCart();
-            saveToLocalStorage();
-            showNotification('Item removed from cart', 'success');
-        }
+      function selectPayment(method) {
+        selectedPayment = method;
+        document.querySelectorAll(".payment-option").forEach((option) => {
+          option.classList.remove("selected");
+        });
+        event.target.closest(".payment-option").classList.add("selected");
+      }
 
-        function applyDiscount() {
-            const code = document.getElementById('discountCode').value.toUpperCase();
-            if (discountCodes[code]) {
-                discountApplied = discountCodes[code];
-                updateCart();
-                showNotification(`${discountApplied}% discount applied!`, 'success');
-            } else {
-                showNotification('Invalid discount code', 'error');
-            }
-        }
+      function calculateEMI() {
+        const principal = parseFloat(
+          document.getElementById("loanAmount").value
+        );
+        const annualRate = parseFloat(
+          document.getElementById("interestRate").value
+        );
+        const tenureMonths = parseInt(document.getElementById("tenure").value);
 
-        // EMI Functions
-        function proceedToEMI() {
-            if (cart.length === 0) {
-                showNotification('Your cart is empty!', 'error');
-                return;
-            }
-            
-            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            const finalTotal = total - (total * discountApplied / 100);
-            document.getElementById('loanAmount').value = finalTotal.toFixed(2);
-            document.getElementById('emiSection').classList.remove('hidden');
-            document.getElementById('emiSection').scrollIntoView({ behavior: 'smooth' });
-            calculateEMI();
-        }
+        if (!principal || principal <= 0) return;
 
-        function selectPayment(method) {
-            selectedPayment = method;
-            document.querySelectorAll('.payment-option').forEach(option => {
-                option.classList.remove('selected');
-            });
-            event.target.closest('.payment-option').classList.add('selected');
-        }
+        const monthlyRate = annualRate / (12 * 100);
+        const emi =
+          (principal * monthlyRate * Math.pow(1 + monthlyRate, tenureMonths)) /
+          (Math.pow(1 + monthlyRate, tenureMonths) - 1);
 
-        function calculateEMI() {
-            const principal = parseFloat(document.getElementById('loanAmount').value);
-            const annualRate = parseFloat(document.getElementById('interestRate').value);
-            const tenureMonths = parseInt(document.getElementById('tenure').value);
-            
-            if (!principal || principal <= 0) return;
-            
-            const monthlyRate = annualRate / (12 * 100);
-            const emi = (principal * monthlyRate * Math.pow(1 + monthlyRate, tenureMonths)) / 
-                        (Math.pow(1 + monthlyRate, tenureMonths) - 1);
-            
-            const totalAmount = emi * tenureMonths;
-            const totalInterest = totalAmount - principal;
-            const progressPercent = (principal / totalAmount) * 100;
-            
-            document.getElementById('emiAmount').textContent = `₹${Math.round(emi)}`;
-            document.getElementById('emiProgress').style.width = progressPercent + '%';
-            document.getElementById('emiDetails').innerHTML = `
+        const totalAmount = emi * tenureMonths;
+        const totalInterest = totalAmount - principal;
+        const progressPercent = (principal / totalAmount) * 100;
+
+        document.getElementById("emiAmount").textContent = `₹${Math.round(
+          emi
+        )}`;
+        document.getElementById("emiProgress").style.width =
+          progressPercent + "%";
+        document.getElementById("emiDetails").innerHTML = `
                 <div style="margin-top: 20px; font-size: 0.95em;">
                     <div style="display: flex; justify-content: space-between; margin: 8px 0;">
                         <span>Principal Amount:</span>
@@ -2175,157 +2897,199 @@
                         <span>Tenure:</span>
                         <span>${tenureMonths} months</span>
                     </div>
-                    ${selectedPayment ? `
+                    ${
+                      selectedPayment
+                        ? `
                     <div style="display: flex; justify-content: space-between; margin: 8px 0;">
                         <span>Payment Method:</span>
                         <span style="text-transform: capitalize;">${selectedPayment}</span>
                     </div>
-                    ` : ''}
+                    `
+                        : ""
+                    }
                 </div>
             `;
-            document.getElementById('emiResult').classList.remove('hidden');
+        document.getElementById("emiResult").classList.remove("hidden");
+      }
+
+      function confirmOrder() {
+        if (!selectedPayment) {
+          showNotification("Please select a payment method", "error");
+          return;
         }
 
-        function confirmOrder() {
-            if (!selectedPayment) {
-                showNotification('Please select a payment method', 'error');
-                return;
-            }
-            
-            cart = [];
-            updateCart();
-            saveToLocalStorage();
-            
-            showNotification('Order confirmed successfully! 🎉', 'success');
-            speakText('Your order has been confirmed successfully!');
-            
-            setTimeout(() => {
-                document.getElementById('emiSection').classList.add('hidden');
-                document.getElementById('productsSection').scrollIntoView({ behavior: 'smooth' });
-            }, 2000);
+        cart = [];
+        updateCart();
+        saveToLocalStorage();
+
+        showNotification("Order confirmed successfully! 🎉", "success");
+        speakText("Your order has been confirmed successfully!");
+
+        setTimeout(() => {
+          document.getElementById("emiSection").classList.add("hidden");
+          document
+            .getElementById("productsSection")
+            .scrollIntoView({ behavior: "smooth" });
+        }, 2000);
+      }
+
+      // Chatbot
+      function handleChatKeyPress(event) {
+        if (event.key === "Enter") {
+          sendMessage();
         }
+      }
 
-        // Chatbot
-        function handleChatKeyPress(event) {
-            if (event.key === 'Enter') {
-                sendMessage();
-            }
+      function askAboutProduct(productId) {
+        const product = products.find((p) => p.id === productId);
+        const message = `Tell me more about ${product.name}. Why should I buy it?`;
+        document.getElementById("chatInput").value = message;
+        sendMessage();
+        document
+          .getElementById("chatbotSection")
+          .scrollIntoView({ behavior: "smooth" });
+      }
+
+      async function sendMessage() {
+        const input = document.getElementById("chatInput");
+        const message = input.value.trim();
+
+        if (!message) return;
+
+        addMessageToChat(message, "user");
+        input.value = "";
+
+        const typingDiv = document.createElement("div");
+        typingDiv.className = "message bot-message";
+        typingDiv.id = "typing";
+        typingDiv.textContent = "Trenz is thinking...";
+        document.getElementById("chatMessages").appendChild(typingDiv);
+
+        const productContext = products
+          .map(
+            (p) =>
+              `${p.name} (${p.category}) - ₹${p.price}, Rating: ${p.rating}/5, ${p.reviews} reviews, ${p.sentiment} sentiment`
+          )
+          .join("\n");
+
+        const cartContext =
+          cart.length > 0
+            ? `\nCart: ${cart
+                .map((item) => `${item.name} (Qty: ${item.quantity})`)
+                .join(", ")}`
+            : "";
+
+        const systemPrompt = `You are Trenz, an AI wellness shopping assistant. Help customers choose products based on their mood (${currentMood}).
+    
+    Available products:
+    ${productContext}
+    ${cartContext}
+
+    Be friendly, helpful, and provide specific product recommendations with prices and ratings.`;
+
+        try {
+          console.log("Calling Netlify function at: /.netlify/functions/chat");
+
+          // Call Netlify serverless function
+          const response = await fetch("/.netlify/functions/chat", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              message: message,
+              systemPrompt: systemPrompt,
+            }),
+          });
+
+          console.log("Response status:", response.status);
+
+          if (!response.ok) {
+            const errorText = await response.text();
+            console.error("Error response:", errorText);
+            throw new Error(`HTTP ${response.status}: ${errorText}`);
+          }
+
+          const data = await response.json();
+          console.log("Success! Got response");
+
+          document.getElementById("typing").remove();
+
+          if (data.choices && data.choices[0]) {
+            const botResponse = data.choices[0].message.content;
+            addMessageToChat(botResponse, "bot");
+            speakText(botResponse);
+            aiInteractions++;
+            updateStats();
+          } else {
+            addMessageToChat(
+              "Sorry, I encountered an error. Please try again!",
+              "bot"
+            );
+          }
+        } catch (error) {
+          console.error("Full error details:", error);
+          document.getElementById("typing")?.remove();
+          addMessageToChat(
+            `Error: ${error.message}. Check console for details.`,
+            "bot"
+          );
         }
+      }
 
-        function askAboutProduct(productId) {
-            const product = products.find(p => p.id === productId);
-            const message = `Tell me more about ${product.name}. Why should I buy it?`;
-            document.getElementById('chatInput').value = message;
-            sendMessage();
-            document.getElementById('chatbotSection').scrollIntoView({ behavior: 'smooth' });
-        }
+      function addMessageToChat(message, type) {
+        const messagesDiv = document.getElementById("chatMessages");
+        const messageDiv = document.createElement("div");
+        messageDiv.className = `message ${type}-message`;
 
-        async function sendMessage() {
-            const input = document.getElementById('chatInput');
-            const message = input.value.trim();
-            
-            if (!message) return;
-            
-            addMessageToChat(message, 'user');
-            input.value = '';
-            
-            const typingDiv = document.createElement('div');
-            typingDiv.className = 'message bot-message';
-            typingDiv.id = 'typing';
-            typingDiv.textContent = 'Trenz is thinking...';
-            document.getElementById('chatMessages').appendChild(typingDiv);
-            
-            const productContext = products.map(p => 
-                `${p.name} (${p.category}) - ₹${p.price}, Rating: ${p.rating}/5, ${p.reviews} reviews, ${p.sentiment} sentiment`
-            ).join('\n');
-            
-            const cartContext = cart.length > 0 ? `\nCart: ${cart.map(item => `${item.name} (Qty: ${item.quantity})`).join(', ')}` : '';
-            
-            const systemPrompt = `You are Trenz, an AI wellness shopping assistant. Help customers choose products based on their mood (${currentMood}).
-            
-        Available products:
-        ${productContext}
-        ${cartContext}
-        
-        Be friendly, helpful, and provide specific product recommendations with prices and ratings.`;
-            
-            try {
-                // Call Netlify serverless function instead of direct API call
-                const response = await fetch('/.netlify/functions/chat', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        message: message,
-                        systemPrompt: systemPrompt
-                    })
-                });
-                
-                const data = await response.json();
-                document.getElementById('typing').remove();
-                
-                if (data.choices && data.choices[0]) {
-                    const botResponse = data.choices[0].message.content;
-                    addMessageToChat(botResponse, 'bot');
-                    speakText(botResponse);
-                    aiInteractions++;
-                    updateStats();
-                } else {
-                    addMessageToChat('Sorry, I encountered an error. Please try again!', 'bot');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                document.getElementById('typing')?.remove();
-                addMessageToChat('Connection error. Please try again!', 'bot');
-            }
-        }
+        const timestamp = new Date().toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+        messageDiv.innerHTML = `${message}<div class="message-timestamp">${timestamp}</div>`;
 
+        messagesDiv.appendChild(messageDiv);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      }
 
-        function addMessageToChat(message, type) {
-            const messagesDiv = document.getElementById('chatMessages');
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${type}-message`;
-            
-            const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            messageDiv.innerHTML = `${message}<div class="message-timestamp">${timestamp}</div>`;
-            
-            messagesDiv.appendChild(messageDiv);
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
-        }
-
-        function clearChat() {
-            document.getElementById('chatMessages').innerHTML = `
+      function clearChat() {
+        document.getElementById("chatMessages").innerHTML = `
                 <div class="message bot-message">
                     Chat cleared! How can I help you today?
                     <div class="message-timestamp">Just now</div>
                 </div>
             `;
-        }
+      }
 
-        // Update Stats
-        function updateStats() {
-            document.getElementById('productCount').textContent = products.length;
-            document.getElementById('cartCount').textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
-            
-            const totalSavings = cart.reduce((sum, item) => 
-                sum + ((item.originalPrice - item.price) * item.quantity), 0
-            );
-            document.getElementById('savingsAmount').textContent = Math.round(totalSavings);
-            document.getElementById('aiResponses').textContent = aiInteractions;
-        }
+      // Update Stats
+      function updateStats() {
+        document.getElementById("productCount").textContent = products.length;
+        document.getElementById("cartCount").textContent = cart.reduce(
+          (sum, item) => sum + item.quantity,
+          0
+        );
 
-                // Notifications
-        function showNotification(message, type) {
-            const notification = document.createElement('div');
-            notification.className = `notification ${type}`;
-            notification.textContent = message;
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.remove();
-            }, 3000);
-        }
+        const totalSavings = cart.reduce(
+          (sum, item) =>
+            sum + (item.originalPrice - item.price) * item.quantity,
+          0
+        );
+        document.getElementById("savingsAmount").textContent =
+          Math.round(totalSavings);
+        document.getElementById("aiResponses").textContent = aiInteractions;
+      }
+
+      // Notifications
+      function showNotification(message, type) {
+        const notification = document.createElement("div");
+        notification.className = `notification ${type}`;
+        notification.textContent = message;
+        document.body.appendChild(notification);
+
+        setTimeout(() => {
+          notification.remove();
+        }, 3000);
+      }
     </script>
-</body>
+  </body>
 </html>
