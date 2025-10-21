@@ -2950,11 +2950,27 @@
           .scrollIntoView({ behavior: "smooth" });
       }
 
+      // Add this at the top of your script section (after products array)
+      let GROQ_API_KEY = null;
+
       async function sendMessage() {
         const input = document.getElementById("chatInput");
         const message = input.value.trim();
 
         if (!message) return;
+
+        // Get API key from user on first message
+        if (!GROQ_API_KEY) {
+          GROQ_API_KEY = prompt(
+            "Please enter your Groq API key (get it from https://console.groq.com):\n\nYour key will be stored for this session only."
+          );
+          if (!GROQ_API_KEY) {
+            alert("API key is required to use the chatbot!");
+            return;
+          }
+          // Store in sessionStorage so user doesn't have to enter again
+          sessionStorage.setItem("groq_key", GROQ_API_KEY);
+        }
 
         addMessageToChat(message, "user");
         input.value = "";
@@ -2981,26 +2997,34 @@
 
         const systemPrompt = `You are Trenz, an AI wellness shopping assistant. Help customers choose products based on their mood (${currentMood}).
     
-    Available products:
-    ${productContext}
-    ${cartContext}
+Available products:
+${productContext}
+${cartContext}
 
-    Be friendly, helpful, and provide specific product recommendations with prices and ratings.`;
+Be friendly, helpful, and provide specific product recommendations with prices and ratings.`;
 
         try {
-          console.log("Calling Netlify function at: /.netlify/functions/chat");
+          console.log("Calling Groq API directly...");
 
-          // Call Netlify serverless function
-          const response = await fetch("/.netlify/functions/chat", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              message: message,
-              systemPrompt: systemPrompt,
-            }),
-          });
+          const response = await fetch(
+            "https://api.groq.com/openai/v1/chat/completions",
+            {
+              method: "POST",
+              headers: {
+                Authorization: `Bearer ${GROQ_API_KEY}`,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                model: "llama-3.1-8b-instant",
+                messages: [
+                  { role: "system", content: systemPrompt },
+                  { role: "user", content: message },
+                ],
+                temperature: 0.7,
+                max_tokens: 500,
+              }),
+            }
+          );
 
           console.log("Response status:", response.status);
 
@@ -3030,12 +3054,25 @@
         } catch (error) {
           console.error("Full error details:", error);
           document.getElementById("typing")?.remove();
-          addMessageToChat(
-            `Error: ${error.message}. Check console for details.`,
-            "bot"
-          );
+
+          // If API key is invalid, clear it and ask again
+          if (error.message.includes("401") || error.message.includes("403")) {
+            GROQ_API_KEY = null;
+            sessionStorage.removeItem("groq_key");
+            addMessageToChat(
+              "Invalid API key. Please try again and enter a valid key.",
+              "bot"
+            );
+          } else {
+            addMessageToChat(`Error: ${error.message}`, "bot");
+          }
         }
       }
+
+      // On page load, try to restore API key from sessionStorage
+      window.addEventListener("DOMContentLoaded", () => {
+        GROQ_API_KEY = sessionStorage.getItem("groq_key");
+      });
 
       function addMessageToChat(message, type) {
         const messagesDiv = document.getElementById("chatMessages");
