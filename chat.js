@@ -26,15 +26,19 @@ exports.handler = async (event, context) => {
     }
 
     try {
+        console.log('Function invoked');
         const { message, systemPrompt } = JSON.parse(event.body);
         
         // Access secure environment variable
         const GROQ_API_KEY = process.env.GROQ_API_KEY;
         
         if (!GROQ_API_KEY) {
+            console.error('API key not found in environment');
             throw new Error('API key not configured');
         }
 
+        console.log('Calling Groq API...');
+        
         // Call Groq API
         const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
             method: 'POST',
@@ -53,7 +57,16 @@ exports.handler = async (event, context) => {
             })
         });
 
+        console.log('Groq API response status:', response.status);
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error('Groq API error:', errorText);
+            throw new Error(`Groq API error: ${response.status}`);
+        }
+
         const data = await response.json();
+        console.log('Success! Returning data');
 
         return {
             statusCode: 200,
@@ -61,7 +74,7 @@ exports.handler = async (event, context) => {
             body: JSON.stringify(data)
         };
     } catch (error) {
-        console.error('Error:', error);
+        console.error('Function error:', error);
         return {
             statusCode: 500,
             headers,
