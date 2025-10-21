@@ -2246,27 +2246,22 @@
             
             const systemPrompt = `You are Trenz, an AI wellness shopping assistant. Help customers choose products based on their mood (${currentMood}).
             
-Available products:
-${productContext}
-${cartContext}
-
-Be friendly, helpful, and provide specific product recommendations with prices and ratings.`;
+        Available products:
+        ${productContext}
+        ${cartContext}
+        
+        Be friendly, helpful, and provide specific product recommendations with prices and ratings.`;
             
             try {
-                const response = await fetch(GROQ_API_URL, {
+                // Call Netlify serverless function instead of direct API call
+                const response = await fetch('/.netlify/functions/chat', {
                     method: 'POST',
                     headers: {
-                        'Authorization': `Bearer ${GROQ_API_KEY}`,
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        model: 'llama-3.1-8b-instant',
-                        messages: [
-                            { role: 'system', content: systemPrompt },
-                            { role: 'user', content: message }
-                        ],
-                        temperature: 0.7,
-                        max_tokens: 500
+                        message: message,
+                        systemPrompt: systemPrompt
                     })
                 });
                 
@@ -2283,10 +2278,12 @@ Be friendly, helpful, and provide specific product recommendations with prices a
                     addMessageToChat('Sorry, I encountered an error. Please try again!', 'bot');
                 }
             } catch (error) {
-                document.getElementById('typing').remove();
+                console.error('Error:', error);
+                document.getElementById('typing')?.remove();
                 addMessageToChat('Connection error. Please try again!', 'bot');
             }
         }
+
 
         function addMessageToChat(message, type) {
             const messagesDiv = document.getElementById('chatMessages');
